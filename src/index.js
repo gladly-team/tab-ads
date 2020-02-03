@@ -1,8 +1,10 @@
+import prebid from 'src/prebid/prebid'
 
-export const fetchAds = config => {
-  console.log('Called `fetchAds` with config:', config)
+export const fetchAds = async config => {
+  console.log('Called `fetchAds` with config:', config) // eslint-disable-line no-console
+  await prebid()
 }
 
-export const displayAd = adId => {
-  console.log('Called `displayAd` with adId:', adId)
+export const displayAd = async adId => {
+  console.log('Called `displayAd` with adId:', adId) // eslint-disable-line no-console
 }
