@@ -5,3 +5,12 @@ node_js:
 cache: yarn
 script: yarn run test
 before_deploy: yarn run build
+deploy:
+  provider: npm
+  email: sendstufftokevin@gmail.com
+  api_key:
+    secure: "Ocxl4OMhNOQJnDd6Tsiki/1JCbJDgnIyA7m9MvKslZjBBRMXF13r3n721H4lT4qM6IT2UiZJ8XK4c+qxzu0I6MLlEWNp/6RTkrzMAoELtNzCUVkcWvY3TMeNJG5u1sGwvL2d/kVXoHkHSTLfRLUwTxh//Jq8806YQO4TDgKQIHNW7vu5wHyQF2YWi3/7CaY9rdQjcEe+hEvhTjNaLDiBdeVAdZM1LC4p/TpPaMHQAlDV4JQ5A48p4VQ57np1n5YQapOKuwykrxcKh2jW8MIKok9nynSgTr2TbarvjilBo4RcvI41R2P8FP7kaQl0/MJ9MUicNNBWuA3F/f6b7B/MbrYb0fu1uVvwOxXuIIq0tUkHC5n2hd5LmTgcvyYD3ET9w1vwnywcwGO429yryKbNC4te0aIApINASlKy8fXfO3gvesWMKeN+CbDgnaE/6Ucj9GGaIAczbHfQqGKPHSaF83ZELokIwSgk/VTwDkoxoWNHvy8eTyPj+YssBhoNi/HF/zPl6mQvDUk/lOXPIJIa1B+pZmHwFGDac5gwwToyNy1Tuoio86XJoLRnU0C+OT4aYRn2X2bUYZ2Mm9LGcpa4FwnvMKppXdd7sxptaeqk/a1FAIg9hc/c0v1wCWi9TjCkI4szho5afA8DlfrW98I3/yuL7LN5PhEMxBKi2afjTYo="
+  on:
+    branch: master
+    tags: true
+  skip_cleanup: true
