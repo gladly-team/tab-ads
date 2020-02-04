@@ -6,7 +6,7 @@ afterEach(() => {
   delete window.headertag
 })
 
-describe('getIndexExchangeTag', function() {
+describe('getIndexExchangeTag', () => {
   it('returns the window.headertag object if one exists', () => {
     const fakeExistingTag = {
       something: {},

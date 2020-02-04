@@ -32,6 +32,7 @@ afterAll(() => {
 })
 
 describe('indexExchangeBidder', () => {
+  // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
     const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
@@ -90,6 +91,7 @@ describe('indexExchangeBidder', () => {
     ])
   })
 
+  // eslint-disable-next-line jest/expect-expect
   it('the bidder resolves when the bid response returns', () => {
     return new Promise(done => {
       const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
@@ -109,6 +111,7 @@ describe('indexExchangeBidder', () => {
     })
   })
 
+  // eslint-disable-next-line jest/expect-expect
   it('the bidder resolves when we pass the bidder timeout', () => {
     return new Promise(done => {
       const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')

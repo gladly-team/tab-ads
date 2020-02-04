@@ -31,10 +31,10 @@ export const markIndexExchangeBidsAsIncluded = () => {
  * @return {Promise<undefined>} Resolves when the Amazon
  *   bid requests return or time out.
  */
-const fetchIndexExchangeDemand = () => {
+const fetchIndexExchangeDemand = async () => {
   const numAds = getNumberOfAdsToShow()
   if (numAds < 1) {
-    return
+    return Promise.resolve()
   }
 
   // Note: use ixTag.cmd.push because the JS may not have
@@ -63,18 +63,22 @@ const fetchIndexExchangeDemand = () => {
     })
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
+    function handleAuctionEnd() {
+      resolve()
+    }
+
     // Note that Index Exchange hasn't documented the cmd
     // behavior so it may break.
     ixTag.cmd.push(() => {
       // console.log('Index Exchange: retrieving demand')
 
       // IX appears to reinitialize the variable on load.
-      const ixTag = getIndexExchangeTag()
+      const ixTagAgain = getIndexExchangeTag()
 
       // Fetch bid responses from Index Exchange.
       // Note: the current request is to a casalemedia URL.
-      ixTag.retrieveDemand(IXSlots, demand => {
+      ixTagAgain.retrieveDemand(IXSlots, demand => {
         // Set adserver targeting for any returned demand.
         // IX demand should set the IOM and ix_id parameters.
         try {
@@ -133,10 +137,6 @@ const fetchIndexExchangeDemand = () => {
         handleAuctionEnd()
       })
     })
-
-    function handleAuctionEnd() {
-      resolve()
-    }
 
     // Resolve after some time to avoid waiting too long
     // for responses.
