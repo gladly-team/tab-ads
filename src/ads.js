@@ -1,5 +1,5 @@
 // Prebid library code is built after tests.
-// eslint-ignore-next-line import/no-unresolved
+// eslint-disable-next-line import/no-unresolved
 import 'src/providers/prebid/built/pb'
 import adsEnabled from 'src/adsEnabledStatus'
 import amazonBidder, {
@@ -140,6 +140,7 @@ const loadAdCode = () => {
     })
 }
 
+e
 if (adsEnabled()) {
   // Define slots and enable ad services.
   setUpGoogleAds()
