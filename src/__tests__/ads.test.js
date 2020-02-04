@@ -52,7 +52,8 @@ describe('ads script', () => {
   it('sets up the Google ad slots', async () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     expect(setUpGoogleAds).toHaveBeenCalledTimes(1)
   })
 
@@ -66,7 +67,8 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -91,7 +93,8 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -107,7 +110,8 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     await new Promise(resolve => setImmediate(resolve))
 
     expect(window.pbjs.setTargetingForGPTAsync).toHaveBeenCalledTimes(1)
@@ -152,7 +156,8 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     await new Promise(resolve => setImmediate(resolve))
 
     expect(googletagMockRefresh).not.toHaveBeenCalled()
@@ -200,7 +205,8 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     await new Promise(resolve => setImmediate(resolve))
 
     expect(googletagMockRefresh).not.toHaveBeenCalled()
@@ -247,7 +253,8 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     jest.advanceTimersByTime(41)
     await new Promise(resolve => setImmediate(resolve))
 
@@ -291,7 +298,8 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     jest.advanceTimersByTime(41)
     await new Promise(resolve => setImmediate(resolve))
 
@@ -317,7 +325,8 @@ describe('ads script', () => {
       })
     })
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     jest.advanceTimersByTime(100)
     await new Promise(resolve => setImmediate(resolve))
     expect(storeAmazonBids).toHaveBeenCalledTimes(1)
@@ -337,7 +346,8 @@ describe('ads script', () => {
       })
     })
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     jest.advanceTimersByTime(3e3)
     await new Promise(resolve => setImmediate(resolve))
     expect(storeAmazonBids).not.toHaveBeenCalled()
@@ -360,7 +370,8 @@ describe('ads script', () => {
       })
     })
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     jest.advanceTimersByTime(100)
     await new Promise(resolve => setImmediate(resolve))
     expect(markIndexExchangeBidsAsIncluded).toHaveBeenCalledTimes(1)
@@ -383,7 +394,8 @@ describe('ads script', () => {
       })
     })
 
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     jest.advanceTimersByTime(3e3)
     await new Promise(resolve => setImmediate(resolve))
     expect(markIndexExchangeBidsAsIncluded).not.toHaveBeenCalled()
@@ -392,7 +404,8 @@ describe('ads script', () => {
   it('calls handleAdsLoaded', async () => {
     expect.assertions(1)
     const handleAdsLoaded = require('src/handleAdsLoaded').default
-    require('src/ads')
+    const fetchAds = require('src/ads').default
+    await fetchAds()
     expect(handleAdsLoaded).toHaveBeenCalledTimes(1)
   })
 })
