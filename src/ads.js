@@ -56,6 +56,8 @@ function sendAdserverRequest() {
     markIndexExchangeBidsAsIncluded()
   }
 
+  logger.debug(`Sending request to ad server.`)
+
   // Set targeting and make a request to DFP.
   const googletag = getGoogleTag()
   const apstag = getAmazonTag()
@@ -107,6 +109,8 @@ const loadAdCode = () => {
   // Track loaded ads for analytics
   handleAdsLoaded()
 
+  logger.debug(`Loading all bidders in ads.js.`)
+
   // Amazon
   amazonBidder()
     .then(() => {
@@ -138,18 +142,21 @@ const loadAdCode = () => {
     })
 }
 
-e
-if (adsEnabled()) {
-  // Define slots and enable ad services.
-  setUpGoogleAds()
+const fetchAds = async () => {
+  if (adsEnabled()) {
+    // Define slots and enable ad services.
+    setUpGoogleAds()
 
-  // Call the ad server after some time to avoid waiting
-  // too long for bid responses.
-  setTimeout(() => {
-    sendAdserverRequest()
-  }, AUCTION_TIMEOUT)
+    // Call the ad server after some time to avoid waiting
+    // too long for bid responses.
+    setTimeout(() => {
+      sendAdserverRequest()
+    }, AUCTION_TIMEOUT)
 
-  loadAdCode()
-} else {
-  // console.log('Ads are disabled. Not setting up DFP or Prebid.')
+    loadAdCode()
+  } else {
+    // console.log('Ads are disabled. Not setting up DFP or Prebid.')
+  }
 }
+
+export default fetchAds

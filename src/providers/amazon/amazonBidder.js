@@ -81,6 +81,7 @@ function initApstag() {
 
   return new Promise(resolve => {
     function handleAuctionEnd() {
+      logger.debug(`Amazon: auction ended`)
       resolve()
     }
     apstag.init({
@@ -90,6 +91,8 @@ function initApstag() {
         cmpTimeout: CONSENT_MANAGEMENT_TIMEOUT,
       },
     })
+
+    logger.debug(`Amazon: bids requested`)
     apstag.fetchBids(
       {
         slots,

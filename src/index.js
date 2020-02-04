@@ -1,10 +1,11 @@
-import prebid from 'src/providers/prebid/prebid'
+import getAds from 'src/ads'
+import logger from 'src/utils/logger'
 
 export const fetchAds = async config => {
-  console.log('Called `fetchAds` with config:', config) // eslint-disable-line no-console
-  await prebid()
+  logger.debug(`Called "fetchAds" with config: ${JSON.stringify(config)}`)
+  await getAds(config)
 }
 
 export const displayAd = async adId => {
-  console.log('Called `displayAd` with adId:', adId) // eslint-disable-line no-console
+  logger.debug(`Called "displayAd" with adId: ${adId}`)
 }

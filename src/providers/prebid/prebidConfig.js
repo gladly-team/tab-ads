@@ -11,6 +11,7 @@ import {
   HORIZONTAL_AD_UNIT_ID,
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'src/adSettings'
+import logger from 'src/utils/logger'
 
 // FIXME: pass this logic in the config
 const isInEuropeanUnion = async () => false
@@ -230,6 +231,8 @@ const getAdUnits = () => {
  *   time out).
  */
 export default async () => {
+  logger.debug(`Prebid: bids requested`)
+
   // Determine if the user is in the EU, which may affect the
   // ads we show.
   let isInEU
@@ -240,6 +243,7 @@ export default async () => {
   }
   return new Promise(resolve => {
     function handleAuctionEnd() {
+      logger.debug(`Prebid: auction ended`)
       resolve()
     }
 

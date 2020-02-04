@@ -65,6 +65,7 @@ const fetchIndexExchangeDemand = async () => {
 
   return new Promise(resolve => {
     function handleAuctionEnd() {
+      logger.debug(`Index Exchange: auction ended`)
       resolve()
     }
 
@@ -75,6 +76,8 @@ const fetchIndexExchangeDemand = async () => {
 
       // IX appears to reinitialize the variable on load.
       const ixTagAgain = getIndexExchangeTag()
+
+      logger.debug(`Index Exchange: bids requested`)
 
       // Fetch bid responses from Index Exchange.
       // Note: the current request is to a casalemedia URL.
