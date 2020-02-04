@@ -104,3 +104,6 @@ dist
 .tern-port
 
 build
+
+# Built version of Prebid.js
+pb.js

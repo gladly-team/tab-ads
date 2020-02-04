@@ -1,0 +1,10 @@
+[
+  "consentManagement",
+  "aolBidAdapter",
+  "emx_digitalBidAdapter",
+  "openxBidAdapter",
+  "rhythmoneBidAdapter",
+  "pulsepointBidAdapter",
+  "sonobiBidAdapter",
+  "sovrnBidAdapter"
+]
