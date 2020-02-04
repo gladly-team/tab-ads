@@ -14,7 +14,8 @@ afterAll(() => {
   delete window.googletag
 })
 
-describe('googleDisplayAd', function() {
+describe('googleDisplayAd', () => {
+  // eslint-disable-next-line jest/expect-expect
   it('runs without error', () => {
     googleDisplayAd('my-ad')
   })

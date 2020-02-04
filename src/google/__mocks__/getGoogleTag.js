@@ -58,6 +58,8 @@ const mockGetSlots = jest.fn(() => {
 })
 const mockSetTargeting = jest.fn()
 
+const eventListenerStore = {}
+
 // Mock an event fired.
 export const __runEventListenerCallbacks = (eventName, ...args) => {
   eventListenerStore[eventName].forEach(f => f(...args))
@@ -65,8 +67,6 @@ export const __runEventListenerCallbacks = (eventName, ...args) => {
 
 const mockCmd = []
 mockCmd.push = f => f()
-
-const eventListenerStore = {}
 
 export default () => {
   window.googletag = window.googletag || {

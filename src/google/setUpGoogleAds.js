@@ -16,7 +16,7 @@ export default () => {
   const horizontalAdSizes = getHorizontalAdSizes()
   const verticalAdSizes = getVerticalAdSizes()
   const numAdsToShow = getNumberOfAdsToShow()
-  googletag.cmd.push(function() {
+  googletag.cmd.push(() => {
     if (numAdsToShow > 0) {
       // Leaderboard
       googletag

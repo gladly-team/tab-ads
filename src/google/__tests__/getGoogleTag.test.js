@@ -6,7 +6,7 @@ afterEach(() => {
   delete window.googletag
 })
 
-describe('getGoogleTag', function() {
+describe('getGoogleTag', () => {
   it('sets window.googletag', () => {
     delete window.googletag
     expect(window.googletag).toBeUndefined()
@@ -17,7 +17,7 @@ describe('getGoogleTag', function() {
 
   it('uses existing window.googletag object if one exists', () => {
     // Set a fake existing googletag
-    const fakeCmd = function() {}
+    const fakeCmd = () => {}
     const fakeExistingGoogletag = {
       cmd: [fakeCmd],
     }
