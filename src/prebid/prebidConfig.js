@@ -1,5 +1,4 @@
 import getPrebidPbjs from 'src/prebid/getPrebidPbjs'
-import { isInEuropeanUnion } from 'src/utils/client-location'
 import {
   getNumberOfAdsToShow,
   getVerticalAdSizes,
@@ -12,6 +11,9 @@ import {
   HORIZONTAL_AD_UNIT_ID,
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'src/adSettings'
+
+// FIXME: pass this logic in the config
+const isInEuropeanUnion = async () => false
 
 const getAdUnits = () => {
   const numAdsToShow = getNumberOfAdsToShow()
@@ -227,16 +229,20 @@ const getAdUnits = () => {
  *   auction completes (either all bids back or bid requests
  *   time out).
  */
-export default () => {
-  return new Promise(async (resolve, reject) => {
-    // Determine if the user is in the EU, which may affect the
-    // ads we show.
-    let isInEU
-    try {
-      isInEU = await isInEuropeanUnion()
-    } catch (e) {
-      isInEU = false
+export default async () => {
+  // Determine if the user is in the EU, which may affect the
+  // ads we show.
+  let isInEU
+  try {
+    isInEU = await isInEuropeanUnion()
+  } catch (e) {
+    isInEU = false
+  }
+  return new Promise(resolve => {
+    function handleAuctionEnd() {
+      resolve()
     }
+
     const requiresConsentManagement = !!isInEU
 
     const adUnits = getAdUnits()
@@ -295,9 +301,5 @@ export default () => {
         bidsBackHandler: handleAuctionEnd,
       })
     })
-
-    function handleAuctionEnd() {
-      resolve()
-    }
   })
 }
