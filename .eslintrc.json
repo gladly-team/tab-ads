@@ -2,6 +2,7 @@
   "extends": ["airbnb", "prettier", "plugin:jest/recommended"],
   "plugins": ["prettier", "react-hooks", "jest"],
   "rules": {
+    "global-require": 0,
     "prettier/prettier": "error",
     "react/no-unescaped-entities": 0,
     "react/jsx-filename-extension": 0,
@@ -14,7 +15,9 @@
     "sourceType": "module"
   },
   "env": {
-    "es6": true
+    "browser": true,
+    "es6": true,
+    "jest": true
   },
   "settings": {
     "import/resolver": {
