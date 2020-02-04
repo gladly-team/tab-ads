@@ -1,4 +1,6 @@
-import 'src/providers/prebid/built/pb' // Prebid library code
+// Prebid library code is built after tests.
+// eslint-ignore-next-line import/no-unresolved
+import 'src/providers/prebid/built/pb'
 import adsEnabled from 'src/adsEnabledStatus'
 import amazonBidder, {
   storeAmazonBids,
