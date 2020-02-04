@@ -16,8 +16,8 @@
     "coverage": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
     "prebid:build": "npm-run-all -s prebid:install prebid:generate prebid:cp",
     "prebid:install": "cd ./node_modules/prebid.js/ && yarn install",
-    "prebid:generate": "cd ./node_modules/prebid.js/ && ./node_modules/gulp/bin/gulp.js build  --modules \"../../src/prebid/modules.json\"",
-    "prebid:cp": "echo \"/* eslint-disable */\" > ./src/prebid/built/pb.js && cat ./node_modules/prebid.js/build/dist/prebid.js >> ./src/prebid/built/pb.js"
+    "prebid:generate": "cd ./node_modules/prebid.js/ && ./node_modules/gulp/bin/gulp.js build  --modules \"../../src/providers/prebid/modules.json\"",
+    "prebid:cp": "echo \"/* eslint-disable */\" > ./src/providers/prebid/built/pb.js && cat ./node_modules/prebid.js/build/dist/prebid.js >> ./src/providers/prebid/built/pb.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

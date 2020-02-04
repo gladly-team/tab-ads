@@ -1,4 +1,4 @@
-import getPrebidPbjs from 'src/prebid/getPrebidPbjs'
+import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import {
   getNumberOfAdsToShow,
   getVerticalAdSizes,

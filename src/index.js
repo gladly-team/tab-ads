@@ -1,4 +1,4 @@
-import prebid from 'src/prebid/prebid'
+import prebid from 'src/providers/prebid/prebid'
 
 export const fetchAds = async config => {
   console.log('Called `fetchAds` with config:', config) // eslint-disable-line no-console

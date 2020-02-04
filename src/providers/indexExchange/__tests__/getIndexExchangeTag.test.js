@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import getIndexExchangeTag from 'src/indexExchange/getIndexExchangeTag'
+import getIndexExchangeTag from 'src/providers/indexExchange/getIndexExchangeTag'
 
 afterEach(() => {
   delete window.headertag

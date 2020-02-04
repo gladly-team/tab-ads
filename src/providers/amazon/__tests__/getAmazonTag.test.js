@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import getAmazonTag from 'src/amazon/getAmazonTag'
+import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 
 afterEach(() => {
   delete window.apstag

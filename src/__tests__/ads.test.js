@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
-import getAmazonTag from 'src/amazon/getAmazonTag'
-import getPrebidPbjs from 'src/prebid/getPrebidPbjs'
+import getAmazonTag from 'src/providers/amazon/getAmazonTag'
+import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 
 jest.mock('js/ads/prebid/prebid')
 jest.mock('js/ads/google/getGoogleTag')
@@ -59,9 +59,9 @@ describe('ads script', () => {
   it('calls the expected bidders and ad server', async () => {
     expect.assertions(4)
 
-    const amazonBidder = require('src/amazon/amazonBidder').default
-    const prebidConfig = require('src/prebid/prebidConfig').default
-    const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const prebidConfig = require('src/providers/prebid/prebidConfig').default
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -79,9 +79,9 @@ describe('ads script', () => {
 
   it('does not call expected bidders or ad server when ads are not enabled', async () => {
     expect.assertions(4)
-    const amazonBidder = require('src/amazon/amazonBidder').default
-    const prebidConfig = require('src/prebid/prebidConfig').default
-    const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const prebidConfig = require('src/providers/prebid/prebidConfig').default
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
 
     // Disable ads.
@@ -119,7 +119,7 @@ describe('ads script', () => {
     expect.assertions(2)
 
     // Mock that Prebid is very slow to respond
-    const prebidConfig = require('src/prebid/prebidConfig').default
+    const prebidConfig = require('src/providers/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -129,7 +129,7 @@ describe('ads script', () => {
     })
 
     // Mock that Amazon is very slow to respond
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -139,7 +139,7 @@ describe('ads script', () => {
     })
 
     // Mock that Index Exchange is very slow to respond
-    const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
@@ -167,7 +167,7 @@ describe('ads script', () => {
     expect.assertions(2)
 
     // Mock that Prebid is very slow to respond
-    const prebidConfig = require('src/prebid/prebidConfig').default
+    const prebidConfig = require('src/providers/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -177,7 +177,7 @@ describe('ads script', () => {
     })
 
     // Mock that Amazon responds quickly
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -187,7 +187,7 @@ describe('ads script', () => {
     })
 
     // Mock that Index Exchange responds quickly
-    const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
@@ -214,7 +214,7 @@ describe('ads script', () => {
     expect.assertions(1)
 
     // Mock that Prebid responds quickly
-    const prebidConfig = require('src/prebid/prebidConfig').default
+    const prebidConfig = require('src/providers/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -224,7 +224,7 @@ describe('ads script', () => {
     })
 
     // Mock that Amazon responds quickly
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -234,7 +234,7 @@ describe('ads script', () => {
     })
 
     // Mock that Index Exchange responds quickly
-    const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
@@ -258,7 +258,7 @@ describe('ads script', () => {
     expect.assertions(2)
 
     // Mock that Prebid responds quickly
-    const prebidConfig = require('src/prebid/prebidConfig').default
+    const prebidConfig = require('src/providers/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -268,7 +268,7 @@ describe('ads script', () => {
     })
 
     // Mock that Amazon responds quickly
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -278,7 +278,7 @@ describe('ads script', () => {
     })
 
     // Mock that Index Exchange responds quickly
-    const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
@@ -305,10 +305,10 @@ describe('ads script', () => {
 
   it('calls to store Amazon bids on the window for analytics (if Amazon is included in the auction)', async () => {
     expect.assertions(1)
-    const { storeAmazonBids } = require('src/amazon/amazonBidder')
+    const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
 
     // Mock that Amazon responds quickly
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -325,10 +325,10 @@ describe('ads script', () => {
 
   it('does not call to store Amazon bids on the window for analytics (if Amazon is not included in the auction)', async () => {
     expect.assertions(1)
-    const { storeAmazonBids } = require('src/amazon/amazonBidder')
+    const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
 
     // Mock that Amazon responds slowly
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -347,10 +347,10 @@ describe('ads script', () => {
     expect.assertions(1)
     const {
       markIndexExchangeBidsAsIncluded,
-    } = require('src/indexExchange/indexExchangeBidder')
+    } = require('src/providers/indexExchange/indexExchangeBidder')
 
     // Mock that IX responds quickly
-    const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
@@ -370,10 +370,10 @@ describe('ads script', () => {
     expect.assertions(1)
     const {
       markIndexExchangeBidsAsIncluded,
-    } = require('src/indexExchange/indexExchangeBidder')
+    } = require('src/providers/indexExchange/indexExchangeBidder')
 
     // Mock that IX responds quickly
-    const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {

@@ -1,15 +1,17 @@
-import 'src/prebid/built/pb' // Prebid library code
+import 'src/providers/prebid/built/pb' // Prebid library code
 import adsEnabled from 'src/adsEnabledStatus'
-import amazonBidder, { storeAmazonBids } from 'src/amazon/amazonBidder'
+import amazonBidder, {
+  storeAmazonBids,
+} from 'src/providers/amazon/amazonBidder'
 import indexExchangeBidder, {
   markIndexExchangeBidsAsIncluded,
-} from 'src/indexExchange/indexExchangeBidder'
-import getAmazonTag from 'src/amazon/getAmazonTag'
+} from 'src/providers/indexExchange/indexExchangeBidder'
+import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import getGoogleTag from 'src/google/getGoogleTag'
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
-import getPrebidPbjs from 'src/prebid/getPrebidPbjs'
+import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import handleAdsLoaded from 'src/handleAdsLoaded'
-import prebidConfig from 'src/prebid/prebidConfig'
+import prebidConfig from 'src/providers/prebid/prebidConfig'
 import { AUCTION_TIMEOUT } from 'src/adSettings'
 import logger from 'src/utils/logger'
 

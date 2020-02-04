@@ -3,7 +3,7 @@
 import getAmazonTag, {
   __disableAutomaticBidResponses, // eslint-disable-line import/named
   __runBidsBack, // eslint-disable-line import/named
-} from 'src/amazon/getAmazonTag'
+} from 'src/providers/amazon/getAmazonTag'
 import getGoogleTag from 'src/google/getGoogleTag'
 import { mockAmazonBidResponse } from 'src/utils/test-utils'
 import { getNumberOfAdsToShow } from 'src/adSettings'
@@ -37,7 +37,7 @@ describe('amazonBidder', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     await amazonBidder()
   })
 
@@ -45,7 +45,7 @@ describe('amazonBidder', () => {
     expect.assertions(1)
     const apstag = getAmazonTag()
 
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     await amazonBidder()
 
     expect(apstag.init.mock.calls[0][0]).toMatchObject({
@@ -58,7 +58,7 @@ describe('amazonBidder', () => {
     getNumberOfAdsToShow.mockReturnValue(2)
     const apstag = getAmazonTag()
 
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     await amazonBidder()
 
     expect(apstag.fetchBids).toHaveBeenCalled()
@@ -93,7 +93,7 @@ describe('amazonBidder', () => {
       [720, 300],
     ])
 
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     await amazonBidder()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [
@@ -119,7 +119,7 @@ describe('amazonBidder', () => {
   it('resolves immediately when we expect the mock to return bids immediately', async () => {
     expect.assertions(1)
 
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const promise = amazonBidder()
     promise.done = false
     promise.then(() => {
@@ -135,7 +135,7 @@ describe('amazonBidder', () => {
     expect.assertions(2)
     __disableAutomaticBidResponses()
 
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const promise = amazonBidder()
     promise.done = false
     promise.then(() => {
@@ -163,8 +163,8 @@ describe('amazonBidder', () => {
       passedCallback = callback
     })
 
-    const amazonBidder = require('src/amazon/amazonBidder').default
-    const { storeAmazonBids } = require('src/amazon/amazonBidder')
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
     amazonBidder()
 
     // Fake that apstag calls callback for returned bids
@@ -196,7 +196,7 @@ describe('amazonBidder', () => {
   it('does not call apstag.fetchBids when zero ads are enabled', async () => {
     getNumberOfAdsToShow.mockReturnValue(0)
     const apstag = getAmazonTag()
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     await amazonBidder()
     expect(apstag.fetchBids).not.toHaveBeenCalled()
   })
@@ -210,7 +210,7 @@ describe('amazonBidder', () => {
     getVerticalAdSizes.mockReturnValue([[300, 250]])
     getHorizontalAdSizes.mockReturnValue([[728, 90]])
     const apstag = getAmazonTag()
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     await amazonBidder()
     expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
@@ -232,7 +232,7 @@ describe('amazonBidder', () => {
     } = require('src/adSettings')
     getVerticalAdSizes.mockReturnValue([[300, 250]])
     getHorizontalAdSizes.mockReturnValue([[728, 90]])
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     await amazonBidder()
     expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
@@ -258,7 +258,7 @@ describe('amazonBidder', () => {
     } = require('src/adSettings')
     getVerticalAdSizes.mockReturnValue([[300, 250]])
     getHorizontalAdSizes.mockReturnValue([[728, 90]])
-    const amazonBidder = require('src/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     await amazonBidder()
     expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({

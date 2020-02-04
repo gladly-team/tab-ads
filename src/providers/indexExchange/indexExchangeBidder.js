@@ -1,4 +1,4 @@
-import getIndexExchangeTag from 'src/indexExchange/getIndexExchangeTag'
+import getIndexExchangeTag from 'src/providers/indexExchange/getIndexExchangeTag'
 import {
   getNumberOfAdsToShow,
   BIDDER_TIMEOUT,

@@ -1,4 +1,4 @@
-import getAmazonTag from 'src/amazon/getAmazonTag'
+import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import {
   getNumberOfAdsToShow,
   getVerticalAdSizes,

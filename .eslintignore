@@ -1,4 +1,4 @@
 node_modules
 coverage
 build
-src/prebid/built/pb.js
+src/providers/prebid/built/pb.js
