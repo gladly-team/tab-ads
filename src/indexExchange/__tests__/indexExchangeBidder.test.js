@@ -139,7 +139,7 @@ describe('indexExchangeBidder', () => {
     const getIndexExchangeTag = require('src/indexExchange/getIndexExchangeTag')
       .default
     const ixTag = getIndexExchangeTag()
-    const { mockIndexExchangeBidResponse } = require('js/utils/test-utils')
+    const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
     const mockBidResponse = mockIndexExchangeBidResponse()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
@@ -382,7 +382,7 @@ describe('indexExchangeBidder', () => {
 
   it('stores the bids in the tab global for analytics', async () => {
     expect.assertions(3)
-    const { getAdDataStore } = require('js/utils/utils')
+    const { getAdDataStore } = require('src/utils/storage')
     const tabGlobal = getAdDataStore()
 
     // Mock the bid response.
@@ -391,7 +391,7 @@ describe('indexExchangeBidder', () => {
     const getIndexExchangeTag = require('src/indexExchange/getIndexExchangeTag')
       .default
     const ixTag = getIndexExchangeTag()
-    const { mockIndexExchangeBidResponse } = require('js/utils/test-utils')
+    const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
     const mockBidResponse = mockIndexExchangeBidResponse()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
@@ -445,7 +445,7 @@ describe('indexExchangeBidder', () => {
 
 describe('markIndexExchangeBidsAsIncluded', () => {
   it('sets the IX bids "includedInAdServerRequest" property to true', () => {
-    const { getAdDataStore } = require('js/utils/utils')
+    const { getAdDataStore } = require('src/utils/storage')
     const tabGlobal = getAdDataStore()
     expect(tabGlobal.ads.indexExchangeBids.includedInAdServerRequest).toBe(
       false
