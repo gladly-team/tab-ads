@@ -32,11 +32,11 @@ export const storeAmazonBids = () => {
   //   size: '0x0',
   //   slotID: 'div-gpt-ad-123456789-0'
   // }
-  const tabGlobal = getAdDataStore()
+  const adDataStore = getAdDataStore()
   try {
     if (amazonBids && amazonBids.length) {
       amazonBids.forEach(bid => {
-        tabGlobal.ads.amazonBids[bid.slotID] = bid
+        adDataStore.amazonBids[bid.slotID] = bid
       })
     }
   } catch (e) {

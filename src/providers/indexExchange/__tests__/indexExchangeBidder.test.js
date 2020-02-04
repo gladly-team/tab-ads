@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
-jest.mock('js/ads/adSettings')
-jest.mock('js/ads/indexExchange/getIndexExchangeTag')
-jest.mock('js/ads/google/getGoogleTag')
+jest.mock('src/adSettings')
+jest.mock('src/providers/indexExchange/getIndexExchangeTag')
+jest.mock('src/google/getGoogleTag')
 jest.mock('src/utils/logger')
 
 beforeAll(() => {
@@ -386,7 +386,7 @@ describe('indexExchangeBidder', () => {
   it('stores the bids in the tab global for analytics', async () => {
     expect.assertions(3)
     const { getAdDataStore } = require('src/utils/storage')
-    const tabGlobal = getAdDataStore()
+    const adDataStore = getAdDataStore()
 
     // Mock the bid response.
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
@@ -405,7 +405,7 @@ describe('indexExchangeBidder', () => {
       SECOND_VERTICAL_AD_SLOT_DOM_ID,
       HORIZONTAL_AD_SLOT_DOM_ID,
     } = require('src/adSettings')
-    expect(tabGlobal.ads.indexExchangeBids[HORIZONTAL_AD_SLOT_DOM_ID]).toEqual([
+    expect(adDataStore.indexExchangeBids[HORIZONTAL_AD_SLOT_DOM_ID]).toEqual([
       {
         targeting: {
           IOM: ['728x90_5000'],
@@ -417,7 +417,7 @@ describe('indexExchangeBidder', () => {
         partnerId: 'IndexExchangeHtb',
       },
     ])
-    expect(tabGlobal.ads.indexExchangeBids[VERTICAL_AD_SLOT_DOM_ID]).toEqual([
+    expect(adDataStore.indexExchangeBids[VERTICAL_AD_SLOT_DOM_ID]).toEqual([
       {
         targeting: {
           IOM: ['300x250_5000'],
@@ -430,7 +430,7 @@ describe('indexExchangeBidder', () => {
       },
     ])
     expect(
-      tabGlobal.ads.indexExchangeBids[SECOND_VERTICAL_AD_SLOT_DOM_ID]
+      adDataStore.indexExchangeBids[SECOND_VERTICAL_AD_SLOT_DOM_ID]
     ).toEqual([
       {
         targeting: {
@@ -449,14 +449,12 @@ describe('indexExchangeBidder', () => {
 describe('markIndexExchangeBidsAsIncluded', () => {
   it('sets the IX bids "includedInAdServerRequest" property to true', () => {
     const { getAdDataStore } = require('src/utils/storage')
-    const tabGlobal = getAdDataStore()
-    expect(tabGlobal.ads.indexExchangeBids.includedInAdServerRequest).toBe(
-      false
-    )
+    const adDataStore = getAdDataStore()
+    expect(adDataStore.indexExchangeBids.includedInAdServerRequest).toBe(false)
     const {
       markIndexExchangeBidsAsIncluded,
     } = require('src/providers/indexExchange/indexExchangeBidder')
     markIndexExchangeBidsAsIncluded()
-    expect(tabGlobal.ads.indexExchangeBids.includedInAdServerRequest).toBe(true)
+    expect(adDataStore.indexExchangeBids.includedInAdServerRequest).toBe(true)
   })
 })

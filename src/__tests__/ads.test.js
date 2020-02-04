@@ -3,17 +3,16 @@ import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' /
 import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 
-jest.mock('js/ads/prebid/prebid')
-jest.mock('js/ads/google/getGoogleTag')
-jest.mock('js/ads/amazon/getAmazonTag')
-jest.mock('js/ads/prebid/getPrebidPbjs')
-jest.mock('js/ads/prebid/prebidConfig')
-jest.mock('js/ads/amazon/amazonBidder')
-jest.mock('js/ads/indexExchange/indexExchangeBidder')
-jest.mock('js/utils/client-location')
-jest.mock('js/ads/handleAdsLoaded')
-jest.mock('js/ads/adsEnabledStatus')
-jest.mock('js/ads/google/setUpGoogleAds')
+jest.mock('src/providers/prebid/built/pb')
+jest.mock('src/google/getGoogleTag')
+jest.mock('src/providers/amazon/getAmazonTag')
+jest.mock('src/providers/prebid/getPrebidPbjs')
+jest.mock('src/providers/prebid/prebidConfig')
+jest.mock('src/providers/amazon/amazonBidder')
+jest.mock('src/providers/indexExchange/indexExchangeBidder')
+jest.mock('src/handleAdsLoaded')
+jest.mock('src/adsEnabledStatus')
+jest.mock('src/google/setUpGoogleAds')
 
 beforeAll(() => {
   jest.useFakeTimers()

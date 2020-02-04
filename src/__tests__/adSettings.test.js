@@ -3,8 +3,6 @@
 import moment from 'moment'
 import MockDate from 'mockdate'
 
-jest.mock('js/utils/experiments')
-
 const mockNow = '2017-05-19T13:59:58.000Z'
 
 beforeEach(() => {

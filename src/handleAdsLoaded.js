@@ -8,18 +8,18 @@ import { getAdDataStore } from 'src/utils/storage'
 export default () => {
   try {
     const googletag = getGoogleTag()
-    const tabGlobal = getAdDataStore()
+    const adDataStore = getAdDataStore()
 
     const storeRenderedSlotData = (slotId, eventData) => {
-      tabGlobal.ads.slotsRendered[slotId] = eventData
+      adDataStore.slotsRendered[slotId] = eventData
     }
 
     const markSlotAsViewable = slotId => {
-      tabGlobal.ads.slotsViewable[slotId] = true
+      adDataStore.slotsViewable[slotId] = true
     }
 
     const markSlotAsLoaded = slotId => {
-      tabGlobal.ads.slotsLoaded[slotId] = true
+      adDataStore.slotsLoaded[slotId] = true
     }
 
     googletag.cmd.push(() => {

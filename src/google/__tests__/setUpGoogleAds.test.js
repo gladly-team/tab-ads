@@ -8,8 +8,8 @@ import {
   getHorizontalAdSizes,
 } from 'src/adSettings'
 
-jest.mock('js/ads/adSettings')
-jest.mock('js/ads/google/getGoogleTag')
+jest.mock('src/adSettings')
+jest.mock('src/google/getGoogleTag')
 
 afterEach(() => {
   jest.clearAllMocks()

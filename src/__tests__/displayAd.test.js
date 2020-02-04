@@ -2,8 +2,8 @@
 
 const mockGoogleDisplayAd = jest.fn()
 const mockMockDisplayAd = jest.fn()
-jest.mock('js/ads/google/googleDisplayAd', () => mockGoogleDisplayAd)
-jest.mock('js/ads/mockDisplayAd', () => mockMockDisplayAd)
+jest.mock('src/google/googleDisplayAd', () => mockGoogleDisplayAd)
+jest.mock('src/mockDisplayAd', () => mockMockDisplayAd)
 
 beforeEach(() => {
   jest.clearAllMocks()
@@ -12,7 +12,7 @@ beforeEach(() => {
 
 describe('displayAd', () => {
   it('calls mockDisplayAd when ads are not enabled', () => {
-    jest.mock('js/ads/adsEnabledStatus', () => () => false)
+    jest.mock('src/adsEnabledStatus', () => () => false)
     const displayAd = require('src/displayAd').default
     displayAd('my-ad')
     expect(mockGoogleDisplayAd).not.toHaveBeenCalled()
@@ -20,7 +20,7 @@ describe('displayAd', () => {
   })
 
   it('calls googleDisplayAd when ads are enabled', () => {
-    jest.mock('js/ads/adsEnabledStatus', () => () => true)
+    jest.mock('src/adsEnabledStatus', () => () => true)
     const displayAd = require('src/displayAd').default
     displayAd('some-ad')
     expect(mockGoogleDisplayAd).toHaveBeenCalledWith('some-ad')

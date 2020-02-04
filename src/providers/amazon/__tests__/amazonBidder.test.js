@@ -9,9 +9,9 @@ import { mockAmazonBidResponse } from 'src/utils/test-utils'
 import { getNumberOfAdsToShow } from 'src/adSettings'
 import { clearAdDataStore, getAdDataStore } from 'src/utils/storage'
 
-jest.mock('js/ads/adSettings')
-jest.mock('js/ads/consentManagement')
-jest.mock('js/ads/amazon/getAmazonTag')
+jest.mock('src/adSettings')
+jest.mock('src/consentManagement')
+jest.mock('src/providers/amazon/getAmazonTag')
 
 beforeEach(() => {
   // Mock apstag
@@ -178,17 +178,17 @@ describe('amazonBidder', () => {
     })
     passedCallback([someBid, someOtherBid])
 
-    const tabGlobal = getAdDataStore()
+    const adDataStore = getAdDataStore()
 
     // Should not have stored the bids yet.
-    expect(tabGlobal.ads.amazonBids['div-gpt-ad-123456789-0']).toBeUndefined()
-    expect(tabGlobal.ads.amazonBids['div-gpt-ad-24681357-0']).toBeUndefined()
+    expect(adDataStore.amazonBids['div-gpt-ad-123456789-0']).toBeUndefined()
+    expect(adDataStore.amazonBids['div-gpt-ad-24681357-0']).toBeUndefined()
 
     storeAmazonBids()
 
     // Now should have stored the bids.
-    expect(tabGlobal.ads.amazonBids['div-gpt-ad-123456789-0']).toEqual(someBid)
-    expect(tabGlobal.ads.amazonBids['div-gpt-ad-24681357-0']).toEqual(
+    expect(adDataStore.amazonBids['div-gpt-ad-123456789-0']).toEqual(someBid)
+    expect(adDataStore.amazonBids['div-gpt-ad-24681357-0']).toEqual(
       someOtherBid
     )
   })

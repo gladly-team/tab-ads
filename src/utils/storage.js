@@ -1,10 +1,51 @@
 /* eslint-disable import/prefer-default-export */
 
-// TODO: clean this up and test this. It's a replacement for the tab window variable.
-let adDataStore = {}
+const defaultAdDataStore = {
+  // Bid objects returned from apstag
+  // Key: slot ID
+  // Value: bid object
+  amazonBids: {},
 
-export const getAdDataStore = () => adDataStore
+  // Bids returned from Index Exchange.
+  // Key: slot element ID
+  // Value: bid object
+  indexExchangeBids: {
+    // Whether the bids were returned in time to be part
+    // of the request to our ad server.
+    includedInAdServerRequest: false,
+  },
+
+  // Objects from googletag's "slotRenderEnded" event. This event fires
+  // before the "slotOnload" event; i.e., before the actual creative loads.
+  // Key: slot ID
+  // Value: https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
+  slotsRendered: {},
+
+  // Marking which slots have fired googletag's "impressionViewable" event.
+  // See:
+  // https://developers.google.com/doubleclick-gpt/reference#googletageventsimpressionviewableevent
+  // Key: slot ID
+  // Value: `true`
+  slotsViewable: {},
+
+  // Marking which slots have fired googletag's "slotOnload" event;
+  // i.e., which slots have loaded creative. See:
+  // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+  // Key: slot ID
+  // Value: `true`
+  slotsLoaded: {},
+
+  // Marking which slots have had their revenue logged.
+  // Key: slot ID
+  // Value: `true`
+  slotsAlreadyLoggedRevenue: {},
+}
+
+// TODO: clean this up and test this. It's a replacement for the tab window variable.
+let adDataStore = { ...defaultAdDataStore }
 
 export const clearAdDataStore = () => {
-  adDataStore = {}
+  adDataStore = { ...defaultAdDataStore }
 }
+
+export const getAdDataStore = () => adDataStore

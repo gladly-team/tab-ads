@@ -17,8 +17,8 @@ import { getAdDataStore } from 'src/utils/storage'
  */
 export const markIndexExchangeBidsAsIncluded = () => {
   try {
-    const tabGlobal = getAdDataStore()
-    tabGlobal.ads.indexExchangeBids.includedInAdServerRequest = true
+    const adDataStore = getAdDataStore()
+    adDataStore.indexExchangeBids.includedInAdServerRequest = true
   } catch (e) {
     logger.error(e)
   }
@@ -84,7 +84,7 @@ const fetchIndexExchangeDemand = async () => {
         try {
           if (demand && demand.slot) {
             const googletag = getGoogleTag()
-            const tabGlobal = getAdDataStore()
+            const adDataStore = getAdDataStore()
 
             // Loop through defined GAM slots to set any targeting.
             googletag.cmd.push(() => {
@@ -122,7 +122,7 @@ const fetchIndexExchangeDemand = async () => {
 
                   // Store the bids for analytics.
                   try {
-                    tabGlobal.ads.indexExchangeBids[
+                    adDataStore.indexExchangeBids[
                       googleSlot.getSlotElementId()
                     ] = IXBidResponseArray
                   } catch (e) {
