@@ -19,7 +19,9 @@
     "prebid:build": "npm-run-all -s prebid:install prebid:generate prebid:cp",
     "prebid:install": "cd ./node_modules/prebid.js/ && yarn install",
     "prebid:generate": "cd ./node_modules/prebid.js/ && ./node_modules/gulp/bin/gulp.js build  --modules \"../../src/providers/prebid/modules.json\"",
-    "prebid:cp": "echo \"/* eslint-disable */\" > ./src/providers/prebid/built/pb.js && cat ./node_modules/prebid.js/build/dist/prebid.js >> ./src/providers/prebid/built/pb.js"
+    "prebid:cp": "echo \"/* eslint-disable */\" > ./src/providers/prebid/built/pb.js && cat ./node_modules/prebid.js/build/dist/prebid.js >> ./src/providers/prebid/built/pb.js",
+    "dev:publish": "npm-run-all -s build dev:yalc-publish-push",
+    "dev:yalc-publish-push": "yalc publish --push"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
