@@ -6,7 +6,7 @@ afterEach(() => {
   delete window.apstag
 })
 
-describe('getAmazonTag', function() {
+describe('getAmazonTag', () => {
   it('uses existing window.apstag object if one exists', () => {
     // Set a fake existing googletag
     const fakeExistingAmazonTag = {

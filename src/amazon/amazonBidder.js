@@ -54,7 +54,7 @@ export const storeAmazonBids = () => {
 function initApstag() {
   const numAds = getNumberOfAdsToShow()
   if (numAds < 1) {
-    return
+    return Promise.resolve()
   }
   const apstag = getAmazonTag()
 
@@ -79,7 +79,10 @@ function initApstag() {
     })
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
+    function handleAuctionEnd() {
+      resolve()
+    }
     apstag.init({
       pubID: 'ea374841-51b0-4335-9960-99200427f7c8',
       adServer: 'googletag',
@@ -92,15 +95,11 @@ function initApstag() {
         slots,
         timeout: BIDDER_TIMEOUT,
       },
-      function(bids) {
+      bids => {
         amazonBids = bids
         handleAuctionEnd()
       }
     )
-
-    function handleAuctionEnd() {
-      resolve()
-    }
   })
 }
 

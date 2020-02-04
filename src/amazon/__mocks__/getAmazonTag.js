@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-var bidsBackHandler = () => {}
+let bidsBackHandler = () => {}
 
 // By default, we mock that bid responses return immediately,
 // which resolves the promise for tests. Call this to disable

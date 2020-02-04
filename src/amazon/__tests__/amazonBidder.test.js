@@ -1,13 +1,13 @@
 /* eslint-env jest */
 
 import getAmazonTag, {
-  __disableAutomaticBidResponses,
-  __runBidsBack,
+  __disableAutomaticBidResponses, // eslint-disable-line import/named
+  __runBidsBack, // eslint-disable-line import/named
 } from 'src/amazon/getAmazonTag'
 import getGoogleTag from 'src/google/getGoogleTag'
-import { deleteTabGlobal, mockAmazonBidResponse } from 'src/utils/test-utils'
+import { mockAmazonBidResponse } from 'src/utils/test-utils'
 import { getNumberOfAdsToShow } from 'src/adSettings'
-import { getAdDataStore } from 'src/utils/storage'
+import { clearAdDataStore, getAdDataStore } from 'src/utils/storage'
 
 jest.mock('js/ads/adSettings')
 jest.mock('js/ads/consentManagement')
@@ -30,10 +30,11 @@ afterEach(() => {
 afterAll(() => {
   delete window.googletag
   delete window.apstag
-  deleteTabGlobal()
+  clearAdDataStore()
 })
 
 describe('amazonBidder', () => {
+  // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
     const amazonBidder = require('src/amazon/amazonBidder').default
