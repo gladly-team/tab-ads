@@ -2,13 +2,11 @@
 
 import moment from 'moment'
 import MockDate from 'mockdate'
-import { isVariousAdSizesEnabled } from 'src/utils/feature-flags'
 import {
   getBrowserExtensionInstallTime,
   hasUserDismissedAdExplanation,
 } from 'src/utils/local-user-data-mgr'
 
-jest.mock('js/utils/feature-flags')
 jest.mock('js/utils/experiments')
 jest.mock('js/utils/local-user-data-mgr')
 
@@ -100,47 +98,13 @@ describe('ad settings', () => {
     expect(shouldShowAdExplanation()).toEqual(false)
   })
 
-  test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
-    isVariousAdSizesEnabled.mockReturnValue(false)
+  test('getVerticalAdSizes returns the expected ad sizes', () => {
     const { getVerticalAdSizes } = require('src/adSettings')
     expect(getVerticalAdSizes()).toEqual([[300, 250]])
   })
 
-  test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are disabled', () => {
-    isVariousAdSizesEnabled.mockReturnValue(false)
+  test('getHorizontalAdSizes returns the expected ad sizes', () => {
     const { getHorizontalAdSizes } = require('src/adSettings')
     expect(getHorizontalAdSizes()).toEqual([[728, 90]])
-  })
-
-  test('getVerticalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
-    isVariousAdSizesEnabled.mockReturnValue(true)
-    const { getVerticalAdSizes } = require('src/adSettings')
-    expect(getVerticalAdSizes()).toEqual([
-      [300, 250],
-      [250, 250],
-      [160, 600],
-      [120, 600],
-      [120, 240],
-      [240, 400],
-      [234, 60],
-      [180, 150],
-      [125, 125],
-      [120, 90],
-      [120, 60],
-      [120, 30],
-      [230, 33],
-      [300, 600],
-    ])
-  })
-
-  test('getHorizontalAdSizes returns the expected ad sizes when various ad sizes are enabled', () => {
-    isVariousAdSizesEnabled.mockReturnValue(true)
-    const { getHorizontalAdSizes } = require('src/adSettings')
-    expect(getHorizontalAdSizes()).toEqual([
-      [728, 90],
-      [728, 210],
-      [720, 300],
-      [468, 60],
-    ])
   })
 })

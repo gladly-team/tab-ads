@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { isVariousAdSizesEnabled } from 'src/utils/feature-flags'
 import {
   getBrowserExtensionInstallTime,
   hasUserDismissedAdExplanation,
@@ -71,29 +70,7 @@ export const getNumberOfAdsToShow = () => {
  * ad.
  * @return {Array[Array]} An array of ad sizes
  */
-export const getVerticalAdSizes = () => {
-  const showVariousAdSizes = isVariousAdSizesEnabled()
-  return showVariousAdSizes
-    ? [
-        [300, 250],
-        // Wider than we probably want to allow.
-        // [336, 280],
-        [250, 250],
-        [160, 600],
-        [120, 600],
-        [120, 240],
-        [240, 400],
-        [234, 60],
-        [180, 150],
-        [125, 125],
-        [120, 90],
-        [120, 60],
-        [120, 30],
-        [230, 33],
-        [300, 600],
-      ]
-    : [[300, 250]]
-}
+export const getVerticalAdSizes = () => [[300, 250]]
 
 /**
  * Get an array of ad sizes (each an array with two numbers)
@@ -101,17 +78,4 @@ export const getVerticalAdSizes = () => {
  * ad.
  * @return {Array[Array]} An array of ad sizes
  */
-export const getHorizontalAdSizes = () => {
-  const showVariousAdSizes = isVariousAdSizesEnabled()
-  return showVariousAdSizes
-    ? [
-        [728, 90],
-        [728, 210],
-        [720, 300],
-        // Taller than we probably want to allow.
-        // [500, 350],
-        // [550, 480],
-        [468, 60],
-      ]
-    : [[728, 90]]
-}
+export const getHorizontalAdSizes = () => [[728, 90]]

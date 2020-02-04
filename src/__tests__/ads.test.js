@@ -14,7 +14,6 @@ jest.mock('js/utils/client-location')
 jest.mock('js/ads/handleAdsLoaded')
 jest.mock('js/ads/adsEnabledStatus')
 jest.mock('js/ads/google/setUpGoogleAds')
-jest.mock('js/utils/feature-flags')
 
 beforeAll(() => {
   jest.useFakeTimers()
