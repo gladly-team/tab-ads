@@ -382,8 +382,8 @@ describe('indexExchangeBidder', () => {
 
   it('stores the bids in the tab global for analytics', async () => {
     expect.assertions(3)
-    const { getTabGlobal } = require('js/utils/utils')
-    const tabGlobal = getTabGlobal()
+    const { getAdDataStore } = require('js/utils/utils')
+    const tabGlobal = getAdDataStore()
 
     // Mock the bid response.
     const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
@@ -445,8 +445,8 @@ describe('indexExchangeBidder', () => {
 
 describe('markIndexExchangeBidsAsIncluded', () => {
   it('sets the IX bids "includedInAdServerRequest" property to true', () => {
-    const { getTabGlobal } = require('js/utils/utils')
-    const tabGlobal = getTabGlobal()
+    const { getAdDataStore } = require('js/utils/utils')
+    const tabGlobal = getAdDataStore()
     expect(tabGlobal.ads.indexExchangeBids.includedInAdServerRequest).toBe(
       false
     )

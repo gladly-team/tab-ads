@@ -10,7 +10,7 @@ import {
   HORIZONTAL_AD_SLOT_DOM_ID,
 } from 'src/adSettings'
 import logger from 'src/utils/logger'
-import { getTabGlobal } from 'src/utils/utils'
+import { getAdDataStore } from 'src/utils/storage'
 
 // Save returned Amazon bids.
 let amazonBids
@@ -32,7 +32,7 @@ export const storeAmazonBids = () => {
   //   size: '0x0',
   //   slotID: 'div-gpt-ad-123456789-0'
   // }
-  const tabGlobal = getTabGlobal()
+  const tabGlobal = getAdDataStore()
   try {
     if (amazonBids && amazonBids.length) {
       amazonBids.forEach(bid => {

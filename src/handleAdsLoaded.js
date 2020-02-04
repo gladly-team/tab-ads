@@ -1,6 +1,6 @@
 import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
-import { getTabGlobal } from 'src/utils/utils'
+import { getAdDataStore } from 'src/utils/storage'
 
 // Keep track of what ad slots have loaded. App code loads later and
 // therefore can miss the slot loading event. This gives the app code
@@ -8,7 +8,7 @@ import { getTabGlobal } from 'src/utils/utils'
 export default () => {
   try {
     const googletag = getGoogleTag()
-    const tabGlobal = getTabGlobal()
+    const tabGlobal = getAdDataStore()
 
     const storeRenderedSlotData = (slotId, eventData) => {
       tabGlobal.ads.slotsRendered[slotId] = eventData

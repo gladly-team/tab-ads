@@ -8,7 +8,7 @@ import {
 } from 'src/adSettings'
 import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
-import { getTabGlobal } from 'src/utils/utils'
+import { getAdDataStore } from 'src/utils/storage'
 
 /**
  * Mark that the Index Exchange bids were returned in time
@@ -17,7 +17,7 @@ import { getTabGlobal } from 'src/utils/utils'
  */
 export const markIndexExchangeBidsAsIncluded = () => {
   try {
-    const tabGlobal = getTabGlobal()
+    const tabGlobal = getAdDataStore()
     tabGlobal.ads.indexExchangeBids.includedInAdServerRequest = true
   } catch (e) {
     logger.error(e)
@@ -80,7 +80,7 @@ const fetchIndexExchangeDemand = () => {
         try {
           if (demand && demand.slot) {
             const googletag = getGoogleTag()
-            const tabGlobal = getTabGlobal()
+            const tabGlobal = getAdDataStore()
 
             // Loop through defined GAM slots to set any targeting.
             googletag.cmd.push(() => {

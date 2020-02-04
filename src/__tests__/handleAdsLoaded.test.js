@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { getTabGlobal } from 'src/utils/utils'
+import { getAdDataStore } from 'src/utils/storage'
 import {
   deleteTabGlobal,
   mockGoogleTagImpressionViewableData,
@@ -61,7 +61,7 @@ describe('handleAdsLoaded', function() {
     )
 
     // Make sure we've marked the slot as loaded
-    const tabGlobal = getTabGlobal()
+    const tabGlobal = getAdDataStore()
     expect(tabGlobal.ads.slotsRendered[slotId]).toBe(mockSlotRenderEventData)
 
     // Make sure it works multiple times
@@ -107,7 +107,7 @@ describe('handleAdsLoaded', function() {
     )
 
     // Make sure we've marked the slot as loaded
-    const tabGlobal = getTabGlobal()
+    const tabGlobal = getAdDataStore()
     expect(tabGlobal.ads.slotsViewable[slotId]).toBe(true)
 
     // Make sure it works multiple times
@@ -149,7 +149,7 @@ describe('handleAdsLoaded', function() {
     expect(googleEventListenerCalls.slotOnload[0][0]).toEqual('slotOnload')
 
     // Make sure we've marked the slot as loaded
-    const tabGlobal = getTabGlobal()
+    const tabGlobal = getAdDataStore()
     expect(tabGlobal.ads.slotsLoaded[slotId]).toBe(true)
 
     // Make sure it works multiple times

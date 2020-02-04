@@ -7,7 +7,7 @@ import getAmazonTag, {
 import getGoogleTag from 'src/google/getGoogleTag'
 import { deleteTabGlobal, mockAmazonBidResponse } from 'src/utils/test-utils'
 import { getNumberOfAdsToShow } from 'src/adSettings'
-import { getTabGlobal } from 'src/utils/utils'
+import { getAdDataStore } from 'src/utils/storage'
 
 jest.mock('js/ads/adSettings')
 jest.mock('js/ads/consentManagement')
@@ -177,7 +177,7 @@ describe('amazonBidder', () => {
     })
     passedCallback([someBid, someOtherBid])
 
-    const tabGlobal = getTabGlobal()
+    const tabGlobal = getAdDataStore()
 
     // Should not have stored the bids yet.
     expect(tabGlobal.ads.amazonBids['div-gpt-ad-123456789-0']).toBeUndefined()
