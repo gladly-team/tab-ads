@@ -1,12 +1,8 @@
 /* eslint-env jest */
 
-import { STORAGE_NEW_CONSENT_DATA_EXISTS } from 'src/constants'
-
-jest.mock('js/utils/localstorage-mgr')
-
 beforeEach(() => {
   // Mock CMP
-  window.__cmp = jest.fn((command, version, callback) => {
+  window.__cmp = jest.fn(command => {
     // Documenting available commands for Quantcast CMP.
     // https://quantcast.zendesk.com/hc/en-us/articles/360003814853-Technical-Implementation-Guide
     // IAB standard docs:
@@ -47,8 +43,6 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
-  const localStorageManager = require('js/utils/localstorage-mgr').default
-  localStorageManager.clear()
 })
 
 afterAll(() => {
@@ -60,7 +54,6 @@ describe('consentManagement', () => {
     // Mock the CMP callback for getting consent data
     window.__cmp.mockImplementation((command, version, callback) => {
       if (command === 'getConsentData') {
-        /* eslint-disable-next-line standard/no-callback-literal */
         callback({
           consentData: 'abcdefghijklm', // consent string
           gdprApplies: true,
@@ -98,7 +91,6 @@ describe('consentManagement', () => {
     // Mock the CMP callback for getting consent data
     window.__cmp.mockImplementation((command, version, callback) => {
       if (command === 'getConsentData') {
-        /* eslint-disable-next-line standard/no-callback-literal */
         callback({
           consentData: 'abcdefghijklm', // consent string
           gdprApplies: true,
@@ -137,7 +129,6 @@ describe('consentManagement', () => {
           mockCMPConsentChange = callback
         }
         if (command === 'getConsentData') {
-          /* eslint-disable-next-line standard/no-callback-literal */
           getConsentDataCallback({
             consentData: 'abcdefghijklm',
             gdprApplies: true,
@@ -168,7 +159,6 @@ describe('consentManagement', () => {
           mockCMPConsentChange = callback
         }
         if (command === 'getConsentData') {
-          /* eslint-disable-next-line standard/no-callback-literal */
           getConsentDataCallback({
             consentData: 'abcdefghijklm',
             gdprApplies: true,
@@ -204,7 +194,6 @@ describe('consentManagement', () => {
           mockCMPConsentChange = callback
         }
         if (command === 'getConsentData') {
-          /* eslint-disable-next-line standard/no-callback-literal */
           getConsentDataCallback({
             consentData: 'abcdefghijklm',
             gdprApplies: true,
@@ -242,39 +231,5 @@ describe('consentManagement', () => {
     expect(mockCallbackA).toHaveBeenCalledTimes(1)
     expect(mockCallbackB).toHaveBeenCalledTimes(2)
     expect(mockCallbackC).toHaveBeenCalledTimes(1)
-  })
-
-  it('saves a "consent data updated" flag to localStorage', () => {
-    const localStorageManager = require('js/utils/localstorage-mgr').default
-    const {
-      saveConsentUpdateEventToLocalStorage,
-    } = require('src/consentManagement')
-    saveConsentUpdateEventToLocalStorage()
-    expect(localStorageManager.setItem).toHaveBeenCalledWith(
-      STORAGE_NEW_CONSENT_DATA_EXISTS,
-      'true'
-    )
-  })
-
-  it('checking if new consent needs to be logged works as expected', () => {
-    const localStorageManager = require('js/utils/localstorage-mgr').default
-    const {
-      checkIfNewConsentNeedsToBeLogged,
-    } = require('src/consentManagement')
-
-    localStorageManager.setItem(STORAGE_NEW_CONSENT_DATA_EXISTS, 'true')
-    expect(checkIfNewConsentNeedsToBeLogged()).toBe(true)
-
-    localStorageManager.removeItem(STORAGE_NEW_CONSENT_DATA_EXISTS)
-    expect(checkIfNewConsentNeedsToBeLogged()).toBe(false)
-  })
-
-  it('marking consent data as logged works as expected', () => {
-    const localStorageManager = require('js/utils/localstorage-mgr').default
-    const { markConsentDataAsLogged } = require('src/consentManagement')
-    markConsentDataAsLogged()
-    expect(localStorageManager.removeItem).toHaveBeenCalledWith(
-      STORAGE_NEW_CONSENT_DATA_EXISTS
-    )
   })
 })

@@ -1,15 +1,2 @@
-import { getTabsOpenedToday } from 'src/utils/local-user-data-mgr'
-
-const MAX_TABS_WITH_ADS = 150
-
-export default () => {
-  if (!(process.env.REACT_APP_ADS_ENABLED === 'true')) {
-    return false
-  }
-
-  // If the user has exceeded the daily tab maximum,
-  // do not show ads.
-  // https://github.com/gladly-team/tab/issues/202
-  const tabsOpenedToday = getTabsOpenedToday()
-  return tabsOpenedToday < MAX_TABS_WITH_ADS
-}
+// TODO: this should come from the app in configuration
+export default () => true

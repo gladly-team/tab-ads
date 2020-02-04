@@ -1,9 +1,3 @@
-import moment from 'moment'
-import {
-  getBrowserExtensionInstallTime,
-  hasUserDismissedAdExplanation,
-} from 'src/utils/local-user-data-mgr'
-
 // Time to wait for the entire ad auction before
 // calling the ad server.
 export const AUCTION_TIMEOUT = 1000
@@ -31,37 +25,12 @@ export const HORIZONTAL_AD_UNIT_ID = '/43865596/HBTL'
 export const HORIZONTAL_AD_SLOT_DOM_ID = 'div-gpt-ad-1464385677836-0'
 
 /**
- * Determine if we should show the explanation that the ads raise
- * money for charity. We'll show it to users for the first X hours
- * after they join.
- * @return {Boolean} Whether to show one ad.
- */
-export const shouldShowAdExplanation = () => {
-  const hoursToShow = 4
-  const installTime = getBrowserExtensionInstallTime()
-  const joinedRecently =
-    !!installTime && moment().diff(installTime, 'hours') < hoursToShow
-  return !!(joinedRecently && !hasUserDismissedAdExplanation())
-}
-
-/**
- * Determine if we should show only one ad. We'll show one ad to
- * users for the first X hours after they join.
- * @return {Boolean} Whether to show one ad.
- */
-const shouldShowOneAd = () => {
-  const installTime = getBrowserExtensionInstallTime()
-  const joinedRecently =
-    !!installTime && moment().diff(installTime, 'hours') < 24
-  return !!joinedRecently
-}
-
-/**
  * Get the number of banner ads to show on the new tab page.
  * @return {Number} The number of ads
  */
 export const getNumberOfAdsToShow = () => {
-  return shouldShowOneAd() ? 1 : 3
+  // TODO: this should come from the app in configuration
+  return 3
 }
 
 /**
