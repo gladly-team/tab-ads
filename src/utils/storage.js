@@ -41,11 +41,15 @@ const defaultAdDataStore = {
   slotsAlreadyLoggedRevenue: {},
 }
 
-// TODO: clean this up and test this. It's a replacement for the tab window variable.
-let adDataStore = { ...defaultAdDataStore }
+// TODO: stop using window variable.
+window.tabAds = {}
+window.tabAds.adDataStore = { ...defaultAdDataStore }
+// export const adDataStore = window.tabAds.adDataStore // eslint-disable-line prefer-destructuring
 
 export const clearAdDataStore = () => {
-  adDataStore = { ...defaultAdDataStore }
+  window.tabAds.adDataStore = { ...defaultAdDataStore }
 }
 
-export const getAdDataStore = () => adDataStore
+export const getAdDataStore = () => {
+  return window.tabAds.adDataStore
+}
