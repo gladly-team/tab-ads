@@ -3,6 +3,7 @@
   "plugins": ["prettier", "react-hooks", "jest"],
   "rules": {
     "global-require": 0,
+    "no-underscore-dangle": 0,
     "prettier/prettier": "error",
     "react/no-unescaped-entities": 0,
     "react/jsx-filename-extension": 0,
