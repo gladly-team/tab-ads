@@ -3,7 +3,7 @@
 jest.mock('js/ads/adSettings')
 jest.mock('js/ads/indexExchange/getIndexExchangeTag')
 jest.mock('js/ads/google/getGoogleTag')
-jest.mock('js/utils/logger')
+jest.mock('src/utils/logger')
 
 beforeAll(() => {
   jest.useFakeTimers()
@@ -224,7 +224,7 @@ describe('indexExchangeBidder', () => {
 
   it('does not throw, log an error, or set targeting if the bid response is undefined', async () => {
     expect.assertions(4)
-    const logger = require('js/utils/logger').default
+    const logger = require('src/utils/logger').default
     const getGoogleTag = require('src/google/getGoogleTag').default
     const googletag = getGoogleTag()
 
@@ -249,7 +249,7 @@ describe('indexExchangeBidder', () => {
 
   it('does not throw, log an error, or set targeting if the bid response is an empty object', async () => {
     expect.assertions(4)
-    const logger = require('js/utils/logger').default
+    const logger = require('src/utils/logger').default
     const getGoogleTag = require('src/google/getGoogleTag').default
     const googletag = getGoogleTag()
 
@@ -272,7 +272,7 @@ describe('indexExchangeBidder', () => {
 
   it('does not throw, log an error, or set targeting if the bid response has no slot responses', async () => {
     expect.assertions(4)
-    const logger = require('js/utils/logger').default
+    const logger = require('src/utils/logger').default
     const getGoogleTag = require('src/google/getGoogleTag').default
     const googletag = getGoogleTag()
 
@@ -301,7 +301,7 @@ describe('indexExchangeBidder', () => {
 
   it('does not throw, log an error, or set targeting if IX returns an unexpected slot ID', async () => {
     expect.assertions(4)
-    const logger = require('js/utils/logger').default
+    const logger = require('src/utils/logger').default
     const getGoogleTag = require('src/google/getGoogleTag').default
     const googletag = getGoogleTag()
 
@@ -343,7 +343,7 @@ describe('indexExchangeBidder', () => {
 
   it('does not throw, log an error, or set targeting if IX does not define targeting values for a slot', async () => {
     expect.assertions(4)
-    const logger = require('js/utils/logger').default
+    const logger = require('src/utils/logger').default
     const getGoogleTag = require('src/google/getGoogleTag').default
     const googletag = getGoogleTag()
 
