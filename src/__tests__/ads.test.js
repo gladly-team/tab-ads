@@ -121,7 +121,7 @@ describe('ads script', () => {
     // Mock that Prebid is very slow to respond
     const prebidConfig = require('src/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 15e3)
@@ -131,7 +131,7 @@ describe('ads script', () => {
     // Mock that Amazon is very slow to respond
     const amazonBidder = require('src/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 15e3)
@@ -142,7 +142,7 @@ describe('ads script', () => {
     const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 15e3)
@@ -169,7 +169,7 @@ describe('ads script', () => {
     // Mock that Prebid is very slow to respond
     const prebidConfig = require('src/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 15e3)
@@ -179,7 +179,7 @@ describe('ads script', () => {
     // Mock that Amazon responds quickly
     const amazonBidder = require('src/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 80)
@@ -190,7 +190,7 @@ describe('ads script', () => {
     const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 80)
@@ -216,7 +216,7 @@ describe('ads script', () => {
     // Mock that Prebid responds quickly
     const prebidConfig = require('src/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 40)
@@ -226,7 +226,7 @@ describe('ads script', () => {
     // Mock that Amazon responds quickly
     const amazonBidder = require('src/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 40)
@@ -237,7 +237,7 @@ describe('ads script', () => {
     const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 40)
@@ -260,7 +260,7 @@ describe('ads script', () => {
     // Mock that Prebid responds quickly
     const prebidConfig = require('src/prebid/prebidConfig').default
     prebidConfig.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 40)
@@ -270,7 +270,7 @@ describe('ads script', () => {
     // Mock that Amazon responds quickly
     const amazonBidder = require('src/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 40)
@@ -281,7 +281,7 @@ describe('ads script', () => {
     const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 40)
@@ -310,7 +310,7 @@ describe('ads script', () => {
     // Mock that Amazon responds quickly
     const amazonBidder = require('src/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 80)
@@ -330,7 +330,7 @@ describe('ads script', () => {
     // Mock that Amazon responds slowly
     const amazonBidder = require('src/amazon/amazonBidder').default
     amazonBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 15e3)
@@ -353,7 +353,7 @@ describe('ads script', () => {
     const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 80)
@@ -376,7 +376,7 @@ describe('ads script', () => {
     const indexExchangeBidder = require('src/indexExchange/indexExchangeBidder')
       .default
     indexExchangeBidder.mockImplementationOnce(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve()
         }, 15e3)
