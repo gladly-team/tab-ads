@@ -12,6 +12,7 @@ import { clearAdDataStore, getAdDataStore } from 'src/utils/storage'
 jest.mock('src/adSettings')
 jest.mock('src/consentManagement')
 jest.mock('src/providers/amazon/getAmazonTag')
+jest.mock('src/utils/logger')
 
 beforeEach(() => {
   // Mock apstag

@@ -13,6 +13,7 @@ jest.mock('src/providers/indexExchange/indexExchangeBidder')
 jest.mock('src/handleAdsLoaded')
 jest.mock('src/adsEnabledStatus')
 jest.mock('src/google/setUpGoogleAds')
+jest.mock('src/utils/logger')
 
 beforeAll(() => {
   jest.useFakeTimers()

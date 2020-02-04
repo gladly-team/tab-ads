@@ -17,6 +17,7 @@ import {
 
 jest.mock('src/adSettings')
 jest.mock('src/providers/prebid/getPrebidPbjs')
+jest.mock('src/utils/logger')
 
 beforeEach(() => {
   delete window.pbjs
