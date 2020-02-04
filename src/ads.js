@@ -1,4 +1,4 @@
-import 'js/ads/prebid/prebid' // Prebid library code
+import 'src/prebid/built/pb' // Prebid library code
 import adsEnabled from 'src/adsEnabledStatus'
 import amazonBidder, { storeAmazonBids } from 'src/amazon/amazonBidder'
 import indexExchangeBidder, {
@@ -24,8 +24,8 @@ const bidders = [BIDDER_PREBID, BIDDER_AMAZON, BIDDER_IX]
 const requestManager = {
   // [bidder name]: {boolean} whether the bidder has
   //   returned a bid
-  bidders: bidders.reduce((bidders, currentBidder) => {
-    bidders[currentBidder] = false
+  bidders: bidders.reduce((bidderTracker, currentBidder) => {
+    bidderTracker[currentBidder] = false // eslint-disable-line no-param-reassign
     return bidders
   }, {}),
 
@@ -73,7 +73,7 @@ function allBiddersBack() {
   return (
     // If length is equal to bidders, all bidders are back.
     bidders
-      .map(function(bidder) {
+      .map(bidder => {
         return requestManager.bidders[bidder]
       })
       // Remove false values (bidders that have not responded).

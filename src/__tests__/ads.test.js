@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag'
+import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
 import getAmazonTag from 'src/amazon/getAmazonTag'
 import getPrebidPbjs from 'src/prebid/getPrebidPbjs'
 

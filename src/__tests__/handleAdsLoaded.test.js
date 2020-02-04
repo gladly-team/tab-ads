@@ -1,8 +1,7 @@
 /* eslint-env jest */
 
-import { getAdDataStore } from 'src/utils/storage'
+import { clearAdDataStore, getAdDataStore } from 'src/utils/storage'
 import {
-  deleteTabGlobal,
   mockGoogleTagImpressionViewableData,
   mockGoogleTagSlotOnloadData,
   mockGoogleTagSlotRenderEndedData,
@@ -26,10 +25,10 @@ beforeEach(() => {
 
 afterAll(() => {
   delete window.googletag
-  deleteTabGlobal()
+  clearAdDataStore()
 })
 
-describe('handleAdsLoaded', function() {
+describe('handleAdsLoaded', () => {
   it('adds a slot ID to the tab global\'s "rendered slots" object when GPT\'s "slotRenderEnded" event is fired', () => {
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
