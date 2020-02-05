@@ -4,7 +4,9 @@ import { get } from 'lodash/object'
 
 const defaultConfig = {
   disableAds: false, // true if we should't call for bids
-  useMockAds: false, // true if we should display fake ad content (development only)
+  // Set "useMockAds" to true if we should display fake ad content. This
+  // is for development only and only if "disableAds" is also true.
+  useMockAds: false,
   // TODO: pass array to know which ads to load.
   // For now, we'll hardcode them.
   adUnits: [
@@ -61,8 +63,10 @@ const defaultConfig = {
   },
 }
 
+let config
+
 export const createConfig = userConfig => {
-  return {
+  const fullConfig = {
     ...(userConfig || {}),
     consent: {
       ...defaultConfig.consent,
@@ -75,4 +79,10 @@ export const createConfig = userConfig => {
     adUnits: defaultConfig.adUnits, // Don't allow modifying this right now.
     newTabAds: defaultConfig.newTabAds, // Don't allow modifying this.
   }
+  config = fullConfig
+  return fullConfig
+}
+
+export const getConfig = () => {
+  return config
 }
