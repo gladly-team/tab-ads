@@ -63,27 +63,29 @@ describe('prebidConfig', () => {
   it('includes the consentManagement setting when in the EU', async () => {
     expect.assertions(1)
 
-    // FIXME: use provided configuration to do this
-    expect(true).toBe(true)
-
-    //     const pbjs = getPrebidPbjs()
-    // const tabAdsConfig = setConfig()
-    //     await prebidConfig(tabAdsConfig)
-    //     expect(
-    //       pbjs.setConfig.mock.calls[0][0].consentManagement
-    //     ).not.toBeUndefined()
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      consent: {
+        isEU: () => Promise.resolve(true),
+      },
+    })
+    await prebidConfig(tabAdsConfig)
+    expect(
+      pbjs.setConfig.mock.calls[0][0].consentManagement
+    ).not.toBeUndefined()
   })
 
   it('does not include consentManagement setting when not in the EU', async () => {
     expect.assertions(1)
 
-    // FIXME: use provided configuration to do this
-    expect(true).toBe(true)
-
-    // const pbjs = getPrebidPbjs()
-    // const tabAdsConfig = setConfig()
-    // await prebidConfig(tabAdsConfig)
-    // expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      consent: {
+        isEU: () => Promise.resolve(false),
+      },
+    })
+    await prebidConfig(tabAdsConfig)
+    expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
   })
 
   it('the list of bidders for each ad match what is expected', async () => {
