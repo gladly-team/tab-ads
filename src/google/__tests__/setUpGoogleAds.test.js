@@ -2,13 +2,8 @@
 
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import getGoogleTag from 'src/google/getGoogleTag'
-import {
-  getNumberOfAdsToShow,
-  getVerticalAdSizes,
-  getHorizontalAdSizes,
-} from 'src/adSettings'
+import { createConfig } from 'src/config'
 
-jest.mock('src/adSettings')
 jest.mock('src/google/getGoogleTag')
 
 afterEach(() => {
@@ -22,104 +17,42 @@ afterAll(() => {
 describe('setUpGoogleAds', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', () => {
-    setUpGoogleAds()
+    const tabAdsConfig = createConfig()
+    setUpGoogleAds(tabAdsConfig)
   })
 
-  it('does not define ad slots when showing zero ads', () => {
-    getNumberOfAdsToShow.mockReturnValue(0)
-    setUpGoogleAds()
-    const googletag = getGoogleTag()
-    expect(googletag.defineSlot).not.toHaveBeenCalled()
-  })
-
-  it('defines the expected ad slots when showing 1 ad', () => {
-    getNumberOfAdsToShow.mockReturnValue(1)
-    setUpGoogleAds()
-    const googletag = getGoogleTag()
-    expect(googletag.defineSlot.mock.calls.length).toBe(1)
-    expect(googletag.defineSlot.mock.calls[0]).toEqual([
-      '/99887766/HBTL',
-      expect.any(Array),
-      'div-gpt-ad-24682468-0',
-    ])
-  })
-
-  it('defines the expected ad slots when showing 2 ads', () => {
-    getNumberOfAdsToShow.mockReturnValue(2)
-    setUpGoogleAds()
-    const googletag = getGoogleTag()
-    expect(googletag.defineSlot.mock.calls.length).toBe(2)
-    expect(googletag.defineSlot.mock.calls[0]).toEqual([
-      '/99887766/HBTL',
-      expect.any(Array),
-      'div-gpt-ad-24682468-0',
-    ])
-    expect(googletag.defineSlot.mock.calls[1]).toEqual([
-      '/11223344/HBTR',
-      expect.any(Array),
-      'div-gpt-ad-1357913579-0',
-    ])
-  })
-
-  it('defines the expected ad slots when showing 3 ads', () => {
-    getNumberOfAdsToShow.mockReturnValue(3)
-    setUpGoogleAds()
+  it('defines the expected ad slots', () => {
+    const tabAdsConfig = createConfig()
+    setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
     expect(googletag.defineSlot.mock.calls.length).toBe(3)
     expect(googletag.defineSlot.mock.calls[0]).toEqual([
-      '/99887766/HBTL',
+      '/43865596/HBTL',
       expect.any(Array),
-      'div-gpt-ad-24682468-0',
+      'div-gpt-ad-1464385677836-0',
     ])
     expect(googletag.defineSlot.mock.calls[1]).toEqual([
-      '/11223344/HBTR',
+      '/43865596/HBTR',
       expect.any(Array),
-      'div-gpt-ad-1357913579-0',
+      'div-gpt-ad-1464385742501-0',
     ])
     expect(googletag.defineSlot.mock.calls[2]).toEqual([
-      '/44556677/HBTR2',
+      '/43865596/HBTR2',
       expect.any(Array),
-      'div-gpt-ad-11235813-0',
-    ])
-  })
-
-  it('uses the ad sizes from the ad settings', () => {
-    getVerticalAdSizes.mockReturnValueOnce([
-      [250, 250],
-      [300, 600],
-    ])
-    getHorizontalAdSizes.mockReturnValueOnce([
-      [728, 90],
-      [720, 300],
-    ])
-    setUpGoogleAds()
-    const googletag = getGoogleTag()
-    expect(googletag.defineSlot.mock.calls[0]).toEqual([
-      '/99887766/HBTL',
-      [
-        [728, 90],
-        [720, 300],
-      ],
-      'div-gpt-ad-24682468-0',
-    ])
-    expect(googletag.defineSlot.mock.calls[1]).toEqual([
-      '/11223344/HBTR',
-      [
-        [250, 250],
-        [300, 600],
-      ],
-      'div-gpt-ad-1357913579-0',
+      'div-gpt-ad-1539903223131-0',
     ])
   })
 
   it('enables single request mode', () => {
-    setUpGoogleAds()
+    const tabAdsConfig = createConfig()
+    setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
     expect(googletag.pubads().enableSingleRequest).toHaveBeenCalled()
   })
 
   it('enables ad services', () => {
-    setUpGoogleAds()
+    const tabAdsConfig = createConfig()
+    setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
     expect(googletag.enableServices).toHaveBeenCalled()
   })

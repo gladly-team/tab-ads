@@ -1,14 +1,4 @@
 import getAmazonTag from 'src/providers/amazon/getAmazonTag'
-import {
-  getNumberOfAdsToShow,
-  getVerticalAdSizes,
-  getHorizontalAdSizes,
-  BIDDER_TIMEOUT,
-  CONSENT_MANAGEMENT_TIMEOUT,
-  VERTICAL_AD_SLOT_DOM_ID,
-  SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID,
-} from 'src/adSettings'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
 
@@ -51,33 +41,15 @@ export const storeAmazonBids = () => {
  * @return {Promise<undefined>} Resolves when the Amazon
  *   bid requests return or time out.
  */
-function initApstag() {
-  const numAds = getNumberOfAdsToShow()
-  if (numAds < 1) {
-    return Promise.resolve()
-  }
+const initApstag = async config => {
   const apstag = getAmazonTag()
 
-  // Only get bids for the horizontal ad slot if only
-  // one ad is enabled.
-  const slots = [
-    {
-      slotID: HORIZONTAL_AD_SLOT_DOM_ID,
-      sizes: getHorizontalAdSizes(),
-    },
-  ]
-  if (numAds > 1) {
-    slots.push({
-      slotID: VERTICAL_AD_SLOT_DOM_ID,
-      sizes: getVerticalAdSizes(),
-    })
-  }
-  if (numAds > 2) {
-    slots.push({
-      slotID: SECOND_VERTICAL_AD_SLOT_DOM_ID,
-      sizes: getVerticalAdSizes(),
-    })
-  }
+  const slots = config.adUnits.map(adUnit => {
+    return {
+      slotID: adUnit.adId,
+      sizes: adUnit.sizes,
+    }
+  })
 
   return new Promise(resolve => {
     function handleAuctionEnd() {
@@ -88,7 +60,7 @@ function initApstag() {
       pubID: 'ea374841-51b0-4335-9960-99200427f7c8',
       adServer: 'googletag',
       gdpr: {
-        cmpTimeout: CONSENT_MANAGEMENT_TIMEOUT,
+        cmpTimeout: config.consent.timeout,
       },
     })
 
@@ -96,7 +68,7 @@ function initApstag() {
     apstag.fetchBids(
       {
         slots,
-        timeout: BIDDER_TIMEOUT,
+        timeout: config.bidderTimeout,
       },
       bids => {
         amazonBids = bids
@@ -106,6 +78,4 @@ function initApstag() {
   })
 }
 
-export default () => {
-  return initApstag()
-}
+export default initApstag

@@ -1,11 +1,8 @@
-import adsEnabled from 'src/adsEnabledStatus'
 import googleDisplayAd from 'src/google/googleDisplayAd'
-import mockDisplayAd from 'src/mockDisplayAd'
+// import mockDisplayAd from 'src/mockDisplayAd'
 
 export default adId => {
-  if (adsEnabled()) {
-    googleDisplayAd(adId)
-  } else {
-    mockDisplayAd(adId)
-  }
+  // FIXME: depending on the config, don't show ads or show mock ads.
+  googleDisplayAd(adId)
+  // mockDisplayAd(adId)
 }

@@ -1,13 +1,6 @@
 /* eslint-env jest */
 
-import {
-  VERTICAL_AD_UNIT_ID,
-  VERTICAL_AD_SLOT_DOM_ID,
-  SECOND_VERTICAL_AD_UNIT_ID,
-  SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_UNIT_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID,
-} from 'src/adSettings'
+import { createConfig } from 'src/config'
 
 // By default, we run functions in the queue immediately.
 // Call this to disable that.
@@ -34,22 +27,23 @@ const MockSlot = ({ adUnitPath, slotElementId }) => ({
   setTargeting: jest.fn(),
 })
 
+const tabAdsConfig = createConfig()
 const mockSlots = [
   // Mock ad unit IDs from the adSettings mock.
   // Bottom leaderboard
   MockSlot({
-    adUnitPath: HORIZONTAL_AD_UNIT_ID,
-    slotElementId: HORIZONTAL_AD_SLOT_DOM_ID,
+    adUnitPath: tabAdsConfig.newTabAds.leaderboard.adUnitId,
+    slotElementId: tabAdsConfig.newTabAds.leaderboard.adId,
   }),
   // First (bottom) rectangle ad
   MockSlot({
-    adUnitPath: VERTICAL_AD_UNIT_ID,
-    slotElementId: VERTICAL_AD_SLOT_DOM_ID,
+    adUnitPath: tabAdsConfig.newTabAds.rectangleAdPrimary.adUnitId,
+    slotElementId: tabAdsConfig.newTabAds.rectangleAdPrimary.adId,
   }),
   // Second (top) rectangle ad
   MockSlot({
-    adUnitPath: SECOND_VERTICAL_AD_UNIT_ID,
-    slotElementId: SECOND_VERTICAL_AD_SLOT_DOM_ID,
+    adUnitPath: tabAdsConfig.newTabAds.rectangleAdSecondary.adUnitId,
+    slotElementId: tabAdsConfig.newTabAds.rectangleAdSecondary.adId,
   }),
 ]
 

@@ -1,5 +1,4 @@
 import 'src/providers/prebid/built/pb' // Run our built Prebid.js
-import adsEnabled from 'src/adsEnabledStatus'
 import amazonBidder, {
   storeAmazonBids,
 } from 'src/providers/amazon/amazonBidder'
@@ -12,8 +11,8 @@ import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import handleAdsLoaded from 'src/handleAdsLoaded'
 import prebidConfig from 'src/providers/prebid/prebidConfig'
-import { AUCTION_TIMEOUT } from 'src/adSettings'
 import logger from 'src/utils/logger'
+import { createConfig } from 'src/config'
 
 // Enabled bidders.
 const BIDDER_PREBID = 'prebid'
@@ -105,14 +104,16 @@ function bidderCompleted(bidder) {
  * Initialize all bidders and make bid requests.
  * @return {undefined}
  */
-const loadAdCode = () => {
+const loadAdCode = config => {
   // Track loaded ads for analytics
   handleAdsLoaded()
 
   logger.debug(`Loading all bidders in ads.js.`)
 
+  // TODO: standardize bidder API.
+
   // Amazon
-  amazonBidder()
+  amazonBidder(config)
     .then(() => {
       bidderCompleted(BIDDER_AMAZON)
     })
@@ -122,7 +123,7 @@ const loadAdCode = () => {
     })
 
   // Prebid
-  prebidConfig()
+  prebidConfig(config)
     .then(() => {
       bidderCompleted(BIDDER_PREBID)
     })
@@ -132,7 +133,7 @@ const loadAdCode = () => {
     })
 
   // Index Exchange
-  indexExchangeBidder()
+  indexExchangeBidder(config)
     .then(() => {
       bidderCompleted(BIDDER_IX)
     })
@@ -142,20 +143,21 @@ const loadAdCode = () => {
     })
 }
 
-const fetchAds = async () => {
-  if (adsEnabled()) {
+const fetchAds = async userConfig => {
+  const config = createConfig(userConfig)
+  if (!config.disableAds) {
     // Define slots and enable ad services.
-    setUpGoogleAds()
+    setUpGoogleAds(config)
 
     // Call the ad server after some time to avoid waiting
     // too long for bid responses.
     setTimeout(() => {
       sendAdserverRequest()
-    }, AUCTION_TIMEOUT)
+    }, config.auctionTimeout)
 
-    loadAdCode()
+    loadAdCode(config)
   } else {
-    // console.log('Ads are disabled. Not setting up DFP or Prebid.')
+    logger.debug('Ads are disabled. Not setting up DFP or fetching bids.')
   }
 }
 

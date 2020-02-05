@@ -1,11 +1,4 @@
 import getIndexExchangeTag from 'src/providers/indexExchange/getIndexExchangeTag'
-import {
-  getNumberOfAdsToShow,
-  BIDDER_TIMEOUT,
-  VERTICAL_AD_UNIT_ID,
-  SECOND_VERTICAL_AD_UNIT_ID,
-  HORIZONTAL_AD_UNIT_ID,
-} from 'src/adSettings'
 import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
@@ -24,6 +17,7 @@ export const markIndexExchangeBidsAsIncluded = () => {
   }
 }
 
+// TODO: assumes we are showing all 3 ads. Make that configurable.
 /**
  * Return a promise that resolves when the Index Exchange bid
  * responses return or the request times out. See:
@@ -31,37 +25,37 @@ export const markIndexExchangeBidsAsIncluded = () => {
  * @return {Promise<undefined>} Resolves when the Amazon
  *   bid requests return or time out.
  */
-const fetchIndexExchangeDemand = async () => {
-  const numAds = getNumberOfAdsToShow()
-  if (numAds < 1) {
-    return Promise.resolve()
-  }
-
+const fetchIndexExchangeDemand = async config => {
   // Note: use ixTag.cmd.push because the JS may not have
   // loaded. Index Exchange hasn't documented the cmd
   // behavior so it may break.
   const ixTag = getIndexExchangeTag()
 
+  const {
+    leaderboard,
+    rectangleAdPrimary,
+    rectangleAdSecondary,
+  } = config.newTabAds
+
   // Key = the GAM ad unit; value = the Index Exchange ID
   const mapGAMSlotsToIXSlots = {
     // Bottom leaderboard
-    [HORIZONTAL_AD_UNIT_ID]: 'd-1-728x90-atf-bottom-leaderboard',
+    [leaderboard.adUnitId]: 'd-1-728x90-atf-bottom-leaderboard',
     // Bottom-right rectangle ad
-    [VERTICAL_AD_UNIT_ID]: 'd-3-300x250-atf-bottom-right_rectangle',
+    [rectangleAdPrimary.adUnitId]: 'd-3-300x250-atf-bottom-right_rectangle',
     // Second (upper) rectangle ad
-    [SECOND_VERTICAL_AD_UNIT_ID]: 'd-2-300x250-atf-middle-right_rectangle',
+    [rectangleAdSecondary.adUnitId]: 'd-2-300x250-atf-middle-right_rectangle',
   }
 
+  // TODO
   // Only get bids for the number of ads we'll show.
-  const IXSlots = [{ htSlotName: mapGAMSlotsToIXSlots[HORIZONTAL_AD_UNIT_ID] }]
-  if (numAds > 1) {
-    IXSlots.push({ htSlotName: mapGAMSlotsToIXSlots[VERTICAL_AD_UNIT_ID] })
-  }
-  if (numAds > 2) {
-    IXSlots.push({
-      htSlotName: mapGAMSlotsToIXSlots[SECOND_VERTICAL_AD_UNIT_ID],
-    })
-  }
+  const IXSlots = [
+    { htSlotName: mapGAMSlotsToIXSlots[leaderboard.adUnitId] },
+    { htSlotName: mapGAMSlotsToIXSlots[rectangleAdPrimary.adUnitId] },
+    {
+      htSlotName: mapGAMSlotsToIXSlots[rectangleAdSecondary.adUnitId],
+    },
+  ]
 
   return new Promise(resolve => {
     function handleAuctionEnd() {
@@ -145,10 +139,8 @@ const fetchIndexExchangeDemand = async () => {
     // for responses.
     setTimeout(() => {
       handleAuctionEnd()
-    }, BIDDER_TIMEOUT)
+    }, config.bidderTimeout)
   })
 }
 
-export default () => {
-  return fetchIndexExchangeDemand()
-}
+export default fetchIndexExchangeDemand

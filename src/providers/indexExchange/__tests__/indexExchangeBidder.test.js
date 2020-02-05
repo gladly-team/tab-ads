@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
-jest.mock('src/adSettings')
+import { createConfig } from 'src/config'
+
 jest.mock('src/providers/indexExchange/getIndexExchangeTag')
 jest.mock('src/google/getGoogleTag')
 jest.mock('src/utils/logger')
@@ -37,52 +38,19 @@ describe('indexExchangeBidder', () => {
     expect.assertions(0)
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
   })
 
-  it('only gets bids for the leaderboard ad when one ad is enabled', async () => {
+  it('gets bids for the three ads', async () => {
     expect.assertions(2)
-    const { getNumberOfAdsToShow } = require('src/adSettings')
-    getNumberOfAdsToShow.mockReturnValue(1)
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
       .default
     const ixTag = getIndexExchangeTag()
-    await indexExchangeBidder()
-    expect(ixTag.retrieveDemand).toHaveBeenCalled()
-    expect(ixTag.retrieveDemand.mock.calls[0][0]).toEqual([
-      { htSlotName: 'd-1-728x90-atf-bottom-leaderboard' },
-    ])
-  })
-
-  it('gets bids for the leaderboard and rectangle ads when two ads are enabled', async () => {
-    expect.assertions(2)
-    const { getNumberOfAdsToShow } = require('src/adSettings')
-    getNumberOfAdsToShow.mockReturnValue(2)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
-    const ixTag = getIndexExchangeTag()
-    await indexExchangeBidder()
-    expect(ixTag.retrieveDemand).toHaveBeenCalled()
-    expect(ixTag.retrieveDemand.mock.calls[0][0]).toEqual([
-      { htSlotName: 'd-1-728x90-atf-bottom-leaderboard' },
-      { htSlotName: 'd-3-300x250-atf-bottom-right_rectangle' },
-    ])
-  })
-
-  it('gets bids for the leaderboard and rectangle ads when three ads are enabled', async () => {
-    expect.assertions(2)
-    const { getNumberOfAdsToShow } = require('src/adSettings')
-    getNumberOfAdsToShow.mockReturnValue(3)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
-    const ixTag = getIndexExchangeTag()
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
     expect(ixTag.retrieveDemand).toHaveBeenCalled()
     expect(ixTag.retrieveDemand.mock.calls[0][0]).toEqual([
       { htSlotName: 'd-1-728x90-atf-bottom-leaderboard' },
@@ -104,7 +72,8 @@ describe('indexExchangeBidder', () => {
       ixTag.retrieveDemand.mockImplementation((config, callback) => {
         retrieveDemandCallback = callback
       })
-      indexExchangeBidder().then(() => {
+      const tabAdsConfig = createConfig()
+      indexExchangeBidder(tabAdsConfig).then(() => {
         done()
       })
       retrieveDemandCallback()
@@ -122,7 +91,8 @@ describe('indexExchangeBidder', () => {
 
       // Mock that retrieveDemand never calls the callback.
       ixTag.retrieveDemand.mockImplementation(() => {})
-      indexExchangeBidder().then(() => {
+      const tabAdsConfig = createConfig()
+      indexExchangeBidder(tabAdsConfig).then(() => {
         done()
       })
 
@@ -147,7 +117,8 @@ describe('indexExchangeBidder', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
     )
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
     const googleSlots = googletag.pubads().getSlots()
     const [leaderboardSlot, rectangleSlot, secondRectangleSlot] = googleSlots
     expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith('IOM', [
@@ -212,7 +183,8 @@ describe('indexExchangeBidder', () => {
         identity: {},
       })
     )
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
     const [leaderboardSlot] = googletag.pubads().getSlots()
     expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith('IOM', [
       '728x90_5000',
@@ -240,7 +212,8 @@ describe('indexExchangeBidder', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(undefined)
     )
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -263,7 +236,8 @@ describe('indexExchangeBidder', () => {
       .default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) => callback({}))
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -292,7 +266,8 @@ describe('indexExchangeBidder', () => {
         identity: {},
       })
     )
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -334,7 +309,8 @@ describe('indexExchangeBidder', () => {
         identity: {},
       })
     )
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -373,7 +349,8 @@ describe('indexExchangeBidder', () => {
         identity: {},
       })
     )
-    await indexExchangeBidder()
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -383,7 +360,7 @@ describe('indexExchangeBidder', () => {
       })
   })
 
-  it('stores the bids in the tab global for analytics', async () => {
+  it('stores the bids for analytics', async () => {
     expect.assertions(3)
     const { getAdDataStore } = require('src/utils/storage')
     const adDataStore = getAdDataStore()
@@ -399,13 +376,11 @@ describe('indexExchangeBidder', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
     )
-    await indexExchangeBidder()
-    const {
-      VERTICAL_AD_SLOT_DOM_ID,
-      SECOND_VERTICAL_AD_SLOT_DOM_ID,
-      HORIZONTAL_AD_SLOT_DOM_ID,
-    } = require('src/adSettings')
-    expect(adDataStore.indexExchangeBids[HORIZONTAL_AD_SLOT_DOM_ID]).toEqual([
+    const tabAdsConfig = createConfig()
+    await indexExchangeBidder(tabAdsConfig)
+    expect(
+      adDataStore.indexExchangeBids[tabAdsConfig.newTabAds.leaderboard.adId]
+    ).toEqual([
       {
         targeting: {
           IOM: ['728x90_5000'],
@@ -417,7 +392,11 @@ describe('indexExchangeBidder', () => {
         partnerId: 'IndexExchangeHtb',
       },
     ])
-    expect(adDataStore.indexExchangeBids[VERTICAL_AD_SLOT_DOM_ID]).toEqual([
+    expect(
+      adDataStore.indexExchangeBids[
+        tabAdsConfig.newTabAds.rectangleAdPrimary.adId
+      ]
+    ).toEqual([
       {
         targeting: {
           IOM: ['300x250_5000'],
@@ -430,7 +409,9 @@ describe('indexExchangeBidder', () => {
       },
     ])
     expect(
-      adDataStore.indexExchangeBids[SECOND_VERTICAL_AD_SLOT_DOM_ID]
+      adDataStore.indexExchangeBids[
+        tabAdsConfig.newTabAds.rectangleAdSecondary.adId
+      ]
     ).toEqual([
       {
         targeting: {

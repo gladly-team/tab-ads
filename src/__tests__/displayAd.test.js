@@ -11,19 +11,12 @@ beforeEach(() => {
 })
 
 describe('displayAd', () => {
-  it('calls mockDisplayAd when ads are not enabled', () => {
-    jest.mock('src/adsEnabledStatus', () => () => false)
-    const displayAd = require('src/displayAd').default
-    displayAd('my-ad')
-    expect(mockGoogleDisplayAd).not.toHaveBeenCalled()
-    expect(mockMockDisplayAd).toHaveBeenCalledWith('my-ad')
-  })
-
-  it('calls googleDisplayAd when ads are enabled', () => {
-    jest.mock('src/adsEnabledStatus', () => () => true)
+  it('calls googleDisplayAd', () => {
     const displayAd = require('src/displayAd').default
     displayAd('some-ad')
     expect(mockGoogleDisplayAd).toHaveBeenCalledWith('some-ad')
     expect(mockMockDisplayAd).not.toHaveBeenCalled()
   })
+
+  // TODO: more tests
 })

@@ -1,225 +1,199 @@
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
-import {
-  getNumberOfAdsToShow,
-  getVerticalAdSizes,
-  getHorizontalAdSizes,
-  CONSENT_MANAGEMENT_TIMEOUT,
-  VERTICAL_AD_UNIT_ID,
-  VERTICAL_AD_SLOT_DOM_ID,
-  SECOND_VERTICAL_AD_UNIT_ID,
-  SECOND_VERTICAL_AD_SLOT_DOM_ID,
-  HORIZONTAL_AD_UNIT_ID,
-  HORIZONTAL_AD_SLOT_DOM_ID,
-} from 'src/adSettings'
 import logger from 'src/utils/logger'
 
-// FIXME: pass this logic in the config
-const isInEuropeanUnion = async () => false
+// TODO: assumes we are showing all 3 ads. Make that configurable.
+const getAdUnits = config => {
+  const {
+    leaderboard,
+    rectangleAdPrimary,
+    rectangleAdSecondary,
+  } = config.newTabAds
 
-const getAdUnits = () => {
-  const numAdsToShow = getNumberOfAdsToShow()
-
-  // Leaderboard-style ad with all bidders
-  const horizontalAdUnit = {
-    code: HORIZONTAL_AD_SLOT_DOM_ID,
-    mediaTypes: {
-      banner: {
-        sizes: getHorizontalAdSizes(),
+  const adUnits = [
+    // Leaderboard-style ad
+    {
+      code: leaderboard.adId,
+      mediaTypes: {
+        banner: {
+          sizes: leaderboard.sizes,
+        },
       },
+      bids: [
+        {
+          bidder: 'sonobi',
+          params: {
+            dom_id: leaderboard.adId,
+            ad_unit: leaderboard.adUnitId,
+          },
+        },
+        {
+          bidder: 'pulsepoint',
+          params: {
+            cf: '728X90',
+            cp: '560174',
+            ct: '460981',
+          },
+        },
+        {
+          bidder: 'aol',
+          params: {
+            network: '10559.1',
+            placement: '4117691',
+            sizeId: '225',
+          },
+        },
+        {
+          bidder: 'sovrn',
+          params: {
+            tagid: '438918',
+          },
+        },
+        {
+          bidder: 'openx',
+          params: {
+            unit: '538658529',
+            delDomain: 'tabforacause-d.openx.net',
+          },
+        },
+        // EMX Digital was formerly brealtime.
+        // http://prebid.org/dev-docs/bidders.html#emx_digital
+        {
+          bidder: 'emx_digital',
+          params: {
+            tagid: '29672',
+          },
+        },
+        {
+          bidder: 'rhythmone',
+          params: {
+            placementId: '73423',
+          },
+        },
+      ],
     },
-    bids: [
-      {
-        bidder: 'sonobi',
-        params: {
-          dom_id: HORIZONTAL_AD_SLOT_DOM_ID,
-          ad_unit: HORIZONTAL_AD_UNIT_ID,
-        },
-      },
-      {
-        bidder: 'pulsepoint',
-        params: {
-          cf: '728X90',
-          cp: '560174',
-          ct: '460981',
-        },
-      },
-      {
-        bidder: 'aol',
-        params: {
-          network: '10559.1',
-          placement: '4117691',
-          sizeId: '225',
-        },
-      },
-      {
-        bidder: 'sovrn',
-        params: {
-          tagid: '438918',
-        },
-      },
-      {
-        bidder: 'openx',
-        params: {
-          unit: '538658529',
-          delDomain: 'tabforacause-d.openx.net',
-        },
-      },
-      // EMX Digital was formerly brealtime.
-      // http://prebid.org/dev-docs/bidders.html#emx_digital
-      {
-        bidder: 'emx_digital',
-        params: {
-          tagid: '29672',
-        },
-      },
-      {
-        bidder: 'rhythmone',
-        params: {
-          placementId: '73423',
-        },
-      },
-    ],
-  }
 
-  // Rectangle-style ad with all bidders
-  const verticalAdUnitForTwoAds = {
-    code: VERTICAL_AD_SLOT_DOM_ID,
-    mediaTypes: {
-      banner: {
-        sizes: getVerticalAdSizes(),
+    // Rectangle-style ad
+    {
+      code: rectangleAdPrimary.adId,
+      mediaTypes: {
+        banner: {
+          sizes: rectangleAdPrimary.sizes,
+        },
       },
+      bids: [
+        {
+          bidder: 'sonobi',
+          params: {
+            dom_id: rectangleAdPrimary.adId,
+            ad_unit: rectangleAdPrimary.adUnitId,
+          },
+        },
+        {
+          bidder: 'pulsepoint',
+          params: {
+            cf: '300X250',
+            cp: '560174',
+            ct: '460982',
+          },
+        },
+        {
+          bidder: 'aol',
+          params: {
+            network: '10559.1',
+            placement: '4117692',
+            sizeId: '170',
+          },
+        },
+        {
+          bidder: 'sovrn',
+          params: {
+            tagid: '438916',
+          },
+        },
+        {
+          bidder: 'openx',
+          params: {
+            unit: '538658529',
+            delDomain: 'tabforacause-d.openx.net',
+          },
+        },
+        {
+          bidder: 'emx_digital',
+          params: {
+            tagid: '29673',
+          },
+        },
+        {
+          bidder: 'rhythmone',
+          params: {
+            placementId: '73423',
+          },
+        },
+      ],
     },
-    bids: [
-      {
-        bidder: 'sonobi',
-        params: {
-          dom_id: VERTICAL_AD_SLOT_DOM_ID,
-          ad_unit: VERTICAL_AD_UNIT_ID,
-        },
-      },
-      {
-        bidder: 'pulsepoint',
-        params: {
-          cf: '300X250',
-          cp: '560174',
-          ct: '460982',
-        },
-      },
-      {
-        bidder: 'aol',
-        params: {
-          network: '10559.1',
-          placement: '4117692',
-          sizeId: '170',
-        },
-      },
-      {
-        bidder: 'sovrn',
-        params: {
-          tagid: '438916',
-        },
-      },
-      {
-        bidder: 'openx',
-        params: {
-          unit: '538658529',
-          delDomain: 'tabforacause-d.openx.net',
-        },
-      },
-      {
-        bidder: 'emx_digital',
-        params: {
-          tagid: '29673',
-        },
-      },
-      {
-        bidder: 'rhythmone',
-        params: {
-          placementId: '73423',
-        },
-      },
-    ],
-  }
 
-  // Rectangle-style ad with some bidders for when
-  // we are showing three ads
-  const firstVerticalAdUnitForThreeAds = verticalAdUnitForTwoAds
-
-  // Second rectangle-style ad with some bidders for when
-  // we are showing three ads
-  const secondVerticalAdUnitForThreeAds = {
-    code: SECOND_VERTICAL_AD_SLOT_DOM_ID,
-    mediaTypes: {
-      banner: {
-        sizes: getVerticalAdSizes(),
+    // Second rectangle-style ad
+    {
+      code: rectangleAdSecondary.adId,
+      mediaTypes: {
+        banner: {
+          sizes: rectangleAdSecondary.sizes,
+        },
       },
+      bids: [
+        {
+          bidder: 'sonobi',
+          params: {
+            dom_id: rectangleAdSecondary.adId,
+            ad_unit: rectangleAdSecondary.adUnitId,
+          },
+        },
+        {
+          bidder: 'pulsepoint',
+          params: {
+            cf: '300X250',
+            cp: '560174',
+            ct: '665497',
+          },
+        },
+        {
+          bidder: 'aol',
+          params: {
+            network: '10559.1',
+            placement: '4997858',
+            sizeId: '170',
+          },
+        },
+        {
+          bidder: 'sovrn',
+          params: {
+            tagid: '589343',
+          },
+        },
+        {
+          bidder: 'openx',
+          params: {
+            unit: '538658529',
+            delDomain: 'tabforacause-d.openx.net',
+          },
+        },
+        // {
+        //   bidder: 'emx_digital',
+        //   params: {
+        //     tagid: 'TODO'
+        //   }
+        // },
+        {
+          bidder: 'rhythmone',
+          params: {
+            placementId: '73423',
+          },
+        },
+      ],
     },
-    bids: [
-      {
-        bidder: 'sonobi',
-        params: {
-          dom_id: SECOND_VERTICAL_AD_SLOT_DOM_ID,
-          ad_unit: SECOND_VERTICAL_AD_UNIT_ID,
-        },
-      },
-      {
-        bidder: 'pulsepoint',
-        params: {
-          cf: '300X250',
-          cp: '560174',
-          ct: '665497',
-        },
-      },
-      {
-        bidder: 'aol',
-        params: {
-          network: '10559.1',
-          placement: '4997858',
-          sizeId: '170',
-        },
-      },
-      {
-        bidder: 'sovrn',
-        params: {
-          tagid: '589343',
-        },
-      },
-      {
-        bidder: 'openx',
-        params: {
-          unit: '538658529',
-          delDomain: 'tabforacause-d.openx.net',
-        },
-      },
-      // {
-      //   bidder: 'emx_digital',
-      //   params: {
-      //     tagid: 'TODO'
-      //   }
-      // },
-      {
-        bidder: 'rhythmone',
-        params: {
-          placementId: '73423',
-        },
-      },
-    ],
-  }
-
-  if (!numAdsToShow) {
-    return []
-  }
-  if (numAdsToShow === 1) {
-    return [horizontalAdUnit]
-  }
-  if (numAdsToShow === 2) {
-    return [horizontalAdUnit, verticalAdUnitForTwoAds]
-  }
-  return [
-    horizontalAdUnit,
-    firstVerticalAdUnitForThreeAds,
-    secondVerticalAdUnitForThreeAds,
   ]
+
+  return adUnits
 }
 
 /**
@@ -230,14 +204,14 @@ const getAdUnits = () => {
  *   auction completes (either all bids back or bid requests
  *   time out).
  */
-export default async () => {
+export default async config => {
   logger.debug(`Prebid: bids requested`)
 
   // Determine if the user is in the EU, which may affect the
   // ads we show.
   let isInEU
   try {
-    isInEU = await isInEuropeanUnion()
+    isInEU = await config.consent.isEU()
   } catch (e) {
     isInEU = false
   }
@@ -249,25 +223,19 @@ export default async () => {
 
     const requiresConsentManagement = !!isInEU
 
-    const adUnits = getAdUnits()
+    const adUnits = getAdUnits(config)
 
     const pbjs = getPrebidPbjs()
 
     pbjs.que.push(() => {
-      // http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.setConfig
-      const protocol = process.env.REACT_APP_WEBSITE_PROTOCOL
-        ? process.env.REACT_APP_WEBSITE_PROTOCOL
-        : 'https'
-      const publisherDomain = `${protocol}://${process.env.REACT_APP_WEBSITE_DOMAIN}`
-      const pagePath = window.location.pathname
       pbjs.setConfig({
         // bidderTimeout: 700 // default
-        publisherDomain, // Used for SafeFrame creative
+        publisherDomain: config.publisher.domain, // Used for SafeFrame creative
         // Overrides the page URL adapters should use. Otherwise, some adapters
         // will use the current frame's URL while others use the top frame URL.
         // Only some adapters use this setting as of May 2018.
         // https://github.com/prebid/Prebid.js/issues/1882
-        pageUrl: `${publisherDomain}${pagePath}`,
+        pageUrl: config.publisher.pageUrl,
         userSync: {
           filterSettings: {
             // EMX Digital requested iframe syncing on 13 Nov 2018 due to
@@ -285,7 +253,7 @@ export default async () => {
         ...(requiresConsentManagement && {
           consentManagement: {
             cmpApi: 'iab',
-            timeout: CONSENT_MANAGEMENT_TIMEOUT,
+            timeout: config.consent.timeout,
             allowAuctionWithoutConsent: true,
           },
         }),
