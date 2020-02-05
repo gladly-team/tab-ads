@@ -27,24 +27,22 @@ const MockSlot = ({ adUnitPath, slotElementId }) => ({
   setTargeting: jest.fn(),
 })
 
-// FIXME: don't call setConfig here. It could interfere with tests.
-const tabAdsConfig = setConfig()
 const mockSlots = [
   // Mock ad unit IDs from the adSettings mock.
   // Bottom leaderboard
   MockSlot({
-    adUnitPath: tabAdsConfig.newTabAds.leaderboard.adUnitId,
-    slotElementId: tabAdsConfig.newTabAds.leaderboard.adId,
+    adUnitPath: '/43865596/HBTL',
+    slotElementId: 'div-gpt-ad-1464385677836-0',
   }),
   // First (bottom) rectangle ad
   MockSlot({
-    adUnitPath: tabAdsConfig.newTabAds.rectangleAdPrimary.adUnitId,
-    slotElementId: tabAdsConfig.newTabAds.rectangleAdPrimary.adId,
+    adUnitPath: '/43865596/HBTR',
+    slotElementId: 'div-gpt-ad-1464385742501-0',
   }),
   // Second (top) rectangle ad
   MockSlot({
-    adUnitPath: tabAdsConfig.newTabAds.rectangleAdSecondary.adUnitId,
-    slotElementId: tabAdsConfig.newTabAds.rectangleAdSecondary.adId,
+    adUnitPath: '/43865596/HBTR2',
+    slotElementId: 'div-gpt-ad-1539903223131-0',
   }),
 ]
 
