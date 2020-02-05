@@ -7,7 +7,7 @@ import getAmazonTag, {
 import getGoogleTag from 'src/google/getGoogleTag'
 import { mockAmazonBidResponse } from 'src/utils/test-utils'
 import { clearAdDataStore, getAdDataStore } from 'src/utils/storage'
-import { createConfig } from 'src/config'
+import { setConfig } from 'src/config'
 
 jest.mock('src/consentManagement')
 jest.mock('src/providers/amazon/getAmazonTag')
@@ -38,7 +38,7 @@ describe('amazonBidder', () => {
   it('runs without error', async () => {
     expect.assertions(0)
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await amazonBidder(tabAdsConfig)
   })
 
@@ -47,7 +47,7 @@ describe('amazonBidder', () => {
     const apstag = getAmazonTag()
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await amazonBidder(tabAdsConfig)
 
     expect(apstag.init.mock.calls[0][0]).toMatchObject({
@@ -60,7 +60,7 @@ describe('amazonBidder', () => {
     const apstag = getAmazonTag()
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await amazonBidder(tabAdsConfig)
 
     expect(apstag.fetchBids).toHaveBeenCalled()
@@ -70,7 +70,7 @@ describe('amazonBidder', () => {
     expect.assertions(1)
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     const promise = amazonBidder(tabAdsConfig)
     promise.done = false
     promise.then(() => {
@@ -87,7 +87,7 @@ describe('amazonBidder', () => {
     __disableAutomaticBidResponses()
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     const promise = amazonBidder(tabAdsConfig)
     promise.done = false
     promise.then(() => {
@@ -117,7 +117,7 @@ describe('amazonBidder', () => {
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     amazonBidder(tabAdsConfig)
 
     // Fake that apstag calls callback for returned bids
@@ -149,7 +149,7 @@ describe('amazonBidder', () => {
   it('gets the expected bids when all ads are enabled', async () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await amazonBidder(tabAdsConfig)
     expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({

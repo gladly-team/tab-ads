@@ -15,8 +15,8 @@ beforeEach(() => {
 
 describe('displayAd', () => {
   it('calls googleDisplayAd with the ad ID when ads are enabled', () => {
-    const { createConfig, getConfig } = require('src/config')
-    const tabAdsConfig = createConfig({
+    const { setConfig, getConfig } = require('src/config')
+    const tabAdsConfig = setConfig({
       disableAds: false,
       useMockAds: false,
     })
@@ -27,8 +27,8 @@ describe('displayAd', () => {
   })
 
   it('does not callgoogleDisplayAd when ads are NOT enabled', () => {
-    const { createConfig, getConfig } = require('src/config')
-    const tabAdsConfig = createConfig({
+    const { setConfig, getConfig } = require('src/config')
+    const tabAdsConfig = setConfig({
       disableAds: true,
       useMockAds: false,
     })
@@ -39,8 +39,8 @@ describe('displayAd', () => {
   })
 
   it('creates a mock ad when ads are disabled and mock ads are enabled', () => {
-    const { createConfig, getConfig } = require('src/config')
-    const tabAdsConfig = createConfig({
+    const { setConfig, getConfig } = require('src/config')
+    const tabAdsConfig = setConfig({
       disableAds: true,
       useMockAds: true,
     })
@@ -62,8 +62,8 @@ describe('displayAd', () => {
   })
 
   it('does not create a mock ad when ads are enabled', () => {
-    const { createConfig, getConfig } = require('src/config')
-    const tabAdsConfig = createConfig({
+    const { setConfig, getConfig } = require('src/config')
+    const tabAdsConfig = setConfig({
       disableAds: false,
       useMockAds: true,
     })
@@ -82,8 +82,8 @@ describe('displayAd', () => {
   })
 
   it('does not create a mock ad when ads are disabled but mock ads are NOT enabled', () => {
-    const { createConfig, getConfig } = require('src/config')
-    const tabAdsConfig = createConfig({
+    const { setConfig, getConfig } = require('src/config')
+    const tabAdsConfig = setConfig({
       disableAds: true,
       useMockAds: false,
     })

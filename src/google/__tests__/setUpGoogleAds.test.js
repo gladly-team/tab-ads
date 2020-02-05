@@ -2,7 +2,7 @@
 
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import getGoogleTag from 'src/google/getGoogleTag'
-import { createConfig } from 'src/config'
+import { setConfig } from 'src/config'
 
 jest.mock('src/google/getGoogleTag')
 
@@ -17,12 +17,12 @@ afterAll(() => {
 describe('setUpGoogleAds', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', () => {
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     setUpGoogleAds(tabAdsConfig)
   })
 
   it('defines the expected ad slots', () => {
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
     expect(googletag.defineSlot.mock.calls.length).toBe(3)
@@ -44,14 +44,14 @@ describe('setUpGoogleAds', () => {
   })
 
   it('enables single request mode', () => {
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
     expect(googletag.pubads().enableSingleRequest).toHaveBeenCalled()
   })
 
   it('enables ad services', () => {
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
     expect(googletag.enableServices).toHaveBeenCalled()

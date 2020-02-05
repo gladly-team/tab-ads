@@ -3,7 +3,7 @@
 import prebidConfig from 'src/providers/prebid/prebidConfig'
 import getGoogleTag from 'src/google/getGoogleTag'
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
-import { createConfig } from 'src/config'
+import { setConfig } from 'src/config'
 
 jest.mock('src/providers/prebid/getPrebidPbjs')
 jest.mock('src/utils/logger')
@@ -30,7 +30,7 @@ describe('prebidConfig', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await prebidConfig(tabAdsConfig)
   })
 
@@ -38,7 +38,7 @@ describe('prebidConfig', () => {
     expect.assertions(2)
 
     const pbjs = getPrebidPbjs()
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await prebidConfig(tabAdsConfig)
 
     const config = pbjs.setConfig.mock.calls[0][0]
@@ -51,7 +51,7 @@ describe('prebidConfig', () => {
     expect.assertions(3)
 
     const pbjs = getPrebidPbjs()
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await prebidConfig(tabAdsConfig)
 
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
@@ -67,7 +67,7 @@ describe('prebidConfig', () => {
     expect(true).toBe(true)
 
     //     const pbjs = getPrebidPbjs()
-    // const tabAdsConfig = createConfig()
+    // const tabAdsConfig = setConfig()
     //     await prebidConfig(tabAdsConfig)
     //     expect(
     //       pbjs.setConfig.mock.calls[0][0].consentManagement
@@ -81,7 +81,7 @@ describe('prebidConfig', () => {
     expect(true).toBe(true)
 
     // const pbjs = getPrebidPbjs()
-    // const tabAdsConfig = createConfig()
+    // const tabAdsConfig = setConfig()
     // await prebidConfig(tabAdsConfig)
     // expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
   })
@@ -89,7 +89,7 @@ describe('prebidConfig', () => {
   it('the list of bidders for each ad match what is expected', async () => {
     expect.assertions(3)
     const pbjs = getPrebidPbjs()
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await prebidConfig(tabAdsConfig)
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 

@@ -6,5 +6,5 @@ const configActual = require.requireActual('src/config')
 module.exports = {
   ...configMock,
   // Use the actual config creation by default.
-  createConfig: jest.fn(args => configActual.createConfig(args)),
+  setConfig: jest.fn(args => configActual.setConfig(args)),
 }

@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { createConfig } from 'src/config'
+import { setConfig } from 'src/config'
 
 // By default, we run functions in the queue immediately.
 // Call this to disable that.
@@ -27,7 +27,8 @@ const MockSlot = ({ adUnitPath, slotElementId }) => ({
   setTargeting: jest.fn(),
 })
 
-const tabAdsConfig = createConfig()
+// FIXME: don't call setConfig here. It could interfere with tests.
+const tabAdsConfig = setConfig()
 const mockSlots = [
   // Mock ad unit IDs from the adSettings mock.
   // Bottom leaderboard

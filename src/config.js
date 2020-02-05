@@ -65,7 +65,7 @@ const defaultConfig = {
 
 let config
 
-export const createConfig = userConfig => {
+export const setConfig = userConfig => {
   const fullConfig = {
     ...defaultConfig,
     ...(userConfig || {}),

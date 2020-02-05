@@ -12,7 +12,7 @@ import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import handleAdsLoaded from 'src/handleAdsLoaded'
 import prebidConfig from 'src/providers/prebid/prebidConfig'
 import logger from 'src/utils/logger'
-import { createConfig } from 'src/config'
+import { setConfig } from 'src/config'
 
 // Enabled bidders.
 const BIDDER_PREBID = 'prebid'
@@ -144,7 +144,7 @@ const loadAdCode = config => {
 }
 
 const fetchAds = async userConfig => {
-  const config = createConfig(userConfig)
+  const config = setConfig(userConfig)
   if (!config.disableAds) {
     // Define slots and enable ad services.
     setUpGoogleAds(config)

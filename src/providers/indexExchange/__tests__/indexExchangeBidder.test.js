@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { createConfig } from 'src/config'
+import { setConfig } from 'src/config'
 
 jest.mock('src/providers/indexExchange/getIndexExchangeTag')
 jest.mock('src/google/getGoogleTag')
@@ -38,7 +38,7 @@ describe('indexExchangeBidder', () => {
     expect.assertions(0)
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
   })
 
@@ -49,7 +49,7 @@ describe('indexExchangeBidder', () => {
     const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
       .default
     const ixTag = getIndexExchangeTag()
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     expect(ixTag.retrieveDemand).toHaveBeenCalled()
     expect(ixTag.retrieveDemand.mock.calls[0][0]).toEqual([
@@ -72,7 +72,7 @@ describe('indexExchangeBidder', () => {
       ixTag.retrieveDemand.mockImplementation((config, callback) => {
         retrieveDemandCallback = callback
       })
-      const tabAdsConfig = createConfig()
+      const tabAdsConfig = setConfig()
       indexExchangeBidder(tabAdsConfig).then(() => {
         done()
       })
@@ -91,7 +91,7 @@ describe('indexExchangeBidder', () => {
 
       // Mock that retrieveDemand never calls the callback.
       ixTag.retrieveDemand.mockImplementation(() => {})
-      const tabAdsConfig = createConfig()
+      const tabAdsConfig = setConfig()
       indexExchangeBidder(tabAdsConfig).then(() => {
         done()
       })
@@ -117,7 +117,7 @@ describe('indexExchangeBidder', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
     )
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     const googleSlots = googletag.pubads().getSlots()
     const [leaderboardSlot, rectangleSlot, secondRectangleSlot] = googleSlots
@@ -183,7 +183,7 @@ describe('indexExchangeBidder', () => {
         identity: {},
       })
     )
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     const [leaderboardSlot] = googletag.pubads().getSlots()
     expect(leaderboardSlot.setTargeting).toHaveBeenCalledWith('IOM', [
@@ -212,7 +212,7 @@ describe('indexExchangeBidder', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(undefined)
     )
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -236,7 +236,7 @@ describe('indexExchangeBidder', () => {
       .default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) => callback({}))
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -266,7 +266,7 @@ describe('indexExchangeBidder', () => {
         identity: {},
       })
     )
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -309,7 +309,7 @@ describe('indexExchangeBidder', () => {
         identity: {},
       })
     )
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -349,7 +349,7 @@ describe('indexExchangeBidder', () => {
         identity: {},
       })
     )
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -376,7 +376,7 @@ describe('indexExchangeBidder', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
     )
-    const tabAdsConfig = createConfig()
+    const tabAdsConfig = setConfig()
     await indexExchangeBidder(tabAdsConfig)
     expect(
       adDataStore.indexExchangeBids[tabAdsConfig.newTabAds.leaderboard.adId]

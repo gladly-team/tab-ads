@@ -5,14 +5,14 @@ afterEach(() => {
 })
 
 describe('config', () => {
-  test('createConfig returns an object', () => {
-    const { createConfig } = require('src/config')
-    expect(createConfig()).toEqual(expect.any(Object))
+  test('setConfig returns an object', () => {
+    const { setConfig } = require('src/config')
+    expect(setConfig()).toEqual(expect.any(Object))
   })
 
-  test('createConfig returns an object with the expected default structure', () => {
-    const { createConfig } = require('src/config')
-    const config = createConfig()
+  test('setConfig returns an object with the expected default structure', () => {
+    const { setConfig } = require('src/config')
+    const config = setConfig()
     expect(config).toEqual({
       disableAds: expect.any(Boolean),
       useMockAds: expect.any(Boolean),
@@ -63,8 +63,8 @@ describe('config', () => {
     })
   })
 
-  test('createConfig allows customizing most of its properties', () => {
-    const { createConfig } = require('src/config')
+  test('setConfig allows customizing most of its properties', () => {
+    const { setConfig } = require('src/config')
     const isEUFunc = () => new Promise(true)
     const modifiedConfig = {
       disableAds: true,
@@ -80,7 +80,7 @@ describe('config', () => {
         pageUrl: 'https://example.com/foo',
       },
     }
-    const config = createConfig(modifiedConfig)
+    const config = setConfig(modifiedConfig)
     expect(config).toMatchObject({
       disableAds: true,
       useMockAds: false, // default value
@@ -100,12 +100,12 @@ describe('config', () => {
   })
 
   test('getConfig returns the stored config', () => {
-    const { createConfig, getConfig } = require('src/config')
+    const { setConfig, getConfig } = require('src/config')
     const modifiedConfig = {
       disableAds: true,
       auctionTimeout: 1234,
     }
-    const config = createConfig(modifiedConfig)
+    const config = setConfig(modifiedConfig)
     expect(getConfig()).toEqual(config)
   })
 })
