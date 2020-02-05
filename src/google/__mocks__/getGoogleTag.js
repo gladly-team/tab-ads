@@ -1,7 +1,5 @@
 /* eslint-env jest */
 
-import { setConfig } from 'src/config'
-
 // By default, we run functions in the queue immediately.
 // Call this to disable that.
 export const __disableAutomaticCommandQueueExecution = () => {
