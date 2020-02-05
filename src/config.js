@@ -33,7 +33,7 @@ const defaultConfig = {
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
     // An async function that resolves to true if the user is in the European Union.
-    isEU: Promise.resolve(false), // TODO: require this to be passed
+    isEU: () => Promise.resolve(false), // TODO: require this to be passed
     timeout: 50, // Time to wait for the consent management platform (CMP) to respond
   },
   publisher: {
@@ -67,6 +67,7 @@ let config
 
 export const createConfig = userConfig => {
   const fullConfig = {
+    ...defaultConfig,
     ...(userConfig || {}),
     consent: {
       ...defaultConfig.consent,
