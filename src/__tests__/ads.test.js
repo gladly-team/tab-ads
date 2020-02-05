@@ -317,16 +317,15 @@ describe('ads script', () => {
     expect.assertions(1)
     const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
 
-    // FIXME: this timer logic isn't working, but it works without it
     // Mock that Amazon responds quickly
-    // const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    // amazonBidder.mockImplementationOnce(() => {
-    //   return new Promise(resolve => {
-    //     setTimeout(() => {
-    //       resolve()
-    //     }, 80)
-    //   })
-    // })
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    amazonBidder.mockImplementationOnce(() => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve()
+        }, 80)
+      })
+    })
 
     const fetchAds = require('src/ads').default
     const tabAdsConfig = setConfig()
@@ -364,17 +363,16 @@ describe('ads script', () => {
       markIndexExchangeBidsAsIncluded,
     } = require('src/providers/indexExchange/indexExchangeBidder')
 
-    // FIXME: this timer logic isn't working, but it works without it
     // Mock that IX responds quickly
-    // const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-    //   .default
-    // indexExchangeBidder.mockImplementationOnce(() => {
-    //   return new Promise(resolve => {
-    //     setTimeout(() => {
-    //       resolve()
-    //     }, 80)
-    //   })
-    // })
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    indexExchangeBidder.mockImplementationOnce(() => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve()
+        }, 80)
+      })
+    })
 
     const fetchAds = require('src/ads').default
     const tabAdsConfig = setConfig()
