@@ -80,6 +80,7 @@ export default () => {
     defineSlot: jest.fn(() => ({
       addService: jest.fn(),
     })),
+    display: jest.fn(),
     enableServices: jest.fn(),
   }
   return window.googletag
