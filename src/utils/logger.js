@@ -43,9 +43,6 @@ const log = (msg, logLevel) => {
     case logLevels.ERROR:
       console.error(finalMsg)
       break
-    case logLevels.FATAL:
-      console.error(finalMsg)
-      break
     default:
       console.error(finalMsg)
   }
@@ -66,9 +63,6 @@ const logger = {
   },
   error: msg => {
     log(msg, logLevels.ERROR)
-  },
-  fatal: msg => {
-    log(msg, logLevels.FATAL)
   },
 }
 
