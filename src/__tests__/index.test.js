@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
-import getAds from 'src/ads'
+import getAds from 'src/fetchAds'
 
-jest.mock('src/ads')
+jest.mock('src/fetchAds')
 jest.mock('src/utils/logger')
 
 describe('index.js', () => {

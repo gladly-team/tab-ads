@@ -44,11 +44,11 @@ afterAll(() => {
   delete window.pbjs
 })
 
-describe('ads script', () => {
+describe('fetchds', () => {
   it('sets up the Google ad slots', async () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     expect(setUpGoogleAds).toHaveBeenCalledTimes(1)
@@ -64,7 +64,7 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
 
@@ -87,7 +87,7 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig({
       disableAds: true, // Turn off ads
     })
@@ -107,7 +107,7 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     await new Promise(resolve => setImmediate(resolve))
@@ -154,7 +154,7 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     await new Promise(resolve => setImmediate(resolve))
@@ -204,7 +204,7 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     await new Promise(resolve => setImmediate(resolve))
@@ -253,7 +253,7 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
@@ -299,7 +299,7 @@ describe('ads script', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
@@ -327,7 +327,7 @@ describe('ads script', () => {
       })
     })
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(100)
@@ -349,7 +349,7 @@ describe('ads script', () => {
       })
     })
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(3e3)
@@ -374,7 +374,7 @@ describe('ads script', () => {
       })
     })
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(100)
@@ -399,7 +399,7 @@ describe('ads script', () => {
       })
     })
 
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(3e3)
@@ -410,7 +410,7 @@ describe('ads script', () => {
   it('calls handleAdsLoaded', async () => {
     expect.assertions(1)
     const handleAdsLoaded = require('src/handleAdsLoaded').default
-    const fetchAds = require('src/ads').default
+    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig()
     await fetchAds(tabAdsConfig)
     expect(handleAdsLoaded).toHaveBeenCalledTimes(1)
