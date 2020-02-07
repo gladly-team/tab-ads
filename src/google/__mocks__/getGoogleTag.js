@@ -59,7 +59,7 @@ export const __runEventListenerCallbacks = (eventName, ...args) => {
 const mockCmd = []
 mockCmd.push = f => f()
 
-export default () => {
+export default jest.fn(() => {
   window.googletag = window.googletag || {
     cmd: mockCmd,
     pubads: jest.fn(() => ({
@@ -81,4 +81,4 @@ export default () => {
     enableServices: jest.fn(),
   }
   return window.googletag
-}
+})

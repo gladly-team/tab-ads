@@ -2,24 +2,24 @@ import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
 
-// Keep track of what ad slots have loaded. App code loads later and
-// therefore can miss the slot loading event. This gives the app code
-// a way to check if the slots already loaded or not.
+// TODO: call displayAd callbacks
+// Keep track of what ad slots have loaded. When slots load, call
+// the callbacks provided in displayAd.
 export default () => {
   try {
     const googletag = getGoogleTag()
     const adDataStore = getAdDataStore()
 
     const storeRenderedSlotData = (slotId, eventData) => {
-      adDataStore.slotsRendered[slotId] = eventData
+      adDataStore.adManager.slotsRendered[slotId] = eventData
     }
 
     const markSlotAsViewable = slotId => {
-      adDataStore.slotsViewable[slotId] = true
+      adDataStore.adManager.slotsViewable[slotId] = true
     }
 
     const markSlotAsLoaded = slotId => {
-      adDataStore.slotsLoaded[slotId] = true
+      adDataStore.adManager.slotsLoaded[slotId] = true
     }
 
     googletag.cmd.push(() => {

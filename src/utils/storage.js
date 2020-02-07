@@ -15,30 +15,28 @@ const defaultAdDataStore = {
     includedInAdServerRequest: false,
   },
 
-  // Objects from googletag's "slotRenderEnded" event. This event fires
-  // before the "slotOnload" event; i.e., before the actual creative loads.
-  // Key: slot ID
-  // Value: https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
-  slotsRendered: {},
+  // Storing data from Google's ad slot events.
+  adManager: {
+    // Objects from googletag's "slotRenderEnded" event. This event fires
+    // before the "slotOnload" event; i.e., before the actual creative loads.
+    // Key: slot ID
+    // Value: https://developers.google.com/doubleclick-gpt/reference#googletageventsslotrenderendedevent
+    slotsRendered: {},
 
-  // Marking which slots have fired googletag's "impressionViewable" event.
-  // See:
-  // https://developers.google.com/doubleclick-gpt/reference#googletageventsimpressionviewableevent
-  // Key: slot ID
-  // Value: `true`
-  slotsViewable: {},
+    // Marking which slots have fired googletag's "impressionViewable" event.
+    // See:
+    // https://developers.google.com/doubleclick-gpt/reference#googletageventsimpressionviewableevent
+    // Key: slot ID
+    // Value: `true`
+    slotsViewable: {},
 
-  // Marking which slots have fired googletag's "slotOnload" event;
-  // i.e., which slots have loaded creative. See:
-  // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
-  // Key: slot ID
-  // Value: `true`
-  slotsLoaded: {},
-
-  // Marking which slots have had their revenue logged.
-  // Key: slot ID
-  // Value: `true`
-  slotsAlreadyLoggedRevenue: {},
+    // Marking which slots have fired googletag's "slotOnload" event;
+    // i.e., which slots have loaded creative. See:
+    // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
+    // Key: slot ID
+    // Value: `true`
+    slotsLoaded: {},
+  },
 }
 
 // TODO: stop using window variable.
