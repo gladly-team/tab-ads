@@ -37,6 +37,26 @@ const defaultAdDataStore = {
     // Value: `true`
     slotsLoaded: {},
   },
+
+  bidResponses: {
+    // // E.g.:
+    // amazon: {
+    //   // Bid response for each slot, standardized.
+    //   bidResponses: {
+    //     'div-gpt-abc-123': {
+    //       // Standardized structure across bidders.
+    //     },
+    //   },
+    //   // true if the bidder responded in time to be included in the auction.
+    //   includedInAdRequest: false,
+    //   // Raw response data for each slot from the ad partner.
+    //   rawBidResponses: {
+    //     'div-gpt-abc-123': {
+    //       bid: 'data'
+    //     }
+    //   }
+    // },
+  },
 }
 
 // TODO: stop using window variable.
