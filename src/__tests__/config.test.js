@@ -4,6 +4,56 @@ afterEach(() => {
   jest.resetModules()
 })
 
+const defaultConfigStructure = {
+  disableAds: expect.any(Boolean),
+  useMockAds: expect.any(Boolean),
+  adUnits: [
+    {
+      adId: expect.any(String),
+      adUnitId: expect.any(String),
+      sizes: expect.any(Array),
+    },
+    {
+      adId: expect.any(String),
+      adUnitId: expect.any(String),
+      sizes: expect.any(Array),
+    },
+    {
+      adId: expect.any(String),
+      adUnitId: expect.any(String),
+      sizes: expect.any(Array),
+    },
+  ],
+  auctionTimeout: expect.any(Number),
+  bidderTimeout: expect.any(Number),
+  consent: {
+    isEU: expect.any(Function),
+    timeout: expect.any(Number),
+  },
+  publisher: {
+    domain: expect.any(String),
+    pageUrl: expect.any(String),
+  },
+  newTabAds: {
+    leaderboard: {
+      adId: expect.any(String),
+      adUnitId: expect.any(String),
+      sizes: expect.any(Array),
+    },
+    rectangleAdPrimary: {
+      adId: expect.any(String),
+      adUnitId: expect.any(String),
+      sizes: expect.any(Array),
+    },
+    rectangleAdSecondary: {
+      adId: expect.any(String),
+      adUnitId: expect.any(String),
+      sizes: expect.any(Array),
+    },
+  },
+  logLevel: expect.any(String),
+}
+
 describe('config', () => {
   test('setConfig returns an object', () => {
     const { setConfig } = require('src/config')
@@ -13,54 +63,7 @@ describe('config', () => {
   test('setConfig returns an object with the expected default structure', () => {
     const { setConfig } = require('src/config')
     const config = setConfig()
-    expect(config).toEqual({
-      disableAds: expect.any(Boolean),
-      useMockAds: expect.any(Boolean),
-      adUnits: [
-        {
-          adId: expect.any(String),
-          adUnitId: expect.any(String),
-          sizes: expect.any(Array),
-        },
-        {
-          adId: expect.any(String),
-          adUnitId: expect.any(String),
-          sizes: expect.any(Array),
-        },
-        {
-          adId: expect.any(String),
-          adUnitId: expect.any(String),
-          sizes: expect.any(Array),
-        },
-      ],
-      auctionTimeout: expect.any(Number),
-      bidderTimeout: expect.any(Number),
-      consent: {
-        isEU: expect.any(Function),
-        timeout: expect.any(Number),
-      },
-      publisher: {
-        domain: expect.any(String),
-        pageUrl: expect.any(String),
-      },
-      newTabAds: {
-        leaderboard: {
-          adId: expect.any(String),
-          adUnitId: expect.any(String),
-          sizes: expect.any(Array),
-        },
-        rectangleAdPrimary: {
-          adId: expect.any(String),
-          adUnitId: expect.any(String),
-          sizes: expect.any(Array),
-        },
-        rectangleAdSecondary: {
-          adId: expect.any(String),
-          adUnitId: expect.any(String),
-          sizes: expect.any(Array),
-        },
-      },
-    })
+    expect(config).toEqual(defaultConfigStructure)
   })
 
   test('setConfig allows customizing most of its properties', () => {
@@ -97,6 +100,11 @@ describe('config', () => {
       newTabAds: expect.any(Object), // default value
       adUnits: expect.any(Array), // default value
     })
+  })
+
+  test('getConfig returns the default when setConfig has not yet been called', () => {
+    const { getConfig } = require('src/config')
+    expect(getConfig()).toEqual(defaultConfigStructure)
   })
 
   test('getConfig returns the stored config', () => {

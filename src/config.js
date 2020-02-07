@@ -61,9 +61,10 @@ const defaultConfig = {
       sizes: [[300, 250]],
     },
   },
+  logLevel: 'debug', // TODO: change the default to "error"
 }
 
-let config
+let config = defaultConfig
 
 export const setConfig = userConfig => {
   const fullConfig = {

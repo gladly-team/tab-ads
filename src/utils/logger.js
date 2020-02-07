@@ -1,6 +1,6 @@
 /* eslint no-console: 0 */
 
-const LOG_LEVEL = 'debug' // TODO: set this in the config
+import { getConfig } from 'src/config'
 
 const logLevels = {}
 logLevels.LOG = 'log'
@@ -8,7 +8,7 @@ logLevels.DEBUG = 'debug'
 logLevels.INFO = 'info'
 logLevels.WARN = 'warn'
 logLevels.ERROR = 'error'
-logLevels.FATAL = 'fatal'
+logLevels.NONE = 'none'
 
 const logLevelsOrder = [
   logLevels.DEBUG,
@@ -16,14 +16,15 @@ const logLevelsOrder = [
   logLevels.INFO,
   logLevels.WARN,
   logLevels.ERROR,
-  logLevels.FATAL,
+  logLevels.NONE, // don't log anything
 ]
 
 export const shouldLog = (logLevel, globalLogLevel) =>
   logLevelsOrder.indexOf(logLevel) >= logLevelsOrder.indexOf(globalLogLevel)
 
 const log = (msg, logLevel) => {
-  if (!shouldLog(logLevel, LOG_LEVEL)) {
+  const logLevelThreshold = getConfig().logLevel
+  if (!shouldLog(logLevel, logLevelThreshold)) {
     return
   }
   const finalMsg = `tab-ads: ${msg}`
