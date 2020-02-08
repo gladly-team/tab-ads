@@ -20,8 +20,28 @@ const Bidder = ({ name, fetchBids, setTargeting }) => {
     throw new Error('The "setTargeting" property must be a function.')
   }
   return {
+    // A string unique to the bidder. The bidder should have a file name
+    // with structure `${name}Bidder`.
     name,
+    /**
+     * Fetch bids for this bidder. Async function that takes our tab-ads
+     * config and returns a Promise that resolves to bid data.
+     * @param config - the tab-ads config object
+     * @return {Promise<Object>} BidResponseData
+     * @return {Object} BidResponseData.bidResponses - An object with
+     *   keys equal to each adId for which there's a bid and values with
+     *   a BidResponse, the bidder's normalized bid for that ad.
+     * @return {Object[]} BidResponseData.rawBidResponses - An object with
+     *   keys equal to each adId for which there's a bid and values with
+     *   the raw bid response structure (different for each bidder).
+     */
     fetchBids,
+    /**
+     * A function that sets the bidder's key/value targeting on the request
+     * to our ad server, specifying this bidder's bids. We should call this
+     * before making the ad server request.
+     * @return {undefined}
+     */
     setTargeting,
   }
 }
