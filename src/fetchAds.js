@@ -123,7 +123,8 @@ const loadAdCode = config => {
     })
 
   // Prebid
-  prebidBidder(config)
+  prebidBidder
+    .fetchBids(config)
     .then(() => {
       bidderCompleted(BIDDER_PREBID)
     })

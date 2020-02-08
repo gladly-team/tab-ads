@@ -72,7 +72,7 @@ describe('fetchds', () => {
     await new Promise(resolve => setImmediate(resolve))
 
     expect(amazonBidder).toHaveBeenCalledTimes(1)
-    expect(prebidBidder).toHaveBeenCalledTimes(1)
+    expect(prebidBidder.fetchBids).toHaveBeenCalledTimes(1)
     expect(indexExchangeBidder).toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
@@ -97,7 +97,7 @@ describe('fetchds', () => {
     await new Promise(resolve => setImmediate(resolve))
 
     expect(amazonBidder).not.toHaveBeenCalled()
-    expect(prebidBidder).not.toHaveBeenCalled()
+    expect(prebidBidder.fetchBids).not.toHaveBeenCalled()
     expect(indexExchangeBidder).not.toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).not.toHaveBeenCalled()
   })
@@ -122,7 +122,7 @@ describe('fetchds', () => {
 
     // Mock that Prebid is very slow to respond
     const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    prebidBidder.mockImplementationOnce(() => {
+    prebidBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -172,7 +172,7 @@ describe('fetchds', () => {
 
     // Mock that Prebid is very slow to respond
     const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    prebidBidder.mockImplementationOnce(() => {
+    prebidBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -221,7 +221,7 @@ describe('fetchds', () => {
 
     // Mock that Prebid responds quickly
     const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    prebidBidder.mockImplementationOnce(() => {
+    prebidBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -267,7 +267,7 @@ describe('fetchds', () => {
 
     // Mock that Prebid responds quickly
     const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    prebidBidder.mockImplementationOnce(() => {
+    prebidBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()

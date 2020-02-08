@@ -26,12 +26,12 @@ afterAll(() => {
   delete window.pbjs
 })
 
-describe('prebidBidder', () => {
+describe('prebidBidder: fetchAds', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
     const tabAdsConfig = setConfig()
-    await prebidBidder(tabAdsConfig)
+    await prebidBidder.fetchBids(tabAdsConfig)
   })
 
   it('sets the Prebid config', async () => {
@@ -39,7 +39,7 @@ describe('prebidBidder', () => {
 
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig()
-    await prebidBidder(tabAdsConfig)
+    await prebidBidder.fetchBids(tabAdsConfig)
 
     const config = pbjs.setConfig.mock.calls[0][0]
 
@@ -52,7 +52,7 @@ describe('prebidBidder', () => {
 
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig()
-    await prebidBidder(tabAdsConfig)
+    await prebidBidder.fetchBids(tabAdsConfig)
 
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
     expect(adUnitConfig[0].code).toBeDefined()
@@ -69,7 +69,7 @@ describe('prebidBidder', () => {
         isEU: () => Promise.resolve(true),
       },
     })
-    await prebidBidder(tabAdsConfig)
+    await prebidBidder.fetchBids(tabAdsConfig)
     expect(
       pbjs.setConfig.mock.calls[0][0].consentManagement
     ).not.toBeUndefined()
@@ -84,15 +84,15 @@ describe('prebidBidder', () => {
         isEU: () => Promise.resolve(false),
       },
     })
-    await prebidBidder(tabAdsConfig)
+    await prebidBidder.fetchBids(tabAdsConfig)
     expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
   })
 
-  it('the list of bidders for each ad match what is expected', async () => {
+  it('includes the expected list of bidders for each ad', async () => {
     expect.assertions(3)
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig()
-    await prebidBidder(tabAdsConfig)
+    await prebidBidder.fetchBids(tabAdsConfig)
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 
     expect(adUnitConfig[0].bids.map(bid => bid.bidder).sort()).toEqual([

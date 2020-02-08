@@ -31,7 +31,7 @@ const Bidder = ({ name, fetchBids, setTargeting }) => {
      * @return {Object} BidResponseData.bidResponses - An object with
      *   keys equal to each adId for which there's a bid and values with
      *   a BidResponse, the bidder's normalized bid for that ad.
-     * @return {Object[]} BidResponseData.rawBidResponses - An object with
+     * @return {Object} BidResponseData.rawBidResponses - An object with
      *   keys equal to each adId for which there's a bid and values with
      *   the raw bid response structure (different for each bidder).
      */

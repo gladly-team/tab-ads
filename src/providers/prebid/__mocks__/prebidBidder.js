@@ -1,3 +1,10 @@
 /* eslint-env jest */
+import Bidder from 'src/utils/Bidder'
 
-export default jest.fn(() => Promise.resolve())
+const MockPrebidBidder = Bidder({
+  name: 'prebid',
+  fetchBids: jest.fn(() => Promise.resolve()),
+  setTargeting: jest.fn(),
+})
+
+export default MockPrebidBidder

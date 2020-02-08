@@ -1,4 +1,5 @@
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
+import Bidder from 'src/utils/Bidder'
 import logger from 'src/utils/logger'
 
 // TODO: assumes we are showing all 3 ads. Make that configurable.
@@ -196,15 +197,24 @@ const getAdUnits = config => {
   return adUnits
 }
 
+const name = 'prebid'
+
+// FIXME: return the correct data
 /**
- * Return a promise that resolves when the Prebid auction is
- * complete. For a setup example, see:
+ * Fetch bids from Prebid partners. Return a Promise that resolves
+ * into bid response data when the bids return.
+ * See Prebid setup docs here:
  * http://prebid.org/dev-docs/examples/basic-example.html
- * @return {Promise<undefined>} Resolves when the Prebid
- *   auction completes (either all bids back or bid requests
- *   time out).
+ * @param {Object} the tab-ads config
+ * @return {Promise<Object>} BidResponseData
+ * @return {Object} BidResponseData.bidResponses - An object with
+ *   keys equal to each adId for which there's a bid and values with
+ *   a BidResponse, the bidder's normalized bid for that ad.
+ * @return {Object} BidResponseData.rawBidResponses - An object with
+ *   keys equal to each adId for which there's a bid and values with
+ *   the raw bid response structure (different for each bidder).
  */
-export default async config => {
+const fetchBids = async config => {
   logger.debug(`Prebid: bids requested`)
 
   // Determine if the user is in the EU, which may affect the
@@ -275,3 +285,15 @@ export default async config => {
     })
   })
 }
+
+const setTargeting = () => {
+  logger.debug(`Prebid: set ad server targeting`)
+}
+
+const PrebidBidder = Bidder({
+  name,
+  fetchBids,
+  setTargeting,
+})
+
+export default PrebidBidder
