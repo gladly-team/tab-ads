@@ -10,7 +10,7 @@ import getGoogleTag from 'src/google/getGoogleTag'
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import handleAdsLoaded from 'src/handleAdsLoaded'
-import prebidConfig from 'src/providers/prebid/prebidConfig'
+import prebidBidder from 'src/providers/prebid/prebidBidder'
 import logger from 'src/utils/logger'
 import { setConfig } from 'src/config'
 
@@ -123,7 +123,7 @@ const loadAdCode = config => {
     })
 
   // Prebid
-  prebidConfig(config)
+  prebidBidder(config)
     .then(() => {
       bidderCompleted(BIDDER_PREBID)
     })

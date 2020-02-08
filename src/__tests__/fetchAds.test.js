@@ -8,7 +8,7 @@ jest.mock('src/providers/prebid/built/pb')
 jest.mock('src/google/getGoogleTag')
 jest.mock('src/providers/amazon/getAmazonTag')
 jest.mock('src/providers/prebid/getPrebidPbjs')
-jest.mock('src/providers/prebid/prebidConfig')
+jest.mock('src/providers/prebid/prebidBidder')
 jest.mock('src/providers/amazon/amazonBidder')
 jest.mock('src/providers/indexExchange/indexExchangeBidder')
 jest.mock('src/handleAdsLoaded')
@@ -58,7 +58,7 @@ describe('fetchds', () => {
     expect.assertions(4)
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const prebidConfig = require('src/providers/prebid/prebidConfig').default
+    const prebidBidder = require('src/providers/prebid/prebidBidder').default
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     const googletagMockRefresh = jest.fn()
@@ -72,7 +72,7 @@ describe('fetchds', () => {
     await new Promise(resolve => setImmediate(resolve))
 
     expect(amazonBidder).toHaveBeenCalledTimes(1)
-    expect(prebidConfig).toHaveBeenCalledTimes(1)
+    expect(prebidBidder).toHaveBeenCalledTimes(1)
     expect(indexExchangeBidder).toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
@@ -80,7 +80,7 @@ describe('fetchds', () => {
   it('does not call expected bidders or ad server when ads are not enabled', async () => {
     expect.assertions(4)
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const prebidConfig = require('src/providers/prebid/prebidConfig').default
+    const prebidBidder = require('src/providers/prebid/prebidBidder').default
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
 
@@ -97,7 +97,7 @@ describe('fetchds', () => {
     await new Promise(resolve => setImmediate(resolve))
 
     expect(amazonBidder).not.toHaveBeenCalled()
-    expect(prebidConfig).not.toHaveBeenCalled()
+    expect(prebidBidder).not.toHaveBeenCalled()
     expect(indexExchangeBidder).not.toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).not.toHaveBeenCalled()
   })
@@ -121,8 +121,8 @@ describe('fetchds', () => {
     expect.assertions(2)
 
     // Mock that Prebid is very slow to respond
-    const prebidConfig = require('src/providers/prebid/prebidConfig').default
-    prebidConfig.mockImplementationOnce(() => {
+    const prebidBidder = require('src/providers/prebid/prebidBidder').default
+    prebidBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -171,8 +171,8 @@ describe('fetchds', () => {
     expect.assertions(2)
 
     // Mock that Prebid is very slow to respond
-    const prebidConfig = require('src/providers/prebid/prebidConfig').default
-    prebidConfig.mockImplementationOnce(() => {
+    const prebidBidder = require('src/providers/prebid/prebidBidder').default
+    prebidBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -220,8 +220,8 @@ describe('fetchds', () => {
     expect.assertions(1)
 
     // Mock that Prebid responds quickly
-    const prebidConfig = require('src/providers/prebid/prebidConfig').default
-    prebidConfig.mockImplementationOnce(() => {
+    const prebidBidder = require('src/providers/prebid/prebidBidder').default
+    prebidBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -266,8 +266,8 @@ describe('fetchds', () => {
     expect.assertions(2)
 
     // Mock that Prebid responds quickly
-    const prebidConfig = require('src/providers/prebid/prebidConfig').default
-    prebidConfig.mockImplementationOnce(() => {
+    const prebidBidder = require('src/providers/prebid/prebidBidder').default
+    prebidBidder.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()

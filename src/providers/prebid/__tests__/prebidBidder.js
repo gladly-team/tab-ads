@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import prebidConfig from 'src/providers/prebid/prebidConfig'
+import prebidBidder from 'src/providers/prebid/prebidBidder'
 import getGoogleTag from 'src/google/getGoogleTag'
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import { setConfig } from 'src/config'
@@ -26,12 +26,12 @@ afterAll(() => {
   delete window.pbjs
 })
 
-describe('prebidConfig', () => {
+describe('prebidBidder', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
     const tabAdsConfig = setConfig()
-    await prebidConfig(tabAdsConfig)
+    await prebidBidder(tabAdsConfig)
   })
 
   it('sets the Prebid config', async () => {
@@ -39,7 +39,7 @@ describe('prebidConfig', () => {
 
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig()
-    await prebidConfig(tabAdsConfig)
+    await prebidBidder(tabAdsConfig)
 
     const config = pbjs.setConfig.mock.calls[0][0]
 
@@ -52,7 +52,7 @@ describe('prebidConfig', () => {
 
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig()
-    await prebidConfig(tabAdsConfig)
+    await prebidBidder(tabAdsConfig)
 
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
     expect(adUnitConfig[0].code).toBeDefined()
@@ -69,7 +69,7 @@ describe('prebidConfig', () => {
         isEU: () => Promise.resolve(true),
       },
     })
-    await prebidConfig(tabAdsConfig)
+    await prebidBidder(tabAdsConfig)
     expect(
       pbjs.setConfig.mock.calls[0][0].consentManagement
     ).not.toBeUndefined()
@@ -84,7 +84,7 @@ describe('prebidConfig', () => {
         isEU: () => Promise.resolve(false),
       },
     })
-    await prebidConfig(tabAdsConfig)
+    await prebidBidder(tabAdsConfig)
     expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
   })
 
@@ -92,7 +92,7 @@ describe('prebidConfig', () => {
     expect.assertions(3)
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig()
-    await prebidConfig(tabAdsConfig)
+    await prebidBidder(tabAdsConfig)
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 
     expect(adUnitConfig[0].bids.map(bid => bid.bidder).sort()).toEqual([
