@@ -54,6 +54,15 @@ describe('fetchds', () => {
     expect(setUpGoogleAds).toHaveBeenCalledTimes(1)
   })
 
+  it('passes the config when setting up the Google ad slots', async () => {
+    expect.assertions(1)
+    const setUpGoogleAds = require('src/google/setUpGoogleAds').default
+    const fetchAds = require('src/fetchAds').default
+    const tabAdsConfig = setConfig()
+    await fetchAds(tabAdsConfig)
+    expect(setUpGoogleAds).toHaveBeenCalledWith(tabAdsConfig)
+  })
+
   it('calls the expected bidders and ad server', async () => {
     expect.assertions(4)
 
