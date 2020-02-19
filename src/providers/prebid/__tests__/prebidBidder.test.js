@@ -4,6 +4,7 @@ import prebidBidder from 'src/providers/prebid/prebidBidder'
 import getGoogleTag from 'src/google/getGoogleTag'
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import { setConfig } from 'src/config'
+import { mockPrebidBidResponses } from 'src/utils/test-utils'
 
 jest.mock('src/providers/prebid/getPrebidPbjs')
 jest.mock('src/utils/logger')
@@ -124,6 +125,16 @@ describe('prebidBidder: fetchBids', () => {
     ])
   })
 
+  it('calls pbjs.requestBids', async () => {
+    expect.assertions(1)
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig()
+    await prebidBidder.fetchBids(tabAdsConfig)
+    expect(pbjs.requestBids).toHaveBeenCalledWith({
+      bidsBackHandler: expect.any(Function),
+    })
+  })
+
   it('returns the expected BidResponseData structure', async () => {
     expect.assertions(1)
     const tabAdsConfig = setConfig()
@@ -132,6 +143,22 @@ describe('prebidBidder: fetchBids', () => {
       bidResponses: expect.any(Object),
       rawBidResponses: expect.any(Object),
     })
+  })
+
+  it('returns the raw Prebid bid responses in the rawBidResponses key', async () => {
+    expect.assertions(1)
+
+    const pbjs = getPrebidPbjs()
+
+    // Set the moock Prebid bid responses.
+    const mockBidResponses = mockPrebidBidResponses()
+    pbjs.requestBids = jest.fn(requestBidsSettings => {
+      requestBidsSettings.bidsBackHandler(mockBidResponses)
+    })
+
+    const tabAdsConfig = setConfig()
+    const { rawBidResponses } = await prebidBidder.fetchBids(tabAdsConfig)
+    expect(rawBidResponses).toEqual(mockBidResponses)
   })
 
   // TODO: test BidResponseData structure more

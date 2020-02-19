@@ -188,11 +188,18 @@ export const mockFetchResponse = overrides => ({
   ...overrides,
 })
 
-const mockPrebidBid = () => {
+const mockPrebidBid = ({
+  bidder = 'openx',
+  cpm = 0.582,
+  width = 728,
+  height = 90,
+}) => {
+  const cpmRoundedDownNearestTenth = (Math.floor(cpm * 10) / 10).toFixed(2)
+  const cpmRoundedDownNearestPenny = cpm.toFixed(2)
   return {
-    bidderCode: 'openx',
-    width: '728',
-    height: '90',
+    bidderCode: bidder,
+    width: `${width}`,
+    height: `${height}`,
     statusMessage: 'Bid available',
     adId: 'abc123def456',
     mediaType: 'banner',
@@ -207,21 +214,21 @@ const mockPrebidBid = () => {
     auctionId: 'a8f917ab-5d08-4dd3-93d7-44b1ec0af9c2',
     responseTimestamp: 1582143201583,
     requestTimestamp: 1582143201380,
-    bidder: 'openx',
+    bidder,
     adUnitCode: 'div-gpt-ad-123456789-0',
     timeToRespond: 203,
-    pbLg: '0.50',
-    pbMg: '0.50',
-    pbHg: '0.58',
-    pbAg: '0.55',
-    pbDg: '0.58',
-    pbCg: '',
-    size: '728x90',
+    pbLg: `${cpmRoundedDownNearestTenth}`,
+    pbMg: `${cpmRoundedDownNearestTenth}`,
+    pbHg: `${cpmRoundedDownNearestPenny}`,
+    pbAg: `${cpmRoundedDownNearestTenth}`, // nearest $0.05 in reality
+    pbDg: `${cpmRoundedDownNearestPenny}`,
+    pbCg: `${cpmRoundedDownNearestTenth}`,
+    size: `${width}x${height}`,
     adserverTargeting: {
-      hb_bidder: 'openx',
+      hb_bidder: bidder,
       hb_adid: 'abc123def456',
-      hb_pb: '0.50',
-      hb_size: '728x90',
+      hb_pb: `${cpmRoundedDownNearestTenth}`,
+      hb_size: `${width}x${height}`,
       hb_source: 'client',
       hb_format: 'banner',
     },
@@ -229,24 +236,17 @@ const mockPrebidBid = () => {
 }
 
 export const mockPrebidBidResponses = () => {
-  const mockBid = mockPrebidBid()
   return {
     // The long leaderboard ad.
     'div-gpt-ad-1464385677836-0': {
       bids: [
-        {
-          ...mockBid,
-          cpm: 0.582,
-          bidder: 'openx',
-          bidderCode: 'openx',
-          width: '728',
-          height: '728',
-          size: '728x90',
-          adserverTargeting: {
-            ...mockBid.adserverTargeting,
-            hb_bidder: 'openx',
-          },
-        },
+        mockPrebidBid({ bidder: 'openx', cpm: 0.582, width: 728, height: 90 }),
+        mockPrebidBid({
+          bidder: 'appnexus',
+          cpm: 2.21,
+          width: 728,
+          height: 90,
+        }),
       ],
     },
     // The primary rectangle ad (bottom-right).
@@ -255,7 +255,9 @@ export const mockPrebidBidResponses = () => {
     },
     // The second rectangle ad (right side, above the first).
     'div-gpt-ad-1539903223131-0': {
-      bids: [],
+      bids: [
+        mockPrebidBid({ bidder: 'openx', cpm: 1.01, width: 300, height: 250 }),
+      ],
     },
   }
 }
