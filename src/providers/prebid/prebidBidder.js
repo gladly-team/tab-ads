@@ -201,13 +201,13 @@ const getAdUnits = config => {
 
 /**
  * Given Prebid bid responses, return an object keyed by ad ID with
- * a value of type BidResponse.
+ * value an array of BidResponses.
  * @param {Object} rawBidData - Prebid's "bids" object passed to the
  *   bidsBackHandler callback. See:
  *   http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.requestBids
  * @return {Object} bidResponses - An object with keys equal to each adId
- *   for which there's a bid and values with a BidResponse, the bidder's
- *   normalized bid for that ad.
+ *   for which there's a bid and values with an array of BidResponses, the
+ *   bidder's normalized bids for that ad.
  */
 const normalizeBidResponses = (rawBidData = {}) => {
   const normalizeBid = rawBid => {
