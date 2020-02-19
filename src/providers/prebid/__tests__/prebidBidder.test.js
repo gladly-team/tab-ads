@@ -6,6 +6,7 @@ import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import { setConfig } from 'src/config'
 import { mockPrebidBidResponses } from 'src/utils/test-utils'
 
+jest.mock('src/providers/prebid/built/pb')
 jest.mock('src/providers/prebid/getPrebidPbjs')
 jest.mock('src/utils/logger')
 

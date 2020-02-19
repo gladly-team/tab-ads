@@ -1,6 +1,4 @@
 import { get, set } from 'lodash/object'
-// TODO: move to prebidBidder
-import 'src/providers/prebid/built/pb' // Run our built Prebid.js
 import amazonBidder, {
   storeAmazonBids,
 } from 'src/providers/amazon/amazonBidder'

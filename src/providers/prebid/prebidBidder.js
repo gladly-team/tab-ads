@@ -1,4 +1,5 @@
 import { get } from 'lodash/object'
+import 'src/providers/prebid/built/pb' // Run our built Prebid.js
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import Bidder from 'src/utils/Bidder'
 import BidResponse from 'src/utils/BidResponse'

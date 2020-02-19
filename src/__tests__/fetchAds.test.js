@@ -3,7 +3,6 @@ import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' /
 import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import { setConfig } from 'src/config'
 
-jest.mock('src/providers/prebid/built/pb')
 jest.mock('src/google/getGoogleTag')
 jest.mock('src/providers/amazon/getAmazonTag')
 jest.mock('src/providers/prebid/prebidBidder')
