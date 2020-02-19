@@ -1,28 +1,29 @@
 import { get, set } from 'lodash/object'
-import amazonBidder, {
-  storeAmazonBids,
-} from 'src/providers/amazon/amazonBidder'
 import indexExchangeBidder, {
   markIndexExchangeBidsAsIncluded,
 } from 'src/providers/indexExchange/indexExchangeBidder'
-import getAmazonTag from 'src/providers/amazon/getAmazonTag'
+
+// Ad server
 import getGoogleTag from 'src/google/getGoogleTag'
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import handleAdsLoaded from 'src/handleAdsLoaded'
+
+// Bidders
 import prebidBidder from 'src/providers/prebid/prebidBidder'
+import amazonBidder from 'src/providers/amazon/amazonBidder'
+
 import logger from 'src/utils/logger'
 import { setConfig } from 'src/config'
 import { getAdDataStore } from 'src/utils/storage'
 
 // TODO: use this for all bidders
-const BIDDERS = [prebidBidder]
+const BIDDERS = [prebidBidder, amazonBidder]
 
 // TODO: remove
 // Enabled bidders.
-const BIDDER_AMAZON = 'amazon'
 const BIDDER_IX = 'ix'
 
-const bidders = [BIDDER_AMAZON, BIDDER_IX]
+const bidders = [BIDDER_IX]
 
 // Keep track of which bidders have responded.
 const requestManager = {
@@ -51,9 +52,6 @@ function sendAdserverRequest() {
   requestManager.adserverRequestSent = true
 
   // For revenue analytics.
-  if (requestManager.bidders[BIDDER_AMAZON]) {
-    storeAmazonBids()
-  }
   if (requestManager.bidders[BIDDER_IX]) {
     markIndexExchangeBidsAsIncluded()
   }
@@ -62,10 +60,7 @@ function sendAdserverRequest() {
 
   // Set targeting and make a request to DFP.
   const googletag = getGoogleTag()
-  const apstag = getAmazonTag()
   googletag.cmd.push(() => {
-    apstag.setDisplayBids()
-
     // Set ad server targeting.
     // TODO: move all bidders into this
     // TODO: add tests
@@ -139,16 +134,6 @@ const callBidders = async config => {
 
   // TODO: standardize bidder API.
 
-  // Amazon
-  amazonBidder(config)
-    .then(() => {
-      bidderCompleted(BIDDER_AMAZON)
-    })
-    .catch(err => {
-      logger.error(err)
-      bidderCompleted(BIDDER_AMAZON)
-    })
-
   // Index Exchange
   indexExchangeBidder(config)
     .then(() => {
@@ -161,19 +146,29 @@ const callBidders = async config => {
 
   // TODO: move all bidders into this
   // TODO: add tests
-  await Promise.all(
-    BIDDERS.map(async bidder => {
-      const bidResponseData = await bidder.fetchBids(config)
-      const store = getAdDataStore()
-      store.bidResponses[bidder.name] = {
-        ...bidResponseData,
-        // We set this to true during the ad server request if
-        // the bids returned in time.
-        includedInAdRequest: false,
-      }
-      return bidResponseData
-    })
-  )
+  // TODO: handle errors gracefully (need parent app to log them)
+  try {
+    await Promise.all(
+      BIDDERS.map(async bidder => {
+        try {
+          const bidResponseData = await bidder.fetchBids(config)
+          const store = getAdDataStore()
+          store.bidResponses[bidder.name] = {
+            ...bidResponseData,
+            // We set this to true during the ad server request if
+            // the bids returned in time.
+            includedInAdRequest: false,
+          }
+          return bidResponseData
+        } catch (e) {
+          logger.error(e)
+          return null
+        }
+      })
+    )
+  } catch (e) {
+    logger.error(e)
+  }
 
   // TODO: add test
   // If fetchBids returned for all the bidders, we can

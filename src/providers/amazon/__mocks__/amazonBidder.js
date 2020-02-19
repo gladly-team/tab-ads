@@ -1,5 +1,10 @@
 /* eslint-env jest */
+import Bidder from 'src/utils/Bidder'
 
-export const storeAmazonBids = jest.fn()
+const MockAmazonBidder = Bidder({
+  name: 'amazon',
+  fetchBids: jest.fn(() => Promise.resolve()),
+  setTargeting: jest.fn(),
+})
 
-export default jest.fn(() => Promise.resolve())
+export default MockAmazonBidder

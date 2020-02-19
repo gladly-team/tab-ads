@@ -1,11 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
 const defaultAdDataStore = {
-  // Bid objects returned from apstag
-  // Key: slot ID
-  // Value: bid object
-  amazonBids: {},
-
   // Bids returned from Index Exchange.
   // Key: slot element ID
   // Value: bid object

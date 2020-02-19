@@ -36,7 +36,7 @@ afterAll(() => {
   delete window.apstag
 })
 
-describe('fetchds', () => {
+describe('fetchAds', () => {
   it('sets up the Google ad slots', async () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
@@ -72,7 +72,7 @@ describe('fetchds', () => {
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
 
-    expect(amazonBidder).toHaveBeenCalledTimes(1)
+    expect(amazonBidder.fetchBids).toHaveBeenCalledTimes(1)
     expect(prebidBidder.fetchBids).toHaveBeenCalledTimes(1)
     expect(indexExchangeBidder).toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
@@ -97,7 +97,7 @@ describe('fetchds', () => {
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
 
-    expect(amazonBidder).not.toHaveBeenCalled()
+    expect(amazonBidder.fetchBids).not.toHaveBeenCalled()
     expect(prebidBidder.fetchBids).not.toHaveBeenCalled()
     expect(indexExchangeBidder).not.toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).not.toHaveBeenCalled()
@@ -135,7 +135,7 @@ describe('fetchds', () => {
 
     // Mock that Amazon is very slow to respond
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.mockImplementationOnce(() => {
+    amazonBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -185,7 +185,7 @@ describe('fetchds', () => {
 
     // Mock that Amazon responds quickly
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.mockImplementationOnce(() => {
+    amazonBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -234,7 +234,7 @@ describe('fetchds', () => {
 
     // Mock that Amazon responds quickly
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.mockImplementationOnce(() => {
+    amazonBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -280,7 +280,7 @@ describe('fetchds', () => {
 
     // Mock that Amazon responds quickly
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.mockImplementationOnce(() => {
+    amazonBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -314,50 +314,6 @@ describe('fetchds', () => {
     await new Promise(resolve => setImmediate(resolve))
 
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
-  })
-
-  it('calls to store Amazon bids for analytics (if Amazon is included in the auction)', async () => {
-    expect.assertions(1)
-    const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
-
-    // Mock that Amazon responds quickly
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 80)
-      })
-    })
-
-    const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
-    await fetchAds(tabAdsConfig)
-    jest.advanceTimersByTime(100)
-    await new Promise(resolve => setImmediate(resolve))
-    expect(storeAmazonBids).toHaveBeenCalledTimes(1)
-  })
-
-  it('does not call to store Amazon bids for analytics (if Amazon is not included in the auction)', async () => {
-    expect.assertions(1)
-    const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
-
-    // Mock that Amazon responds slowly
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 15e3)
-      })
-    })
-
-    const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
-    await fetchAds(tabAdsConfig)
-    jest.advanceTimersByTime(3e3)
-    await new Promise(resolve => setImmediate(resolve))
-    expect(storeAmazonBids).not.toHaveBeenCalled()
   })
 
   it('calls to mark IX bids as included in the bid for analytics (if IX is included in the auction)', async () => {
