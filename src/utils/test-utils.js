@@ -187,3 +187,75 @@ export const mockFetchResponse = overrides => ({
   url: 'https://example.com/foo/',
   ...overrides,
 })
+
+const mockPrebidBid = () => {
+  return {
+    bidderCode: 'openx',
+    width: '728',
+    height: '90',
+    statusMessage: 'Bid available',
+    adId: 'abc123def456',
+    mediaType: 'banner',
+    source: 'client',
+    cpm: 0.582,
+    creativeId: '209895498',
+    ad: "<div id='some-ad'></div>",
+    ttl: 300,
+    netRevenue: true,
+    currency: 'USD',
+    ts: 'some-stuff-here',
+    auctionId: 'a8f917ab-5d08-4dd3-93d7-44b1ec0af9c2',
+    responseTimestamp: 1582143201583,
+    requestTimestamp: 1582143201380,
+    bidder: 'openx',
+    adUnitCode: 'div-gpt-ad-123456789-0',
+    timeToRespond: 203,
+    pbLg: '0.50',
+    pbMg: '0.50',
+    pbHg: '0.58',
+    pbAg: '0.55',
+    pbDg: '0.58',
+    pbCg: '',
+    size: '728x90',
+    adserverTargeting: {
+      hb_bidder: 'openx',
+      hb_adid: 'abc123def456',
+      hb_pb: '0.50',
+      hb_size: '728x90',
+      hb_source: 'client',
+      hb_format: 'banner',
+    },
+  }
+}
+
+export const mockPrebidBidResponses = () => {
+  const mockBid = mockPrebidBid()
+  return {
+    // The long leaderboard ad.
+    'div-gpt-ad-1464385677836-0': {
+      bids: [
+        {
+          ...mockBid,
+          cpm: 0.582,
+          bidder: 'openx',
+          bidderCode: 'openx',
+          width: '728',
+          height: '728',
+          size: '728x90',
+          adserverTargeting: {
+            ...mockBid.adserverTargeting,
+            hb_bidder: 'openx',
+          },
+        },
+      ],
+    },
+    // The primary rectangle ad (bottom-right).
+    'div-gpt-ad-1464385742501-0': {
+      bids: [],
+    },
+    // The second rectangle ad (right side, above the first).
+    'div-gpt-ad-1539903223131-0': {
+      bids: [],
+    },
+  }
+}
