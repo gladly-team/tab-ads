@@ -33,13 +33,13 @@ afterAll(() => {
   clearAdDataStore()
 })
 
-describe('amazonBidder', () => {
+describe('amazonBidder: fetchBids', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig()
-    await amazonBidder(tabAdsConfig)
+    await amazonBidder.fetchBids(tabAdsConfig)
   })
 
   it('calls apstag.init with the expected publisher ID and ad server', async () => {
@@ -48,7 +48,7 @@ describe('amazonBidder', () => {
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig()
-    await amazonBidder(tabAdsConfig)
+    await amazonBidder.fetchBids(tabAdsConfig)
 
     expect(apstag.init.mock.calls[0][0]).toMatchObject({
       pubID: 'ea374841-51b0-4335-9960-99200427f7c8',
@@ -61,7 +61,7 @@ describe('amazonBidder', () => {
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig()
-    await amazonBidder(tabAdsConfig)
+    await amazonBidder.fetchBids(tabAdsConfig)
 
     expect(apstag.fetchBids).toHaveBeenCalled()
   })
@@ -71,7 +71,7 @@ describe('amazonBidder', () => {
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig()
-    const promise = amazonBidder(tabAdsConfig)
+    const promise = amazonBidder.fetchBids(tabAdsConfig)
     promise.done = false
     promise.then(() => {
       promise.done = true
@@ -88,7 +88,7 @@ describe('amazonBidder', () => {
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig()
-    const promise = amazonBidder(tabAdsConfig)
+    const promise = amazonBidder.fetchBids(tabAdsConfig)
     promise.done = false
     promise.then(() => {
       promise.done = true
@@ -118,7 +118,7 @@ describe('amazonBidder', () => {
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
     const tabAdsConfig = setConfig()
-    amazonBidder(tabAdsConfig)
+    amazonBidder.fetchBids(tabAdsConfig)
 
     // Fake that apstag calls callback for returned bids
     const someBid = mockAmazonBidResponse({
@@ -150,7 +150,7 @@ describe('amazonBidder', () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig()
-    await amazonBidder(tabAdsConfig)
+    await amazonBidder.fetchBids(tabAdsConfig)
     expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [

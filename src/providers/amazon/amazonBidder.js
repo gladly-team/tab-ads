@@ -1,4 +1,7 @@
+import { get } from 'lodash/object'
 import getAmazonTag from 'src/providers/amazon/getAmazonTag'
+import Bidder from 'src/utils/Bidder'
+import BidResponse from 'src/utils/BidResponse'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
 
@@ -34,6 +37,31 @@ export const storeAmazonBids = () => {
   }
 }
 
+// FIXME
+/**
+ * Given Amazon bid responses, return an object with keys set to adIds
+ * and values set to an array of BidResponses for that adId.
+ * @param {Array} rawBidData - Amazon's bid response
+ * @return {Object} bidResponses - An object with keys equal to each adId
+ *   for which there's a bid and values with an array of BidResponses, the
+ *   bidder's normalized bids for that ad.
+ */
+const normalizeBidResponses = (rawBidData = {}) => {
+  // Raw bid object structure:
+  // {
+  //   amznbid: '1',
+  //   amzniid: 'some-id',
+  //   amznp: '1',
+  //   amznsz: '0x0',
+  //   size: '0x0',
+  //   slotID: 'div-gpt-ad-123456789-0'
+  // }
+
+  // TODO
+  return {}
+}
+
+// FIXME: return correct value
 /**
  * Return a promise that resolves when the Amazon bids
  * return or the request times out. See:
@@ -41,7 +69,7 @@ export const storeAmazonBids = () => {
  * @return {Promise<undefined>} Resolves when the Amazon
  *   bid requests return or time out.
  */
-const initApstag = async config => {
+const fetchBids = async config => {
   const apstag = getAmazonTag()
 
   const slots = config.adUnits.map(adUnit => {
@@ -78,4 +106,18 @@ const initApstag = async config => {
   })
 }
 
-export default initApstag
+// FIXME
+const setTargeting = () => {
+  // TODO
+  logger.debug(`Amazon: set ad server targeting`)
+}
+
+const name = 'amazon'
+
+const AmazonBidder = Bidder({
+  name,
+  fetchBids,
+  setTargeting,
+})
+
+export default AmazonBidder
