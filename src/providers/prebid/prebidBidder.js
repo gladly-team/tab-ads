@@ -197,9 +197,23 @@ const getAdUnits = config => {
   return adUnits
 }
 
+/**
+ * Given Prebid bid responses, return an object keyed by ad ID with
+ * a value of type BidResponse.
+ * @param {Object} rawBidData - Prebid's "bids" object passed to the
+ *   bidsBackHandler callback. See:
+ *   http://prebid.org/dev-docs/publisher-api-reference.html#module_pbjs.requestBids
+ * @return {Object} bidResponses - An object with keys equal to each adId
+ *   for which there's a bid and values with a BidResponse, the bidder's
+ *   normalized bid for that ad.
+ */
+const normalizeBidResponses = rawBidData => {
+  // TODO
+  return {}
+}
+
 const name = 'prebid'
 
-// FIXME: return the correct data
 /**
  * Fetch bids from Prebid partners. Return a Promise that resolves
  * into bid response data when the bids return.
@@ -226,9 +240,12 @@ const fetchBids = async config => {
     isInEU = false
   }
   return new Promise(resolve => {
-    function handleAuctionEnd() {
+    function handleAuctionEnd(rawBids) {
       logger.debug(`Prebid: auction ended`)
-      resolve()
+      resolve({
+        bidResponses: normalizeBidResponses(rawBids),
+        rawBidResponses: rawBids,
+      })
     }
 
     const requiresConsentManagement = !!isInEU

@@ -26,7 +26,7 @@ afterAll(() => {
   delete window.pbjs
 })
 
-describe('prebidBidder: fetchAds', () => {
+describe('prebidBidder: fetchBids', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
@@ -123,4 +123,16 @@ describe('prebidBidder: fetchAds', () => {
       'sovrn',
     ])
   })
+
+  it('returns the expected BidResponseData structure', async () => {
+    expect.assertions(1)
+    const tabAdsConfig = setConfig()
+    const response = await prebidBidder.fetchBids(tabAdsConfig)
+    expect(response).toMatchObject({
+      bidResponses: expect.any(Object),
+      rawBidResponses: expect.any(Object),
+    })
+  })
+
+  // TODO: test BidResponseData structure more
 })
