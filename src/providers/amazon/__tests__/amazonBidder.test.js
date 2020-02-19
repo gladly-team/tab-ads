@@ -1,12 +1,7 @@
 /* eslint-env jest */
 
-import getAmazonTag, {
-  __disableAutomaticBidResponses, // eslint-disable-line import/named
-  __runBidsBack, // eslint-disable-line import/named
-} from 'src/providers/amazon/getAmazonTag'
-import getGoogleTag from 'src/google/getGoogleTag'
+import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import { mockAmazonBidResponse } from 'src/utils/test-utils'
-import { clearAdDataStore, getAdDataStore } from 'src/utils/storage'
 import { setConfig } from 'src/config'
 
 jest.mock('src/consentManagement')
@@ -17,10 +12,6 @@ beforeEach(() => {
   // Mock apstag
   delete window.apstag
   window.apstag = getAmazonTag()
-
-  // Set up googletag
-  delete window.googletag
-  window.googletag = getGoogleTag()
 })
 
 afterEach(() => {
@@ -28,9 +19,7 @@ afterEach(() => {
 })
 
 afterAll(() => {
-  delete window.googletag
   delete window.apstag
-  clearAdDataStore()
 })
 
 describe('amazonBidder: fetchBids', () => {
@@ -84,7 +73,13 @@ describe('amazonBidder: fetchBids', () => {
 
   it('only resolves after the auction ends', async () => {
     expect.assertions(2)
-    __disableAutomaticBidResponses()
+
+    // Manually resolve the Amazon bid response.
+    let bidsBackCallback
+    const apstag = getAmazonTag()
+    apstag.fetchBids = jest.fn((config, callback) => {
+      bidsBackCallback = callback
+    })
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig()
@@ -98,7 +93,9 @@ describe('amazonBidder: fetchBids', () => {
     await new Promise(resolve => setImmediate(resolve))
 
     expect(promise.done).toBe(false)
-    __runBidsBack()
+
+    // Pretend the Amazon bids return.
+    bidsBackCallback([])
 
     // Flush all promises
     await new Promise(resolve => setImmediate(resolve))
@@ -106,47 +103,7 @@ describe('amazonBidder: fetchBids', () => {
     expect(promise.done).toBe(true)
   })
 
-  it('stores Amazon bids for analytics', async () => {
-    expect.assertions(4)
-
-    // Mock apstag's `fetchBids` so we can invoke the callback function
-    let passedCallback
-    window.apstag.fetchBids.mockImplementation((config, callback) => {
-      passedCallback = callback
-    })
-
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const { storeAmazonBids } = require('src/providers/amazon/amazonBidder')
-    const tabAdsConfig = setConfig()
-    amazonBidder.fetchBids(tabAdsConfig)
-
-    // Fake that apstag calls callback for returned bids
-    const someBid = mockAmazonBidResponse({
-      amznbid: 'some-id',
-      slotID: 'div-gpt-ad-123456789-0',
-    })
-    const someOtherBid = mockAmazonBidResponse({
-      amznbid: 'some-other-id',
-      slotID: 'div-gpt-ad-24681357-0',
-    })
-    passedCallback([someBid, someOtherBid])
-
-    const adDataStore = getAdDataStore()
-
-    // Should not have stored the bids yet.
-    expect(adDataStore.amazonBids['div-gpt-ad-123456789-0']).toBeUndefined()
-    expect(adDataStore.amazonBids['div-gpt-ad-24681357-0']).toBeUndefined()
-
-    storeAmazonBids()
-
-    // Now should have stored the bids.
-    expect(adDataStore.amazonBids['div-gpt-ad-123456789-0']).toEqual(someBid)
-    expect(adDataStore.amazonBids['div-gpt-ad-24681357-0']).toEqual(
-      someOtherBid
-    )
-  })
-
-  it('gets the expected bids when all ads are enabled', async () => {
+  it('calls for the expected bids when all ads are enabled', async () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig()
@@ -168,6 +125,117 @@ describe('amazonBidder: fetchBids', () => {
         },
       ],
     })
+  })
+
+  it('returns the expected Amazon bid responses in the rawBidResponses key', async () => {
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig()
+
+    // Set the mock Amazon bid responses.
+    const mockBid = mockAmazonBidResponse()
+    const mockBidResponses = [
+      {
+        ...mockBid,
+        amznbid: 'abcdef',
+        amzniid: 'some-id-number-1',
+        amznp: '1',
+        amznsz: '728x90',
+        size: '728x90',
+        slotID: 'div-gpt-ad-123456789-0',
+      },
+      {
+        ...mockBid,
+        amznbid: 'ghijkl',
+        amzniid: 'some-id-number-2',
+        amznp: '1',
+        amznsz: '300x250',
+        size: '300x250',
+        slotID: 'div-gpt-ad-13579135-0',
+      },
+      {
+        ...mockBid,
+        amznbid: 'mnopqr',
+        amzniid: 'some-id-number-3',
+        amznp: '1',
+        amznsz: '300x250',
+        size: '300x250',
+        slotID: 'div-gpt-ad-24680246-0',
+      },
+    ]
+    apstag.fetchBids = jest.fn((config, callback) => {
+      callback(mockBidResponses)
+    })
+
+    const { rawBidResponses } = await amazonBidder.fetchBids(tabAdsConfig)
+    expect(rawBidResponses).toEqual(mockBidResponses)
+  })
+
+  it('returns the expected normalized BidResponses in the bidResponses key', async () => {
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig()
+
+    // Set the mock Amazon bid responses.
+    const mockBid = mockAmazonBidResponse()
+    const mockBidResponses = [
+      {
+        ...mockBid,
+        amznbid: 'encoded-revenue-abcdef',
+        amzniid: 'some-id-number-1',
+        amznp: '1',
+        amznsz: '728x90',
+        size: '728x90',
+        slotID: 'div-gpt-ad-123456789-0',
+      },
+      {
+        ...mockBid,
+        amznbid: 'encoded-revenue-ghijkl',
+        amzniid: 'some-id-number-2',
+        amznp: '1',
+        amznsz: '300x250',
+        size: '300x250',
+        slotID: 'div-gpt-ad-13579135-0',
+      },
+      {
+        ...mockBid,
+        amznbid: 'encoded-revenue-mnopqr',
+        amzniid: 'some-id-number-3',
+        amznp: '1',
+        amznsz: '300x250',
+        size: '300x250',
+        slotID: 'div-gpt-ad-24680246-0',
+      },
+    ]
+    apstag.fetchBids = jest.fn((config, callback) => {
+      callback(mockBidResponses)
+    })
+
+    const { bidResponses } = await amazonBidder.fetchBids(tabAdsConfig)
+    const expectedBidResponses = {
+      'div-gpt-ad-123456789-0': {
+        encodedRevenue: 'encoded-revenue-abcdef',
+        advertiserName: 'amazon',
+        adSize: '728x90',
+        revenue: null,
+        DFPAdvertiserId: null,
+      },
+      'div-gpt-ad-13579135-0': {
+        encodedRevenue: 'encoded-revenue-ghijkl',
+        advertiserName: 'amazon',
+        adSize: '300x250',
+        revenue: null,
+        DFPAdvertiserId: null,
+      },
+      'div-gpt-ad-24680246-0': {
+        encodedRevenue: 'encoded-revenue-mnopqr',
+        advertiserName: 'amazon',
+        adSize: '300x250',
+        revenue: null,
+        DFPAdvertiserId: null,
+      },
+    }
+    expect(bidResponses).toEqual(expectedBidResponses)
   })
 })
 

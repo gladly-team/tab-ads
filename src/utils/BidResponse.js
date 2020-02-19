@@ -14,7 +14,7 @@ const BidResponse = ({
       'A bid response must have either the "revenue" or "encodedRevenue" property.'
     )
   }
-  if (typeof revenue !== 'number') {
+  if (!isNil(revenue) && typeof revenue !== 'number') {
     throw new Error('The "revenue" value must be a number.')
   }
   if (!isNil(DFPAdvertiserId) && typeof DFPAdvertiserId !== 'number') {
