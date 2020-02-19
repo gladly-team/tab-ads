@@ -150,7 +150,7 @@ describe('prebidBidder: fetchBids', () => {
 
     const pbjs = getPrebidPbjs()
 
-    // Set the moock Prebid bid responses.
+    // Set the mock Prebid bid responses.
     const mockBidResponses = mockPrebidBidResponses()
     pbjs.requestBids = jest.fn(requestBidsSettings => {
       requestBidsSettings.bidsBackHandler(mockBidResponses)
@@ -161,5 +161,58 @@ describe('prebidBidder: fetchBids', () => {
     expect(rawBidResponses).toEqual(mockBidResponses)
   })
 
-  // TODO: test BidResponseData structure more
+  it('returns the expected normalized BidResponses in the bidResponses key', async () => {
+    expect.assertions(1)
+
+    const pbjs = getPrebidPbjs()
+
+    // Set the mock Prebid bid responses.
+    const mockBidResponses = mockPrebidBidResponses()
+    pbjs.requestBids = jest.fn(requestBidsSettings => {
+      requestBidsSettings.bidsBackHandler(mockBidResponses)
+    })
+
+    const tabAdsConfig = setConfig()
+    const { bidResponses } = await prebidBidder.fetchBids(tabAdsConfig)
+
+    const normalizedBidResponses = {
+      // The long leaderboard ad.
+      'div-gpt-ad-1464385677836-0': [
+        {
+          revenue: 0.582 / 1000,
+          advertiserName: 'openx',
+          adSize: '728x90',
+          encodedRevenue: null,
+          DFPAdvertiserId: null,
+        },
+        {
+          revenue: 4.21 / 1000,
+          advertiserName: 'appnexus',
+          adSize: '728x90',
+          encodedRevenue: null,
+          DFPAdvertiserId: null,
+        },
+        {
+          revenue: 0.19 / 1000,
+          advertiserName: 'emxdigital',
+          adSize: '728x90',
+          encodedRevenue: null,
+          DFPAdvertiserId: null,
+        },
+      ],
+      // The primary rectangle ad (bottom-right).
+      'div-gpt-ad-1464385742501-0': [],
+      // The second rectangle ad (right side, above the first).
+      'div-gpt-ad-1539903223131-0': [
+        {
+          revenue: 1.01 / 1000,
+          advertiserName: 'openx',
+          adSize: '300x250',
+          encodedRevenue: null,
+          DFPAdvertiserId: null,
+        },
+      ],
+    }
+    expect(bidResponses).toEqual(normalizedBidResponses)
+  })
 })

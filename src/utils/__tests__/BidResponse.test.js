@@ -56,7 +56,7 @@ describe('BidResponse', () => {
     }).not.toThrow()
   })
 
-  it('throws if the DFPAdvertiserId is not provided', () => {
+  it('does not throw if the DFPAdvertiserId is not provided', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0.081,
@@ -66,7 +66,7 @@ describe('BidResponse', () => {
     }
     expect(() => {
       BidResponse(input)
-    }).toThrow('The "DFPAdvertiserId" value must be provided.')
+    }).not.toThrow()
   })
 
   it('throws if the DFPAdvertiserId is a string', () => {

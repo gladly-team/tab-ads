@@ -204,7 +204,7 @@ const mockPrebidBid = ({
     adId: 'abc123def456',
     mediaType: 'banner',
     source: 'client',
-    cpm: 0.582,
+    cpm,
     creativeId: '209895498',
     ad: "<div id='some-ad'></div>",
     ttl: 300,
@@ -243,7 +243,13 @@ export const mockPrebidBidResponses = () => {
         mockPrebidBid({ bidder: 'openx', cpm: 0.582, width: 728, height: 90 }),
         mockPrebidBid({
           bidder: 'appnexus',
-          cpm: 2.21,
+          cpm: 4.21,
+          width: 728,
+          height: 90,
+        }),
+        mockPrebidBid({
+          bidder: 'emxdigital',
+          cpm: 0.19,
           width: 728,
           height: 90,
         }),

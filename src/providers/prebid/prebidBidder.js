@@ -1,5 +1,7 @@
+import { get } from 'lodash/object'
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import Bidder from 'src/utils/Bidder'
+import BidResponse from 'src/utils/BidResponse'
 import logger from 'src/utils/logger'
 
 // TODO: assumes we are showing all 3 ads. Make that configurable.
@@ -207,9 +209,22 @@ const getAdUnits = config => {
  *   for which there's a bid and values with a BidResponse, the bidder's
  *   normalized bid for that ad.
  */
-const normalizeBidResponses = rawBidData => {
-  // TODO
-  return {}
+const normalizeBidResponses = (rawBidData = {}) => {
+  const normalizeBid = rawBid => {
+    return BidResponse({
+      revenue: rawBid.cpm / 1000 || 0,
+      advertiserName: rawBid.bidderCode,
+      adSize: rawBid.size,
+    })
+  }
+  const normalizedBids = Object.keys(rawBidData).reduce((accumulator, adId) => {
+    const rawBidsForAdId = get(rawBidData, [adId, 'bids'], [])
+    return {
+      ...accumulator,
+      [adId]: rawBidsForAdId.map(rawBid => normalizeBid(rawBid)),
+    }
+  }, {})
+  return normalizedBids
 }
 
 const name = 'prebid'
