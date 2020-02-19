@@ -106,9 +106,9 @@ const fetchBids = async config => {
   })
 }
 
-// FIXME
 const setTargeting = () => {
-  // TODO
+  const apstag = getAmazonTag()
+  apstag.setDisplayBids()
   logger.debug(`Amazon: set ad server targeting`)
 }
 
