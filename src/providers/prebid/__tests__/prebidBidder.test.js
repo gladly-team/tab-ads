@@ -216,3 +216,20 @@ describe('prebidBidder: fetchBids', () => {
     expect(bidResponses).toEqual(normalizedBidResponses)
   })
 })
+
+describe('prebidBidder: setTargeting', () => {
+  it('calls setTargetingForGPTAsync', () => {
+    expect.assertions(1)
+    prebidBidder.setTargeting()
+    const pbjs = getPrebidPbjs()
+    expect(pbjs.setTargetingForGPTAsync).toHaveBeenCalled()
+  })
+})
+
+describe('prebidBidder: name', () => {
+  it('has the expected bidder name', () => {
+    expect.assertions(1)
+    prebidBidder.setTargeting()
+    expect(prebidBidder.name).toEqual('prebid')
+  })
+})

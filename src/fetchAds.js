@@ -1,3 +1,5 @@
+import { get, set } from 'lodash/object'
+// TODO: move to prebidBidder
 import 'src/providers/prebid/built/pb' // Run our built Prebid.js
 import amazonBidder, {
   storeAmazonBids,
@@ -8,18 +10,21 @@ import indexExchangeBidder, {
 import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import getGoogleTag from 'src/google/getGoogleTag'
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
-import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import handleAdsLoaded from 'src/handleAdsLoaded'
 import prebidBidder from 'src/providers/prebid/prebidBidder'
 import logger from 'src/utils/logger'
 import { setConfig } from 'src/config'
+import { getAdDataStore } from 'src/utils/storage'
 
+// TODO: use this for all bidders
+const BIDDERS = [prebidBidder]
+
+// TODO: remove
 // Enabled bidders.
-const BIDDER_PREBID = 'prebid'
 const BIDDER_AMAZON = 'amazon'
 const BIDDER_IX = 'ix'
 
-const bidders = [BIDDER_PREBID, BIDDER_AMAZON, BIDDER_IX]
+const bidders = [BIDDER_AMAZON, BIDDER_IX]
 
 // Keep track of which bidders have responded.
 const requestManager = {
@@ -60,11 +65,35 @@ function sendAdserverRequest() {
   // Set targeting and make a request to DFP.
   const googletag = getGoogleTag()
   const apstag = getAmazonTag()
-  const pbjs = getPrebidPbjs()
   googletag.cmd.push(() => {
     apstag.setDisplayBids()
-    pbjs.setTargetingForGPTAsync()
+
+    // Set ad server targeting.
+    // TODO: move all bidders into this
+    // TODO: add tests
+    BIDDERS.forEach(bidder => {
+      bidder.setTargeting()
+    })
+
+    // Fetch ads.
     googletag.pubads().refresh()
+
+    // TODO: add tests
+    // Mark which bidders returned bids in time to be included
+    // in the ad server request.
+    BIDDERS.forEach(bidder => {
+      const store = getAdDataStore()
+
+      // This is true if the bidder has returned bid responses.
+      const bidsIncluded = !!get(
+        store,
+        ['bidResponses', bidder.name, 'bidResponses'],
+        null
+      )
+      if (bidsIncluded) {
+        set(store, ['bidResponses', bidder.name, 'includedInAdRequest'], true)
+      }
+    })
   })
 }
 
@@ -104,7 +133,7 @@ function bidderCompleted(bidder) {
  * Initialize all bidders and make bid requests.
  * @return {undefined}
  */
-const loadAdCode = config => {
+const callBidders = async config => {
   // Track loaded ads for analytics
   handleAdsLoaded()
 
@@ -122,17 +151,6 @@ const loadAdCode = config => {
       bidderCompleted(BIDDER_AMAZON)
     })
 
-  // Prebid
-  prebidBidder
-    .fetchBids(config)
-    .then(() => {
-      bidderCompleted(BIDDER_PREBID)
-    })
-    .catch(err => {
-      logger.error(err)
-      bidderCompleted(BIDDER_PREBID)
-    })
-
   // Index Exchange
   indexExchangeBidder(config)
     .then(() => {
@@ -142,6 +160,27 @@ const loadAdCode = config => {
       logger.error(err)
       bidderCompleted(BIDDER_IX)
     })
+
+  // TODO: move all bidders into this
+  // TODO: add tests
+  await Promise.all(
+    BIDDERS.map(async bidder => {
+      const bidResponseData = await bidder.fetchBids(config)
+      const store = getAdDataStore()
+      store.bidResponses[bidder.name] = {
+        ...bidResponseData,
+        // We set this to true during the ad server request if
+        // the bids returned in time.
+        includedInAdRequest: false,
+      }
+      return bidResponseData
+    })
+  )
+
+  // TODO: add test
+  // If fetchBids returned for all the bidders, we can
+  // call the ad server (if we haven't already).
+  sendAdserverRequest()
 }
 
 const fetchAds = async userConfig => {
@@ -156,7 +195,7 @@ const fetchAds = async userConfig => {
       sendAdserverRequest()
     }, config.auctionTimeout)
 
-    loadAdCode(config)
+    callBidders(config)
   } else {
     logger.debug('Ads are disabled. Not setting up DFP or fetching bids.')
   }

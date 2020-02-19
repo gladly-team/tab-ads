@@ -319,6 +319,8 @@ const fetchBids = async config => {
 }
 
 const setTargeting = () => {
+  const pbjs = getPrebidPbjs()
+  pbjs.setTargetingForGPTAsync()
   logger.debug(`Prebid: set ad server targeting`)
 }
 

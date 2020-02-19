@@ -1,13 +1,11 @@
 /* eslint-env jest */
 import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
 import getAmazonTag from 'src/providers/amazon/getAmazonTag'
-import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import { setConfig } from 'src/config'
 
 jest.mock('src/providers/prebid/built/pb')
 jest.mock('src/google/getGoogleTag')
 jest.mock('src/providers/amazon/getAmazonTag')
-jest.mock('src/providers/prebid/getPrebidPbjs')
 jest.mock('src/providers/prebid/prebidBidder')
 jest.mock('src/providers/amazon/amazonBidder')
 jest.mock('src/providers/indexExchange/indexExchangeBidder')
@@ -24,10 +22,6 @@ beforeEach(() => {
   delete window.apstag
   window.apstag = getAmazonTag()
 
-  // Mock Prebid global
-  delete window.pbjs
-  window.pbjs = getPrebidPbjs()
-
   // Set up googletag
   delete window.googletag
   window.googletag = getGoogleTag()
@@ -41,7 +35,6 @@ afterEach(() => {
 afterAll(() => {
   delete window.googletag
   delete window.apstag
-  delete window.pbjs
 })
 
 describe('fetchds', () => {
@@ -112,7 +105,7 @@ describe('fetchds', () => {
   })
 
   it('sets ad server targeting before calling the ad server', async () => {
-    expect.assertions(3)
+    expect.assertions(2)
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
@@ -121,8 +114,10 @@ describe('fetchds', () => {
     await fetchAds(tabAdsConfig)
     await new Promise(resolve => setImmediate(resolve))
 
-    expect(window.pbjs.setTargetingForGPTAsync).toHaveBeenCalledTimes(1)
-    expect(window.pbjs.setTargetingForGPTAsync).toHaveBeenCalledTimes(1)
+    const prebidBidder = require('src/providers/prebid/prebidBidder').default
+    expect(prebidBidder.setTargeting).toHaveBeenCalledTimes(1)
+
+    // TODO: test Amazon targeting
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
