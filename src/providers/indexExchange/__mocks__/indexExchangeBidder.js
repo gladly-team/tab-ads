@@ -1,4 +1,10 @@
 /* eslint-env jest */
+import Bidder from 'src/utils/Bidder'
 
-export const markIndexExchangeBidsAsIncluded = jest.fn()
-export default jest.fn(() => Promise.resolve())
+const MockIndexExchangeBidder = Bidder({
+  name: 'indexExchange',
+  fetchBids: jest.fn(() => Promise.resolve()),
+  setTargeting: jest.fn(),
+})
+
+export default MockIndexExchangeBidder

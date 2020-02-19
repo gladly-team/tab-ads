@@ -1,22 +1,13 @@
 import getIndexExchangeTag from 'src/providers/indexExchange/getIndexExchangeTag'
+import Bidder from 'src/utils/Bidder'
+// import BidResponse from 'src/utils/BidResponse'
 import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
 
-/**
- * Mark that the Index Exchange bids were returned in time
- * to be included in the ad server request.
- * @return {undefined}
- */
-export const markIndexExchangeBidsAsIncluded = () => {
-  try {
-    const adDataStore = getAdDataStore()
-    adDataStore.indexExchangeBids.includedInAdServerRequest = true
-  } catch (e) {
-    logger.error(e)
-  }
-}
+const indexExchangeBidderName = 'indexExchange'
 
+// FIXME: correct return value
 // TODO: assumes we are showing all 3 ads. Make that configurable.
 /**
  * Return a promise that resolves when the Index Exchange bid
@@ -25,7 +16,7 @@ export const markIndexExchangeBidsAsIncluded = () => {
  * @return {Promise<undefined>} Resolves when the Amazon
  *   bid requests return or time out.
  */
-const fetchIndexExchangeDemand = async config => {
+const fetchBids = async config => {
   // Note: use ixTag.cmd.push because the JS may not have
   // loaded. Index Exchange hasn't documented the cmd
   // behavior so it may break.
@@ -76,12 +67,13 @@ const fetchIndexExchangeDemand = async config => {
       // Fetch bid responses from Index Exchange.
       // Note: the current request is to a casalemedia URL.
       ixTagAgain.retrieveDemand(IXSlots, demand => {
+        // TODO: move to setTargeting
+
         // Set adserver targeting for any returned demand.
         // IX demand should set the IOM and ix_id parameters.
         try {
           if (demand && demand.slot) {
             const googletag = getGoogleTag()
-            const adDataStore = getAdDataStore()
 
             // Loop through defined GAM slots to set any targeting.
             googletag.cmd.push(() => {
@@ -116,15 +108,6 @@ const fetchIndexExchangeDemand = async config => {
                       }
                     )
                   })
-
-                  // Store the bids for analytics.
-                  try {
-                    adDataStore.indexExchangeBids[
-                      googleSlot.getSlotElementId()
-                    ] = IXBidResponseArray
-                  } catch (e) {
-                    logger.error(e)
-                  }
                 })
             })
           }
@@ -143,4 +126,15 @@ const fetchIndexExchangeDemand = async config => {
   })
 }
 
-export default fetchIndexExchangeDemand
+const setTargeting = () => {
+  // TODO
+  logger.debug(`Index Exchange: set ad server targeting`)
+}
+
+const AmazonBidder = Bidder({
+  name: indexExchangeBidderName,
+  fetchBids,
+  setTargeting,
+})
+
+export default AmazonBidder

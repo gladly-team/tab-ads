@@ -1,15 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
 const defaultAdDataStore = {
-  // Bids returned from Index Exchange.
-  // Key: slot element ID
-  // Value: bid object
-  indexExchangeBids: {
-    // Whether the bids were returned in time to be part
-    // of the request to our ad server.
-    includedInAdServerRequest: false,
-  },
-
   // Storing data from Google's ad slot events.
   adManager: {
     // Objects from googletag's "slotRenderEnded" event. This event fires
@@ -54,10 +45,8 @@ const defaultAdDataStore = {
   },
 }
 
-// TODO: stop using window variable.
 window.tabAds = {}
 window.tabAds.adDataStore = { ...defaultAdDataStore }
-// export const adDataStore = window.tabAds.adDataStore // eslint-disable-line prefer-destructuring
 
 export const clearAdDataStore = () => {
   window.tabAds.adDataStore = { ...defaultAdDataStore }

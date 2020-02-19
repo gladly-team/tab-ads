@@ -74,7 +74,7 @@ describe('fetchAds', () => {
 
     expect(amazonBidder.fetchBids).toHaveBeenCalledTimes(1)
     expect(prebidBidder.fetchBids).toHaveBeenCalledTimes(1)
-    expect(indexExchangeBidder).toHaveBeenCalledTimes(1)
+    expect(indexExchangeBidder.fetchBids).toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
@@ -99,7 +99,7 @@ describe('fetchAds', () => {
 
     expect(amazonBidder.fetchBids).not.toHaveBeenCalled()
     expect(prebidBidder.fetchBids).not.toHaveBeenCalled()
-    expect(indexExchangeBidder).not.toHaveBeenCalledTimes(1)
+    expect(indexExchangeBidder.fetchBids).not.toHaveBeenCalledTimes(1)
     expect(googletagMockRefresh).not.toHaveBeenCalled()
   })
 
@@ -146,7 +146,7 @@ describe('fetchAds', () => {
     // Mock that Index Exchange is very slow to respond
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
-    indexExchangeBidder.mockImplementationOnce(() => {
+    indexExchangeBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -196,7 +196,7 @@ describe('fetchAds', () => {
     // Mock that Index Exchange responds quickly
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
-    indexExchangeBidder.mockImplementationOnce(() => {
+    indexExchangeBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -245,7 +245,7 @@ describe('fetchAds', () => {
     // Mock that Index Exchange responds quickly
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
-    indexExchangeBidder.mockImplementationOnce(() => {
+    indexExchangeBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -291,7 +291,7 @@ describe('fetchAds', () => {
     // Mock that Index Exchange responds quickly
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
-    indexExchangeBidder.mockImplementationOnce(() => {
+    indexExchangeBidder.fetchBids.mockImplementationOnce(() => {
       return new Promise(resolve => {
         setTimeout(() => {
           resolve()
@@ -314,56 +314,6 @@ describe('fetchAds', () => {
     await new Promise(resolve => setImmediate(resolve))
 
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
-  })
-
-  it('calls to mark IX bids as included in the bid for analytics (if IX is included in the auction)', async () => {
-    expect.assertions(1)
-    const {
-      markIndexExchangeBidsAsIncluded,
-    } = require('src/providers/indexExchange/indexExchangeBidder')
-
-    // Mock that IX responds quickly
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    indexExchangeBidder.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 80)
-      })
-    })
-
-    const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
-    await fetchAds(tabAdsConfig)
-    jest.advanceTimersByTime(100)
-    await new Promise(resolve => setImmediate(resolve))
-    expect(markIndexExchangeBidsAsIncluded).toHaveBeenCalledTimes(1)
-  })
-
-  it('does not call to mark IX bids as included in the bid for analytics (if IX is not included in the auction)', async () => {
-    expect.assertions(1)
-    const {
-      markIndexExchangeBidsAsIncluded,
-    } = require('src/providers/indexExchange/indexExchangeBidder')
-
-    // Mock that IX responds quickly
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    indexExchangeBidder.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 15e3)
-      })
-    })
-
-    const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
-    await fetchAds(tabAdsConfig)
-    jest.advanceTimersByTime(3e3)
-    await new Promise(resolve => setImmediate(resolve))
-    expect(markIndexExchangeBidsAsIncluded).not.toHaveBeenCalled()
   })
 
   it('calls handleAdsLoaded', async () => {

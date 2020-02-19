@@ -1,43 +1,24 @@
 import { get, set } from 'lodash/object'
-import indexExchangeBidder, {
-  markIndexExchangeBidsAsIncluded,
-} from 'src/providers/indexExchange/indexExchangeBidder'
 
-// Ad server
+// Ad server.
 import getGoogleTag from 'src/google/getGoogleTag'
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import handleAdsLoaded from 'src/handleAdsLoaded'
 
-// Bidders
+// Bidders.
 import prebidBidder from 'src/providers/prebid/prebidBidder'
 import amazonBidder from 'src/providers/amazon/amazonBidder'
+import indexExchangeBidder from 'src/providers/indexExchange/indexExchangeBidder'
 
+// Other helpers.
 import logger from 'src/utils/logger'
 import { setConfig } from 'src/config'
 import { getAdDataStore } from 'src/utils/storage'
 
-// TODO: use this for all bidders
-const BIDDERS = [prebidBidder, amazonBidder]
+const BIDDERS = [prebidBidder, amazonBidder, indexExchangeBidder]
 
-// TODO: remove
-// Enabled bidders.
-const BIDDER_IX = 'ix'
-
-const bidders = [BIDDER_IX]
-
-// Keep track of which bidders have responded.
-const requestManager = {
-  // [bidder name]: {boolean} whether the bidder has
-  //   returned a bid
-  bidders: bidders.reduce((bidderTracker, currentBidder) => {
-    bidderTracker[currentBidder] = false // eslint-disable-line no-param-reassign
-    return bidders
-  }, {}),
-
-  // Whether we've already requested ads from the ad
-  // server.
-  adserverRequestSent: false,
-}
+// Set to true if we send a request to the ad server.
+let adserverRequestSent = false
 
 /**
  * Add bidder targeting to googletag and send a request
@@ -46,15 +27,10 @@ const requestManager = {
  */
 function sendAdserverRequest() {
   // Return if the request to the adserver was already sent.
-  if (requestManager.adserverRequestSent === true) {
+  if (adserverRequestSent === true) {
     return
   }
-  requestManager.adserverRequestSent = true
-
-  // For revenue analytics.
-  if (requestManager.bidders[BIDDER_IX]) {
-    markIndexExchangeBidsAsIncluded()
-  }
+  adserverRequestSent = true
 
   logger.debug(`Sending request to ad server.`)
 
@@ -62,7 +38,6 @@ function sendAdserverRequest() {
   const googletag = getGoogleTag()
   googletag.cmd.push(() => {
     // Set ad server targeting.
-    // TODO: move all bidders into this
     // TODO: add tests
     BIDDERS.forEach(bidder => {
       bidder.setTargeting()
@@ -91,60 +66,12 @@ function sendAdserverRequest() {
 }
 
 /**
- * Whether all bidders have returned bids.
- * @return {boolean}
- */
-function allBiddersBack() {
-  return (
-    // If length is equal to bidders, all bidders are back.
-    bidders
-      .map(bidder => {
-        return requestManager.bidders[bidder]
-      })
-      // Remove false values (bidders that have not responded).
-      .filter(Boolean).length === bidders.length
-  )
-}
-
-/**
- * Mark a bidder as having returned bids. If all bidders have
- * returned bids, call the ad server.
- * @return {undefined}
- */
-function bidderCompleted(bidder) {
-  // Return if the request to the adserver was already sent.
-  if (requestManager.adserverRequestSent === true) {
-    return
-  }
-  requestManager.bidders[bidder] = true
-  if (allBiddersBack()) {
-    sendAdserverRequest()
-  }
-}
-
-/**
  * Initialize all bidders and make bid requests.
  * @return {undefined}
  */
 const callBidders = async config => {
-  // Track loaded ads for analytics
-  handleAdsLoaded()
-
   logger.debug(`Loading all bidders in ads.js.`)
 
-  // TODO: standardize bidder API.
-
-  // Index Exchange
-  indexExchangeBidder(config)
-    .then(() => {
-      bidderCompleted(BIDDER_IX)
-    })
-    .catch(err => {
-      logger.error(err)
-      bidderCompleted(BIDDER_IX)
-    })
-
-  // TODO: move all bidders into this
   // TODO: add tests
   // TODO: handle errors gracefully (need parent app to log them)
   try {
@@ -181,6 +108,9 @@ const fetchAds = async userConfig => {
   if (!config.disableAds) {
     // Define slots and enable ad services.
     setUpGoogleAds(config)
+
+    // Track loaded ads for analytics
+    handleAdsLoaded()
 
     // Call the ad server after some time to avoid waiting
     // too long for bid responses.
