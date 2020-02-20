@@ -253,7 +253,6 @@ describe('amazonBidder: name', () => {
   it('has the expected bidder name', () => {
     expect.assertions(1)
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.setTargeting()
     expect(amazonBidder.name).toEqual('amazon')
   })
 })

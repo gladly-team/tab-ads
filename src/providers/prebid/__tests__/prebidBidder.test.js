@@ -230,7 +230,6 @@ describe('prebidBidder: setTargeting', () => {
 describe('prebidBidder: name', () => {
   it('has the expected bidder name', () => {
     expect.assertions(1)
-    prebidBidder.setTargeting()
     expect(prebidBidder.name).toEqual('prebid')
   })
 })
