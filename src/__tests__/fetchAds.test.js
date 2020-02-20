@@ -348,6 +348,9 @@ describe('fetchAds: bid request storage', () => {
       auctionTimeout: 2000,
     })
     await fetchAds(tabAdsConfig)
+
+    // Advance to after all bidders have responded but before the
+    // auction timeout.
     jest.advanceTimersByTime(41)
     await flushAllPromises()
 
@@ -414,6 +417,9 @@ describe('fetchAds: bid request storage', () => {
       auctionTimeout: 2000,
     })
     await fetchAds(tabAdsConfig)
+
+    // Advance to after all bidders have responded and after the
+    // auction timeout.
     jest.advanceTimersByTime(20e3)
     await flushAllPromises()
 
@@ -445,6 +451,184 @@ describe('fetchAds: bid request storage', () => {
           example: 'Raw bid responses for prebid',
         },
       },
+    })
+  })
+
+  it('marks only the bidders that respond before the ad server request with includedInAdRequest === true', async () => {
+    expect.assertions(2)
+
+    // No bids stored yet.
+    expect(getAdDataStore().bidResponses).toEqual({})
+
+    // Mock that the first bidder (Prebid) is slow to respond but the
+    // other bidders respond quickly.
+    const bidders = getBidders()
+    bidders.forEach((bidder, index) => {
+      bidder.fetchBids.mockImplementationOnce(() => {
+        const timeoutMs = index === 0 ? 6e3 : 80
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve({
+              bidResponses: {
+                example: `Bid responses for ${bidder.name}`,
+              },
+              rawBidResponses: {
+                example: `Raw bid responses for ${bidder.name}`,
+              },
+            })
+          }, timeoutMs)
+        })
+      })
+    })
+
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      auctionTimeout: 2000,
+    })
+    await fetchAds(tabAdsConfig)
+
+    // Advance to after most (but not all) bidders have responded and
+    // before the auction timeout.
+    jest.advanceTimersByTime(100)
+    await flushAllPromises()
+
+    // Advance to after the auction timeout.
+    jest.advanceTimersByTime(16e3)
+    await flushAllPromises()
+
+    expect(getAdDataStore().bidResponses).toEqual({
+      amazon: {
+        bidResponses: {
+          example: 'Bid responses for amazon',
+        },
+        includedInAdRequest: true, // Bidder responded in time
+        rawBidResponses: {
+          example: 'Raw bid responses for amazon',
+        },
+      },
+      indexExchange: {
+        bidResponses: {
+          example: 'Bid responses for indexExchange',
+        },
+        includedInAdRequest: true, // Bidder responded in time
+        rawBidResponses: {
+          example: 'Raw bid responses for indexExchange',
+        },
+      },
+      prebid: {
+        bidResponses: {
+          example: 'Bid responses for prebid',
+        },
+        includedInAdRequest: false, // Prebid was too slow to respond
+        rawBidResponses: {
+          example: 'Raw bid responses for prebid',
+        },
+      },
+    })
+  })
+
+  it('does not include bid responses for bidders that have not yet responded', async () => {
+    expect.assertions(3)
+
+    // No bids stored yet.
+    expect(getAdDataStore().bidResponses).toEqual({})
+
+    // Mock that the first bidder (Prebid) is slow to respond but the
+    // other bidders respond quickly.
+    const bidders = getBidders()
+    bidders.forEach((bidder, index) => {
+      bidder.fetchBids.mockImplementationOnce(() => {
+        const timeoutMs = index === 0 ? 12e3 : 80
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve({
+              bidResponses: {
+                example: `Bid responses for ${bidder.name}`,
+              },
+              rawBidResponses: {
+                example: `Raw bid responses for ${bidder.name}`,
+              },
+            })
+          }, timeoutMs)
+        })
+      })
+    })
+
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      auctionTimeout: 2000,
+    })
+    await fetchAds(tabAdsConfig)
+
+    // Advance to after most (but not all) bidders have responded and
+    // before the auction timeout.
+    jest.advanceTimersByTime(100)
+    await flushAllPromises()
+
+    expect(getAdDataStore().bidResponses).toEqual({
+      amazon: {
+        bidResponses: {
+          example: 'Bid responses for amazon',
+        },
+        includedInAdRequest: false, // We've not yet sent the ad server request.
+        rawBidResponses: {
+          example: 'Raw bid responses for amazon',
+        },
+      },
+      indexExchange: {
+        bidResponses: {
+          example: 'Bid responses for indexExchange',
+        },
+        includedInAdRequest: false, // We've not yet sent the ad server request.
+        rawBidResponses: {
+          example: 'Raw bid responses for indexExchange',
+        },
+      },
+      // Prebid has not yet responded.
+      // prebid: {
+      //   bidResponses: {
+      //     example: 'Bid responses for prebid',
+      //   },
+      //   includedInAdRequest: false,
+      //   rawBidResponses: {
+      //     example: 'Raw bid responses for prebid',
+      //   },
+      // },
+    })
+
+    // Advance to after the auction timeout.
+    jest.advanceTimersByTime(4e3)
+    await flushAllPromises()
+
+    expect(getAdDataStore().bidResponses).toEqual({
+      amazon: {
+        bidResponses: {
+          example: 'Bid responses for amazon',
+        },
+        includedInAdRequest: true, // Now we've sent the ad server request.
+        rawBidResponses: {
+          example: 'Raw bid responses for amazon',
+        },
+      },
+      indexExchange: {
+        bidResponses: {
+          example: 'Bid responses for indexExchange',
+        },
+        includedInAdRequest: true, // Now we've sent the ad server request.
+        rawBidResponses: {
+          example: 'Raw bid responses for indexExchange',
+        },
+      },
+      // Prebid has not yet responded still.
+      // prebid: {
+      //   bidResponses: {
+      //     example: 'Bid responses for prebid',
+      //   },
+      //   includedInAdRequest: false,
+      //   rawBidResponses: {
+      //     example: 'Raw bid responses for prebid',
+      //   },
+      // },
     })
   })
 })
