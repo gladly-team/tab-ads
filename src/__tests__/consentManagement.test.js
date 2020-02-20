@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+jest.mock('src/utils/logger')
+
 beforeEach(() => {
   // Mock CMP
   window.__cmp = jest.fn(command => {

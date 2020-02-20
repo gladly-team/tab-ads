@@ -117,15 +117,32 @@ describe('config: setConfig', () => {
   it('throws if the publisher domain is not provided', () => {
     const { setConfig } = require('src/config')
     expect(() => {
-      setConfig({})
+      setConfig({
+        publisher: {
+          pageUrl: 'https://example.com/something/',
+        },
+      })
     }).toThrow('Config error: the publisher.domain property must be set.')
+  })
+
+  it('throws if the publisher page URL is not provided', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        publisher: {
+          domain: 'example.com',
+        },
+      })
+    }).toThrow('Config error: the publisher.pageUrl property must be set.')
   })
 })
 
 describe('config: getConfig', () => {
-  it('returns the default when setConfig has not yet been called', () => {
+  it('throws if setConfig has not yet been called', () => {
     const { getConfig } = require('src/config')
-    expect(getConfig()).toEqual(defaultConfigStructure)
+    expect(() => {
+      getConfig()
+    }).toThrow('You must call `setConfig` before using the config.')
   })
 
   it('returns the stored config', () => {

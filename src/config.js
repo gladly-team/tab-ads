@@ -33,12 +33,12 @@ const defaultConfig = {
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
     // An async function that resolves to true if the user is in the European Union.
-    isEU: () => Promise.resolve(false), // TODO: require this to be passed
+    isEU: () => Promise.resolve(false), // required
     timeout: 50, // Time to wait for the consent management platform (CMP) to respond
   },
   publisher: {
-    domain: 'tab.gladly.io',
-    pageUrl: 'https://tab.gladly.io/newtab/', // TODO: require this to be passed
+    domain: null, // required
+    pageUrl: null, // required
   },
   // Convenience to distinguish between the ads.
   newTabAds: {
@@ -64,13 +64,16 @@ const defaultConfig = {
   logLevel: 'debug', // TODO: change the default to "error"
 }
 
-let config = defaultConfig
+let config
 
 // Throw if the provided config is inadequate.
 const validateConfig = userConfig => {
   // TODO: more validation
   if (!get(userConfig, 'publisher.domain')) {
     throw new Error('Config error: the publisher.domain property must be set.')
+  }
+  if (!get(userConfig, 'publisher.pageUrl')) {
+    throw new Error('Config error: the publisher.pageUrl property must be set.')
   }
 }
 
@@ -95,5 +98,8 @@ export const setConfig = userConfig => {
 }
 
 export const getConfig = () => {
+  if (!config) {
+    throw new Error('You must call `setConfig` before using the config.')
+  }
   return config
 }
