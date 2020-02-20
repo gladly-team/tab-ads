@@ -51,7 +51,6 @@ function sendAdserverRequest() {
     // Fetch ads.
     googletag.pubads().refresh()
 
-    // TODO: add tests
     // Mark which bidders returned bids in time to be included
     // in the ad server request.
     BIDDERS.forEach(bidder => {

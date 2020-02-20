@@ -3,6 +3,7 @@ import fetchAds, { reset } from 'src/fetchAds'
 import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
 import { setConfig } from 'src/config'
 import logger from 'src/utils/logger'
+import { getAdDataStore, clearAdDataStore } from 'src/utils/storage'
 
 // Bidders.
 import prebidBidder from 'src/providers/prebid/prebidBidder'
@@ -27,6 +28,7 @@ beforeAll(() => {
 afterEach(() => {
   jest.clearAllMocks()
   reset()
+  clearAdDataStore()
 })
 
 // Return an array of active Bidder modules.
@@ -34,7 +36,7 @@ const getBidders = () => {
   return [prebidBidder, amazonBidder, indexExchangeBidder]
 }
 
-describe('fetchAds', () => {
+describe('fetchAds: bid and ad server requests', () => {
   it('sets up the Google ad slots', async () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
@@ -310,5 +312,139 @@ describe('fetchAds', () => {
     await fetchAds(tabAdsConfig)
     await flushAllPromises()
     expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+})
+
+describe('fetchAds: bid request storage', () => {
+  it("stores every bidder's bid response data in storage when they respond quickly", async () => {
+    expect.assertions(2)
+
+    const store = getAdDataStore()
+
+    // No bids stored yet.
+    expect(store.bidResponses).toEqual({})
+
+    // Mock that all bidders respond quickly.
+    const bidders = getBidders()
+    bidders.forEach(bidder => {
+      bidder.fetchBids.mockImplementationOnce(() => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve({
+              bidResponses: {
+                example: `Bid responses for ${bidder.name}`,
+              },
+              rawBidResponses: {
+                example: `Raw bid responses for ${bidder.name}`,
+              },
+            })
+          }, 40)
+        })
+      })
+    })
+
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      auctionTimeout: 2000,
+    })
+    await fetchAds(tabAdsConfig)
+    jest.advanceTimersByTime(41)
+    await flushAllPromises()
+
+    expect(store.bidResponses).toEqual({
+      amazon: {
+        bidResponses: {
+          example: 'Bid responses for amazon',
+        },
+        includedInAdRequest: true,
+        rawBidResponses: {
+          example: 'Raw bid responses for amazon',
+        },
+      },
+      indexExchange: {
+        bidResponses: {
+          example: 'Bid responses for indexExchange',
+        },
+        includedInAdRequest: true,
+        rawBidResponses: {
+          example: 'Raw bid responses for indexExchange',
+        },
+      },
+      prebid: {
+        bidResponses: {
+          example: 'Bid responses for prebid',
+        },
+        includedInAdRequest: true,
+        rawBidResponses: {
+          example: 'Raw bid responses for prebid',
+        },
+      },
+    })
+  })
+
+  it("stores every bidder's bid response data in storage even when they respond slowly, but includedInAdRequest should be false", async () => {
+    expect.assertions(2)
+
+    const store = getAdDataStore()
+
+    // No bids stored yet.
+    expect(store.bidResponses).toEqual({})
+
+    // Mock that all bidders respond quickly.
+    const bidders = getBidders()
+    bidders.forEach(bidder => {
+      bidder.fetchBids.mockImplementationOnce(() => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve({
+              bidResponses: {
+                example: `Bid responses for ${bidder.name}`,
+              },
+              rawBidResponses: {
+                example: `Raw bid responses for ${bidder.name}`,
+              },
+            })
+          }, 15e3) // returns after the ad server request is sent
+        })
+      })
+    })
+
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      auctionTimeout: 2000,
+    })
+    await fetchAds(tabAdsConfig)
+    jest.advanceTimersByTime(20e3)
+    await flushAllPromises()
+
+    expect(store.bidResponses).toEqual({
+      amazon: {
+        bidResponses: {
+          example: 'Bid responses for amazon',
+        },
+        includedInAdRequest: false,
+        rawBidResponses: {
+          example: 'Raw bid responses for amazon',
+        },
+      },
+      indexExchange: {
+        bidResponses: {
+          example: 'Bid responses for indexExchange',
+        },
+        includedInAdRequest: false,
+        rawBidResponses: {
+          example: 'Raw bid responses for indexExchange',
+        },
+      },
+      prebid: {
+        bidResponses: {
+          example: 'Bid responses for prebid',
+        },
+        includedInAdRequest: false,
+        rawBidResponses: {
+          example: 'Raw bid responses for prebid',
+        },
+      },
+    })
   })
 })

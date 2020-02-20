@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-const defaultAdDataStore = {
+const getDefaultAdDataStore = () => ({
   // Storing data from Google's ad slot events.
   adManager: {
     // Objects from googletag's "slotRenderEnded" event. This event fires
@@ -43,13 +43,13 @@ const defaultAdDataStore = {
     //   }
     // },
   },
-}
+})
 
 window.tabAds = {}
-window.tabAds.adDataStore = { ...defaultAdDataStore }
+window.tabAds.adDataStore = getDefaultAdDataStore()
 
 export const clearAdDataStore = () => {
-  window.tabAds.adDataStore = { ...defaultAdDataStore }
+  window.tabAds.adDataStore = getDefaultAdDataStore()
 }
 
 export const getAdDataStore = () => {
