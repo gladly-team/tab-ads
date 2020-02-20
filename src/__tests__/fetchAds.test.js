@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
 import { setConfig } from 'src/config'
-import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
+import { flushAllPromises, getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
 jest.mock('src/google/getGoogleTag')
 jest.mock('src/providers/amazon/getAmazonTag')
@@ -31,6 +31,15 @@ afterAll(() => {
   delete window.googletag
 })
 
+// Return an array of Bidder modules.
+const getBidders = () => {
+  const amazonBidder = require('src/providers/amazon/amazonBidder').default
+  const prebidBidder = require('src/providers/prebid/prebidBidder').default
+  const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+    .default
+  return [prebidBidder, amazonBidder, indexExchangeBidder]
+}
+
 describe('fetchAds', () => {
   it('sets up the Google ad slots', async () => {
     expect.assertions(1)
@@ -50,13 +59,10 @@ describe('fetchAds', () => {
     expect(setUpGoogleAds).toHaveBeenCalledWith(tabAdsConfig)
   })
 
-  it('calls the expected bidders and ad server', async () => {
-    expect.assertions(4)
+  it('calls the expected bidders', async () => {
+    const bidders = getBidders()
+    expect.assertions(bidders.length)
 
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
@@ -65,20 +71,32 @@ describe('fetchAds', () => {
     await fetchAds(tabAdsConfig)
 
     // Flush all promises
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
-    expect(amazonBidder.fetchBids).toHaveBeenCalledTimes(1)
-    expect(prebidBidder.fetchBids).toHaveBeenCalledTimes(1)
-    expect(indexExchangeBidder.fetchBids).toHaveBeenCalledTimes(1)
+    bidders.forEach(bidder => {
+      expect(bidder.fetchBids).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it('calls the ad server', async () => {
+    expect.assertions(1)
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    const fetchAds = require('src/fetchAds').default
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    await fetchAds(tabAdsConfig)
+
+    // Flush all promises
+    await flushAllPromises()
+
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
-  it('does not call expected bidders or ad server when ads are not enabled', async () => {
-    expect.assertions(4)
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
+  it('does not call the expected bidders when ads are not enabled', async () => {
+    const bidders = getBidders()
+    expect.assertions(bidders.length)
 
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -91,62 +109,61 @@ describe('fetchAds', () => {
     await fetchAds(tabAdsConfig)
 
     // Flush all promises
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
-    expect(amazonBidder.fetchBids).not.toHaveBeenCalled()
-    expect(prebidBidder.fetchBids).not.toHaveBeenCalled()
-    expect(indexExchangeBidder.fetchBids).not.toHaveBeenCalledTimes(1)
+    bidders.forEach(bidder => {
+      expect(bidder.fetchBids).not.toHaveBeenCalled()
+    })
+  })
+
+  it('does not call the ad server when ads are not enabled', async () => {
+    expect.assertions(1)
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    const fetchAds = require('src/fetchAds').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      disableAds: true, // Turn off ads
+    })
+    await fetchAds(tabAdsConfig)
+
+    // Flush all promises
+    await flushAllPromises()
+
     expect(googletagMockRefresh).not.toHaveBeenCalled()
   })
 
-  it('sets ad server targeting before calling the ad server', async () => {
-    expect.assertions(2)
+  it('sets ad server targeting on all bidders', async () => {
+    const bidders = getBidders()
+    expect.assertions(bidders.length)
+
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
     const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
-    const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    expect(prebidBidder.setTargeting).toHaveBeenCalledTimes(1)
-
-    // TODO: test Amazon targeting
-    expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
+    bidders.forEach(bidder => {
+      expect(bidder.setTargeting).toHaveBeenCalledTimes(1)
+    })
   })
 
   it('calls the ad server even when all bidders time out', async () => {
     expect.assertions(2)
 
-    // Mock that Prebid is very slow to respond
-    const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    prebidBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 15e3)
-      })
-    })
-
-    // Mock that Amazon is very slow to respond
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 15e3)
-      })
-    })
-
-    // Mock that Index Exchange is very slow to respond
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    indexExchangeBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 15e3)
+    // Mock that all bidders are very slow to respond.
+    const bidders = getBidders()
+    bidders.forEach(bidder => {
+      bidder.fetchBids.mockImplementationOnce(() => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve()
+          }, 15e3)
+        })
       })
     })
 
@@ -156,12 +173,12 @@ describe('fetchAds', () => {
     const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
     expect(googletagMockRefresh).not.toHaveBeenCalled()
 
     jest.advanceTimersByTime(3e3)
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
@@ -206,11 +223,11 @@ describe('fetchAds', () => {
     const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
     expect(googletagMockRefresh).not.toHaveBeenCalled()
     jest.advanceTimersByTime(3e3)
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
@@ -218,34 +235,15 @@ describe('fetchAds', () => {
   it('calls the ad server immediately when all bidders respond before the timeout', async () => {
     expect.assertions(1)
 
-    // Mock that Prebid responds quickly
-    const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    prebidBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 40)
-      })
-    })
-
-    // Mock that Amazon responds quickly
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 40)
-      })
-    })
-
-    // Mock that Index Exchange responds quickly
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    indexExchangeBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 40)
+    // Mock that all bidders respond quickly.
+    const bidders = getBidders()
+    bidders.forEach(bidder => {
+      bidder.fetchBids.mockImplementationOnce(() => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve()
+          }, 40)
+        })
       })
     })
 
@@ -256,7 +254,7 @@ describe('fetchAds', () => {
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
@@ -264,34 +262,15 @@ describe('fetchAds', () => {
   it('only calls the ad server once when all bidders respond before the timeout', async () => {
     expect.assertions(2)
 
-    // Mock that Prebid responds quickly
-    const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    prebidBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 40)
-      })
-    })
-
-    // Mock that Amazon responds quickly
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 40)
-      })
-    })
-
-    // Mock that Index Exchange responds quickly
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    indexExchangeBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 40)
+    // Mock that all bidders respond quickly.
+    const bidders = getBidders()
+    bidders.forEach(bidder => {
+      bidder.fetchBids.mockImplementationOnce(() => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve()
+          }, 40)
+        })
       })
     })
 
@@ -302,12 +281,12 @@ describe('fetchAds', () => {
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
 
     jest.advanceTimersByTime(20e3)
-    await new Promise(resolve => setImmediate(resolve))
+    await flushAllPromises()
 
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })

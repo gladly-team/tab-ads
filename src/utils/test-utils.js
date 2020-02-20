@@ -278,3 +278,8 @@ export const getMockTabAdsUserConfig = () => ({
     pageUrl: 'https://example.com/foo',
   },
 })
+
+// Provide a valid config for testing.
+export const flushAllPromises = async () => {
+  await new Promise(resolve => setImmediate(resolve))
+}
