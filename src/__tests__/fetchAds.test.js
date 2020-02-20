@@ -2,6 +2,7 @@
 import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
 import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import { setConfig } from 'src/config'
+import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
 jest.mock('src/google/getGoogleTag')
 jest.mock('src/providers/amazon/getAmazonTag')
@@ -41,7 +42,7 @@ describe('fetchAds', () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     expect(setUpGoogleAds).toHaveBeenCalledTimes(1)
   })
@@ -50,7 +51,7 @@ describe('fetchAds', () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     expect(setUpGoogleAds).toHaveBeenCalledWith(tabAdsConfig)
   })
@@ -66,7 +67,7 @@ describe('fetchAds', () => {
     __setPubadsRefreshMock(googletagMockRefresh)
 
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
 
     // Flush all promises
@@ -90,6 +91,7 @@ describe('fetchAds', () => {
 
     const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
       disableAds: true, // Turn off ads
     })
     await fetchAds(tabAdsConfig)
@@ -109,7 +111,7 @@ describe('fetchAds', () => {
     __setPubadsRefreshMock(googletagMockRefresh)
 
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     await new Promise(resolve => setImmediate(resolve))
 
@@ -158,7 +160,7 @@ describe('fetchAds', () => {
     __setPubadsRefreshMock(googletagMockRefresh)
 
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     await new Promise(resolve => setImmediate(resolve))
 
@@ -208,7 +210,7 @@ describe('fetchAds', () => {
     __setPubadsRefreshMock(googletagMockRefresh)
 
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     await new Promise(resolve => setImmediate(resolve))
 
@@ -257,7 +259,7 @@ describe('fetchAds', () => {
     __setPubadsRefreshMock(googletagMockRefresh)
 
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
     await new Promise(resolve => setImmediate(resolve))
@@ -303,7 +305,7 @@ describe('fetchAds', () => {
     __setPubadsRefreshMock(googletagMockRefresh)
 
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
     await new Promise(resolve => setImmediate(resolve))
@@ -320,7 +322,7 @@ describe('fetchAds', () => {
     expect.assertions(1)
     const handleAdsLoaded = require('src/handleAdsLoaded').default
     const fetchAds = require('src/fetchAds').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     expect(handleAdsLoaded).toHaveBeenCalledTimes(1)
   })

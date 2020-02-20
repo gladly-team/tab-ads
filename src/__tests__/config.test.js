@@ -54,19 +54,31 @@ const defaultConfigStructure = {
   logLevel: expect.any(String),
 }
 
-describe('config', () => {
-  test('setConfig returns an object', () => {
+describe('config: setConfig', () => {
+  it('returns an object', () => {
     const { setConfig } = require('src/config')
-    expect(setConfig()).toEqual(expect.any(Object))
+    expect(
+      setConfig({
+        publisher: {
+          domain: 'example.com',
+          pageUrl: 'https://example.com/foo',
+        },
+      })
+    ).toEqual(expect.any(Object))
   })
 
-  test('setConfig returns an object with the expected default structure', () => {
+  it('returns an object with the expected default structure', () => {
     const { setConfig } = require('src/config')
-    const config = setConfig()
+    const config = setConfig({
+      publisher: {
+        domain: 'example.com',
+        pageUrl: 'https://example.com/foo',
+      },
+    })
     expect(config).toEqual(defaultConfigStructure)
   })
 
-  test('setConfig allows customizing most of its properties', () => {
+  it('allows customizing most of its properties', () => {
     const { setConfig } = require('src/config')
     const isEUFunc = () => new Promise(true)
     const modifiedConfig = {
@@ -102,14 +114,27 @@ describe('config', () => {
     })
   })
 
-  test('getConfig returns the default when setConfig has not yet been called', () => {
+  it('throws if the publisher domain is not provided', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({})
+    }).toThrow('Config error: the publisher.domain property must be set.')
+  })
+})
+
+describe('config: getConfig', () => {
+  it('returns the default when setConfig has not yet been called', () => {
     const { getConfig } = require('src/config')
     expect(getConfig()).toEqual(defaultConfigStructure)
   })
 
-  test('getConfig returns the stored config', () => {
+  it('returns the stored config', () => {
     const { setConfig, getConfig } = require('src/config')
     const modifiedConfig = {
+      publisher: {
+        domain: 'example.com',
+        pageUrl: 'https://example.com/foo',
+      },
       disableAds: true,
       auctionTimeout: 1234,
     }

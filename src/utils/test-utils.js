@@ -267,3 +267,11 @@ export const mockPrebidBidResponses = () => {
     },
   }
 }
+
+// Provide a valid config for testing.
+export const getMockTabAdsUserConfig = () => ({
+  publisher: {
+    domain: 'example.com',
+    pageUrl: 'https://example.com/foo',
+  },
+})

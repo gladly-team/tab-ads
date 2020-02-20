@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
+
 const mockGoogleDisplayAd = jest.fn()
 jest.mock('src/google/googleDisplayAd', () => mockGoogleDisplayAd)
 jest.mock('src/config')
@@ -17,6 +19,7 @@ describe('displayAd', () => {
   it('calls googleDisplayAd with the ad ID when ads are enabled', () => {
     const { setConfig, getConfig } = require('src/config')
     const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
       disableAds: false,
       useMockAds: false,
     })
@@ -29,6 +32,7 @@ describe('displayAd', () => {
   it('does not callgoogleDisplayAd when ads are NOT enabled', () => {
     const { setConfig, getConfig } = require('src/config')
     const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
       disableAds: true,
       useMockAds: false,
     })
@@ -41,6 +45,7 @@ describe('displayAd', () => {
   it('creates a mock ad when ads are disabled and mock ads are enabled', () => {
     const { setConfig, getConfig } = require('src/config')
     const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
       disableAds: true,
       useMockAds: true,
     })
@@ -64,6 +69,7 @@ describe('displayAd', () => {
   it('does not create a mock ad when ads are enabled', () => {
     const { setConfig, getConfig } = require('src/config')
     const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
       disableAds: false,
       useMockAds: true,
     })
@@ -84,6 +90,7 @@ describe('displayAd', () => {
   it('does not create a mock ad when ads are disabled but mock ads are NOT enabled', () => {
     const { setConfig, getConfig } = require('src/config')
     const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
       disableAds: true,
       useMockAds: false,
     })

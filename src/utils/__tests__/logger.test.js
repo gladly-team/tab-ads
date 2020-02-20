@@ -2,6 +2,7 @@
 /* eslint-env jest */
 
 import { setConfig } from 'src/config'
+import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -10,8 +11,9 @@ afterEach(() => {
 const formatMessage = msg => `tab-ads: ${msg}`
 
 beforeEach(() => {
-  // Reset the config each time. By default, use logLevl === "debug".
+  // Reset the config each time. By default, use logLevel === "debug".
   setConfig({
+    ...getMockTabAdsUserConfig(),
     logLevel: 'debug',
   })
 })
@@ -77,6 +79,7 @@ describe('logger', () => {
 
   test('logger.debug does not log to console when the logLevel is "info"', () => {
     setConfig({
+      ...getMockTabAdsUserConfig(),
       logLevel: 'info',
     })
 
@@ -88,6 +91,7 @@ describe('logger', () => {
 
   test('logger.warn does not log to console when the logLevel is "error"', () => {
     setConfig({
+      ...getMockTabAdsUserConfig(),
       logLevel: 'error',
     })
 
@@ -102,6 +106,7 @@ describe('logger', () => {
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
 
     setConfig({
+      ...getMockTabAdsUserConfig(),
       logLevel: 'error',
     })
 
@@ -113,6 +118,7 @@ describe('logger', () => {
 
   test('logger.error does not log to console when the logLevel is "none"', () => {
     setConfig({
+      ...getMockTabAdsUserConfig(),
       logLevel: 'none',
     })
 

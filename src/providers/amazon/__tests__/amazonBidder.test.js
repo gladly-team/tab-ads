@@ -1,7 +1,10 @@
 /* eslint-env jest */
 
 import getAmazonTag from 'src/providers/amazon/getAmazonTag'
-import { mockAmazonBidResponse } from 'src/utils/test-utils'
+import {
+  mockAmazonBidResponse,
+  getMockTabAdsUserConfig,
+} from 'src/utils/test-utils'
 import { setConfig } from 'src/config'
 
 jest.mock('src/consentManagement')
@@ -27,7 +30,7 @@ describe('amazonBidder: fetchBids', () => {
   it('runs without error', async () => {
     expect.assertions(0)
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await amazonBidder.fetchBids(tabAdsConfig)
   })
 
@@ -36,7 +39,7 @@ describe('amazonBidder: fetchBids', () => {
     const apstag = getAmazonTag()
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await amazonBidder.fetchBids(tabAdsConfig)
 
     expect(apstag.init.mock.calls[0][0]).toMatchObject({
@@ -49,7 +52,7 @@ describe('amazonBidder: fetchBids', () => {
     const apstag = getAmazonTag()
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await amazonBidder.fetchBids(tabAdsConfig)
 
     expect(apstag.fetchBids).toHaveBeenCalled()
@@ -59,7 +62,7 @@ describe('amazonBidder: fetchBids', () => {
     expect.assertions(1)
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     const promise = amazonBidder.fetchBids(tabAdsConfig)
     promise.done = false
     promise.then(() => {
@@ -82,7 +85,7 @@ describe('amazonBidder: fetchBids', () => {
     })
 
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     const promise = amazonBidder.fetchBids(tabAdsConfig)
     promise.done = false
     promise.then(() => {
@@ -106,7 +109,7 @@ describe('amazonBidder: fetchBids', () => {
   it('calls for the expected bids when all ads are enabled', async () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await amazonBidder.fetchBids(tabAdsConfig)
     expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
@@ -130,7 +133,7 @@ describe('amazonBidder: fetchBids', () => {
   it('returns the expected Amazon bid responses in the rawBidResponses key', async () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
 
     // Set the mock Amazon bid responses.
     const mockBid = mockAmazonBidResponse()
@@ -174,7 +177,7 @@ describe('amazonBidder: fetchBids', () => {
   it('returns the expected normalized BidResponses in the bidResponses key', async () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
 
     // Set the mock Amazon bid responses.
     const mockBid = mockAmazonBidResponse()

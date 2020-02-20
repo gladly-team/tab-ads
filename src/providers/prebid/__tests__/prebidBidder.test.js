@@ -4,7 +4,10 @@ import prebidBidder from 'src/providers/prebid/prebidBidder'
 import getGoogleTag from 'src/google/getGoogleTag'
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import { setConfig } from 'src/config'
-import { mockPrebidBidResponses } from 'src/utils/test-utils'
+import {
+  getMockTabAdsUserConfig,
+  mockPrebidBidResponses,
+} from 'src/utils/test-utils'
 
 jest.mock('src/providers/prebid/built/pb')
 jest.mock('src/providers/prebid/getPrebidPbjs')
@@ -32,7 +35,7 @@ describe('prebidBidder: fetchBids', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await prebidBidder.fetchBids(tabAdsConfig)
   })
 
@@ -40,7 +43,7 @@ describe('prebidBidder: fetchBids', () => {
     expect.assertions(2)
 
     const pbjs = getPrebidPbjs()
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await prebidBidder.fetchBids(tabAdsConfig)
 
     const config = pbjs.setConfig.mock.calls[0][0]
@@ -53,7 +56,7 @@ describe('prebidBidder: fetchBids', () => {
     expect.assertions(3)
 
     const pbjs = getPrebidPbjs()
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await prebidBidder.fetchBids(tabAdsConfig)
 
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
@@ -67,6 +70,7 @@ describe('prebidBidder: fetchBids', () => {
 
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
       consent: {
         isEU: () => Promise.resolve(true),
       },
@@ -82,6 +86,7 @@ describe('prebidBidder: fetchBids', () => {
 
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
       consent: {
         isEU: () => Promise.resolve(false),
       },
@@ -93,7 +98,7 @@ describe('prebidBidder: fetchBids', () => {
   it('includes the expected list of bidders for each ad', async () => {
     expect.assertions(3)
     const pbjs = getPrebidPbjs()
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await prebidBidder.fetchBids(tabAdsConfig)
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 
@@ -129,7 +134,7 @@ describe('prebidBidder: fetchBids', () => {
   it('calls pbjs.requestBids', async () => {
     expect.assertions(1)
     const pbjs = getPrebidPbjs()
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await prebidBidder.fetchBids(tabAdsConfig)
     expect(pbjs.requestBids).toHaveBeenCalledWith({
       bidsBackHandler: expect.any(Function),
@@ -138,7 +143,7 @@ describe('prebidBidder: fetchBids', () => {
 
   it('returns the expected BidResponseData structure', async () => {
     expect.assertions(1)
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     const response = await prebidBidder.fetchBids(tabAdsConfig)
     expect(response).toMatchObject({
       bidResponses: expect.any(Object),
@@ -157,7 +162,7 @@ describe('prebidBidder: fetchBids', () => {
       requestBidsSettings.bidsBackHandler(mockBidResponses)
     })
 
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     const { rawBidResponses } = await prebidBidder.fetchBids(tabAdsConfig)
     expect(rawBidResponses).toEqual(mockBidResponses)
   })
@@ -173,7 +178,7 @@ describe('prebidBidder: fetchBids', () => {
       requestBidsSettings.bidsBackHandler(mockBidResponses)
     })
 
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     const { bidResponses } = await prebidBidder.fetchBids(tabAdsConfig)
 
     const normalizedBidResponses = {

@@ -37,7 +37,7 @@ const defaultConfig = {
     timeout: 50, // Time to wait for the consent management platform (CMP) to respond
   },
   publisher: {
-    domain: 'tab.gladly.io', // TODO: require this to be passed
+    domain: 'tab.gladly.io',
     pageUrl: 'https://tab.gladly.io/newtab/', // TODO: require this to be passed
   },
   // Convenience to distinguish between the ads.
@@ -66,7 +66,16 @@ const defaultConfig = {
 
 let config = defaultConfig
 
+// Throw if the provided config is inadequate.
+const validateConfig = userConfig => {
+  // TODO: more validation
+  if (!get(userConfig, 'publisher.domain')) {
+    throw new Error('Config error: the publisher.domain property must be set.')
+  }
+}
+
 export const setConfig = userConfig => {
+  validateConfig(userConfig)
   const fullConfig = {
     ...defaultConfig,
     ...(userConfig || {}),

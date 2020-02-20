@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import { setConfig } from 'src/config'
+import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
 jest.mock('src/providers/indexExchange/getIndexExchangeTag')
 jest.mock('src/google/getGoogleTag')
@@ -38,7 +39,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     expect.assertions(0)
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
   })
 
@@ -49,7 +50,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
       .default
     const ixTag = getIndexExchangeTag()
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
     expect(ixTag.retrieveDemand).toHaveBeenCalled()
     expect(ixTag.retrieveDemand.mock.calls[0][0]).toEqual([
@@ -72,7 +73,7 @@ describe('indexExchangeBidder: fetchBids', () => {
       ixTag.retrieveDemand.mockImplementation((config, callback) => {
         retrieveDemandCallback = callback
       })
-      const tabAdsConfig = setConfig()
+      const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
       indexExchangeBidder.fetchBids(tabAdsConfig).then(() => {
         done()
       })
@@ -91,7 +92,7 @@ describe('indexExchangeBidder: fetchBids', () => {
 
       // Mock that retrieveDemand never calls the callback.
       ixTag.retrieveDemand.mockImplementation(() => {})
-      const tabAdsConfig = setConfig()
+      const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
       indexExchangeBidder.fetchBids(tabAdsConfig).then(() => {
         done()
       })
@@ -116,7 +117,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(undefined)
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -140,7 +141,7 @@ describe('indexExchangeBidder: fetchBids', () => {
       .default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) => callback({}))
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -170,7 +171,7 @@ describe('indexExchangeBidder: fetchBids', () => {
         identity: {},
       })
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -213,7 +214,7 @@ describe('indexExchangeBidder: fetchBids', () => {
         identity: {},
       })
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -253,7 +254,7 @@ describe('indexExchangeBidder: fetchBids', () => {
         identity: {},
       })
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
     expect(logger.error).not.toHaveBeenCalled()
     googletag
@@ -278,7 +279,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     const { rawBidResponses } = await indexExchangeBidder.fetchBids(
       tabAdsConfig
     )
@@ -299,7 +300,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     const { bidResponses } = await indexExchangeBidder.fetchBids(tabAdsConfig)
     const expectedBidResponses = {
       // The long leaderboard ad.
@@ -354,7 +355,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
 
     // Fetch bids.
     await indexExchangeBidder.fetchBids(tabAdsConfig)
@@ -426,7 +427,7 @@ describe('indexExchangeBidder: setTargeting', () => {
         identity: {},
       })
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
 
     // Fetch bids.
     await indexExchangeBidder.fetchBids(tabAdsConfig)
@@ -462,7 +463,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(mockBidResponse)
     )
-    const tabAdsConfig = setConfig()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
 
     // Fetch bids.
     await indexExchangeBidder.fetchBids(tabAdsConfig)
