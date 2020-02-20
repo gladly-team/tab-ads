@@ -22,7 +22,7 @@ let adserverRequestSent = false
 
 /**
  * Add bidder targeting to googletag and send a request
- * to DFP to fetch ads.
+ * to Google Ad Manager to fetch ads.
  * @return {undefined}
  */
 function sendAdserverRequest() {
@@ -34,7 +34,7 @@ function sendAdserverRequest() {
 
   logger.debug(`Sending request to ad server.`)
 
-  // Set targeting and make a request to DFP.
+  // Set targeting and make a request to GAM.
   const googletag = getGoogleTag()
   googletag.cmd.push(() => {
     // Set ad server targeting.
@@ -120,7 +120,7 @@ const fetchAds = async userConfig => {
 
     callBidders(config)
   } else {
-    logger.debug('Ads are disabled. Not setting up DFP or fetching bids.')
+    logger.debug('Ads are disabled. Not setting up GAM or fetching bids.')
   }
 }
 

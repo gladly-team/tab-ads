@@ -184,21 +184,21 @@ describe('prebidBidder: fetchBids', () => {
           advertiserName: 'openx',
           adSize: '728x90',
           encodedRevenue: null,
-          DFPAdvertiserId: null,
+          GAMAdvertiserId: null,
         },
         {
           revenue: 4.21 / 1000,
           advertiserName: 'appnexus',
           adSize: '728x90',
           encodedRevenue: null,
-          DFPAdvertiserId: null,
+          GAMAdvertiserId: null,
         },
         {
           revenue: 0.19 / 1000,
           advertiserName: 'emxdigital',
           adSize: '728x90',
           encodedRevenue: null,
-          DFPAdvertiserId: null,
+          GAMAdvertiserId: null,
         },
       ],
       // The primary rectangle ad (bottom-right).
@@ -210,7 +210,7 @@ describe('prebidBidder: fetchBids', () => {
           advertiserName: 'openx',
           adSize: '300x250',
           encodedRevenue: null,
-          DFPAdvertiserId: null,
+          GAMAdvertiserId: null,
         },
       ],
     }

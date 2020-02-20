@@ -309,7 +309,7 @@ describe('indexExchangeBidder: fetchBids', () => {
           advertiserName: 'indexExchange',
           adSize: '728x90',
           encodedRevenue: null,
-          DFPAdvertiserId: null,
+          GAMAdvertiserId: null,
         },
       ],
       // The primary rectangle ad (bottom-right).
@@ -319,7 +319,7 @@ describe('indexExchangeBidder: fetchBids', () => {
           advertiserName: 'indexExchange',
           adSize: '300x250',
           encodedRevenue: null,
-          DFPAdvertiserId: null,
+          GAMAdvertiserId: null,
         },
       ],
       // The second rectangle ad (right side, above the first).
@@ -329,7 +329,7 @@ describe('indexExchangeBidder: fetchBids', () => {
           advertiserName: 'indexExchange',
           adSize: '300x250',
           encodedRevenue: null,
-          DFPAdvertiserId: null,
+          GAMAdvertiserId: null,
         },
       ],
     }

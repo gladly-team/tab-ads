@@ -218,21 +218,21 @@ describe('amazonBidder: fetchBids', () => {
         advertiserName: 'amazon',
         adSize: '728x90',
         revenue: null,
-        DFPAdvertiserId: null,
+        GAMAdvertiserId: null,
       },
       'div-gpt-ad-13579135-0': {
         encodedRevenue: 'encoded-revenue-ghijkl',
         advertiserName: 'amazon',
         adSize: '300x250',
         revenue: null,
-        DFPAdvertiserId: null,
+        GAMAdvertiserId: null,
       },
       'div-gpt-ad-24680246-0': {
         encodedRevenue: 'encoded-revenue-mnopqr',
         advertiserName: 'amazon',
         adSize: '300x250',
         revenue: null,
-        DFPAdvertiserId: null,
+        GAMAdvertiserId: null,
       },
     }
     expect(bidResponses).toEqual(expectedBidResponses)

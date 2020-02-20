@@ -6,7 +6,7 @@ describe('BidResponse', () => {
     const input = {
       revenue: 0.081,
       encodedRevenue: 'abcxyz',
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -19,7 +19,7 @@ describe('BidResponse', () => {
     const input = {
       // revenue: 0.081,
       // encodedRevenue: 'abcxyz',
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -34,7 +34,7 @@ describe('BidResponse', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: '0.081',
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -47,7 +47,7 @@ describe('BidResponse', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       encodedRevenue: 'abcdef',
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -60,7 +60,7 @@ describe('BidResponse', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0,
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -69,11 +69,11 @@ describe('BidResponse', () => {
     }).not.toThrow()
   })
 
-  it('does not throw if the DFPAdvertiserId is not provided', () => {
+  it('does not throw if the GAMAdvertiserId is not provided', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0.081,
-      // DFPAdvertiserId: 629518,
+      // GAMAdvertiserId: 629518,
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -82,24 +82,24 @@ describe('BidResponse', () => {
     }).not.toThrow()
   })
 
-  it('throws if the DFPAdvertiserId is a string', () => {
+  it('throws if the GAMAdvertiserId is a string', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0.081,
-      DFPAdvertiserId: '629518',
+      GAMAdvertiserId: '629518',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
     expect(() => {
       BidResponse(input)
-    }).toThrow('The "DFPAdvertiserId" value must be a number.')
+    }).toThrow('The "GAMAdvertiserId" value must be a number.')
   })
 
-  it('does not throw if the DFPAdvertiserId is zero', () => {
+  it('does not throw if the GAMAdvertiserId is zero', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0.081,
-      DFPAdvertiserId: 0,
+      GAMAdvertiserId: 0,
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -112,7 +112,7 @@ describe('BidResponse', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0.081,
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       // advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -125,7 +125,7 @@ describe('BidResponse', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0.081,
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       advertiserName: 12,
       adSize: '300x250',
     }
@@ -138,7 +138,7 @@ describe('BidResponse', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0.081,
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       advertiserName: 'SomeAdvertiser',
       // adSize: '300x250',
     }
@@ -151,7 +151,7 @@ describe('BidResponse', () => {
     const BidResponse = require('src/utils/BidResponse').default
     const input = {
       revenue: 0.081,
-      DFPAdvertiserId: 629518,
+      GAMAdvertiserId: 629518,
       advertiserName: 'SomeAdvertiser',
       adSize: 300,
     }

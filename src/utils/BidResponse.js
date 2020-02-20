@@ -5,7 +5,7 @@ import { isNil } from 'lodash/lang'
 const BidResponse = ({
   revenue = null,
   encodedRevenue = null,
-  DFPAdvertiserId = null,
+  GAMAdvertiserId = null,
   advertiserName,
   adSize,
 }) => {
@@ -17,8 +17,8 @@ const BidResponse = ({
   if (!isNil(revenue) && typeof revenue !== 'number') {
     throw new Error('The "revenue" value must be a number.')
   }
-  if (!isNil(DFPAdvertiserId) && typeof DFPAdvertiserId !== 'number') {
-    throw new Error('The "DFPAdvertiserId" value must be a number.')
+  if (!isNil(GAMAdvertiserId) && typeof GAMAdvertiserId !== 'number') {
+    throw new Error('The "GAMAdvertiserId" value must be a number.')
   }
   if (isNil(advertiserName)) {
     throw new Error('The "advertiserName" value must be provided.')
@@ -36,7 +36,7 @@ const BidResponse = ({
   return {
     revenue, // Float|null
     encodedRevenue, // String|null
-    DFPAdvertiserId, // Number|null
+    GAMAdvertiserId, // Number|null
     advertiserName, // String
     adSize, // String, such as "728x90"
   }
