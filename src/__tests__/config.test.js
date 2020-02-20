@@ -52,6 +52,7 @@ const defaultConfigStructure = {
     },
   },
   logLevel: expect.any(String),
+  onError: expect.any(Function),
 }
 
 const getMinimalValidUserConfig = () => ({

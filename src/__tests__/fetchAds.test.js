@@ -1,6 +1,14 @@
 /* eslint-env jest */
+import fetchAds, { reset } from 'src/fetchAds'
 import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
 import { setConfig } from 'src/config'
+import logger from 'src/utils/logger'
+
+// Bidders.
+import prebidBidder from 'src/providers/prebid/prebidBidder'
+import amazonBidder from 'src/providers/amazon/amazonBidder'
+import indexExchangeBidder from 'src/providers/indexExchange/indexExchangeBidder'
+
 import { flushAllPromises, getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
 jest.mock('src/google/getGoogleTag')
@@ -16,27 +24,13 @@ beforeAll(() => {
   jest.useFakeTimers()
 })
 
-beforeEach(() => {
-  // Set up googletag
-  delete window.googletag
-  window.googletag = getGoogleTag()
-})
-
 afterEach(() => {
   jest.clearAllMocks()
-  jest.resetModules()
+  reset()
 })
 
-afterAll(() => {
-  delete window.googletag
-})
-
-// Return an array of Bidder modules.
+// Return an array of active Bidder modules.
 const getBidders = () => {
-  const amazonBidder = require('src/providers/amazon/amazonBidder').default
-  const prebidBidder = require('src/providers/prebid/prebidBidder').default
-  const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-    .default
   return [prebidBidder, amazonBidder, indexExchangeBidder]
 }
 
@@ -44,7 +38,6 @@ describe('fetchAds', () => {
   it('sets up the Google ad slots', async () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     expect(setUpGoogleAds).toHaveBeenCalledTimes(1)
@@ -53,7 +46,6 @@ describe('fetchAds', () => {
   it('passes the config when setting up the Google ad slots', async () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     expect(setUpGoogleAds).toHaveBeenCalledWith(tabAdsConfig)
@@ -66,7 +58,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
 
@@ -84,7 +75,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
 
@@ -101,7 +91,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
       disableAds: true, // Turn off ads
@@ -122,7 +111,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
       disableAds: true, // Turn off ads
@@ -142,7 +130,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     await flushAllPromises()
@@ -170,7 +157,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     await flushAllPromises()
@@ -202,7 +188,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     await flushAllPromises()
@@ -232,7 +217,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
@@ -259,7 +243,6 @@ describe('fetchAds', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
@@ -276,9 +259,42 @@ describe('fetchAds', () => {
   it('calls handleAdsLoaded', async () => {
     expect.assertions(1)
     const handleAdsLoaded = require('src/handleAdsLoaded').default
-    const fetchAds = require('src/fetchAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     expect(handleAdsLoaded).toHaveBeenCalledTimes(1)
+  })
+
+  it("calls logger.error when something goes wrong when calling bidders' fetchBids", async () => {
+    expect.assertions(1)
+
+    // Mock that the first bidder throws an error
+    const bidders = getBidders()
+    const mockErr = new Error('Yikes.')
+    bidders[0].fetchBids.mockImplementationOnce(() => {
+      throw mockErr
+    })
+
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    await fetchAds(tabAdsConfig)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  it("calls config.onError when something goes wrong when calling bidders' fetchBids", async () => {
+    expect.assertions(1)
+
+    // Mock that the first bidder throws an error
+    const bidders = getBidders()
+    const mockErr = new Error('Yikes.')
+    bidders[0].fetchBids.mockImplementationOnce(() => {
+      throw mockErr
+    })
+
+    const mockOnError = jest.fn()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      onError: mockOnError,
+    })
+    await fetchAds(tabAdsConfig)
+    expect(mockOnError).toHaveBeenCalledWith(mockErr)
   })
 })

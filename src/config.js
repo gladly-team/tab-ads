@@ -63,6 +63,7 @@ const defaultConfig = {
     },
   },
   logLevel: 'error',
+  onError: () => {},
 }
 
 let config

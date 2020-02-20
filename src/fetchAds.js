@@ -20,6 +20,12 @@ const BIDDERS = [prebidBidder, amazonBidder, indexExchangeBidder]
 // Set to true if we send a request to the ad server.
 let adserverRequestSent = false
 
+// If we ever make more than one fetch for ads on any page load,
+// either make this more functional or remove module state entirely.
+export const reset = () => {
+  adserverRequestSent = false
+}
+
 /**
  * Add bidder targeting to googletag and send a request
  * to Google Ad Manager to fetch ads.
@@ -38,7 +44,6 @@ function sendAdserverRequest() {
   const googletag = getGoogleTag()
   googletag.cmd.push(() => {
     // Set ad server targeting.
-    // TODO: add tests
     BIDDERS.forEach(bidder => {
       bidder.setTargeting()
     })
@@ -72,8 +77,6 @@ function sendAdserverRequest() {
 const callBidders = async config => {
   logger.debug(`Loading all bidders in ads.js.`)
 
-  // TODO: add tests
-  // TODO: handle errors gracefully (need parent app to log them)
   try {
     await Promise.all(
       BIDDERS.map(async bidder => {
@@ -88,19 +91,20 @@ const callBidders = async config => {
           }
           return bidResponseData
         } catch (e) {
+          config.onError(e)
           logger.error(e)
           return null
         }
       })
     )
+
+    // If fetchBids returned for all the bidders, we can
+    // call the ad server (if we haven't already).
+    sendAdserverRequest()
   } catch (e) {
+    config.onError(e)
     logger.error(e)
   }
-
-  // TODO: add test
-  // If fetchBids returned for all the bidders, we can
-  // call the ad server (if we haven't already).
-  sendAdserverRequest()
 }
 
 const fetchAds = async userConfig => {
