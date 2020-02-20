@@ -186,34 +186,16 @@ describe('fetchAds', () => {
   it('calls the ad server when one bidder times out', async () => {
     expect.assertions(2)
 
-    // Mock that Prebid is very slow to respond
-    const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    prebidBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 15e3)
-      })
-    })
-
-    // Mock that Amazon responds quickly
-    const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    amazonBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 80)
-      })
-    })
-
-    // Mock that Index Exchange responds quickly
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    indexExchangeBidder.fetchBids.mockImplementationOnce(() => {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 80)
+    // Mock that the first bidder is slow to respond.
+    const bidders = getBidders()
+    bidders.forEach((bidder, index) => {
+      bidder.fetchBids.mockImplementationOnce(() => {
+        const timeoutMs = index === 0 ? 15e3 : 80
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve()
+          }, timeoutMs)
+        })
       })
     })
 
