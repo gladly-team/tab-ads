@@ -144,6 +144,8 @@ describe('fetchAds: bid and ad server requests', () => {
   it('calls the ad server even when all bidders time out', async () => {
     expect.assertions(2)
 
+    const AUCTION_TIMEOUT = 2000
+
     // Mock that all bidders are very slow to respond.
     const bidders = getBidders()
     bidders.forEach(bidder => {
@@ -159,7 +161,10 @@ describe('fetchAds: bid and ad server requests', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      auctionTimeout: AUCTION_TIMEOUT,
+    })
     await fetchAds(tabAdsConfig)
     await flushAllPromises()
 
@@ -173,6 +178,8 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('calls the ad server when one bidder times out', async () => {
     expect.assertions(2)
+
+    const AUCTION_TIMEOUT = 2000
 
     // Mock that the first bidder is slow to respond.
     const bidders = getBidders()
@@ -190,7 +197,10 @@ describe('fetchAds: bid and ad server requests', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      auctionTimeout: AUCTION_TIMEOUT,
+    })
     await fetchAds(tabAdsConfig)
     await flushAllPromises()
 
@@ -204,6 +214,8 @@ describe('fetchAds: bid and ad server requests', () => {
   it('calls the ad server immediately when all bidders respond before the timeout', async () => {
     expect.assertions(1)
 
+    const AUCTION_TIMEOUT = 2000
+
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
     bidders.forEach(bidder => {
@@ -219,7 +231,10 @@ describe('fetchAds: bid and ad server requests', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      auctionTimeout: AUCTION_TIMEOUT,
+    })
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
     await flushAllPromises()
@@ -230,6 +245,8 @@ describe('fetchAds: bid and ad server requests', () => {
   it('only calls the ad server once when all bidders respond before the timeout', async () => {
     expect.assertions(2)
 
+    const AUCTION_TIMEOUT = 2000
+
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
     bidders.forEach(bidder => {
@@ -245,7 +262,10 @@ describe('fetchAds: bid and ad server requests', () => {
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
 
-    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      auctionTimeout: AUCTION_TIMEOUT,
+    })
     await fetchAds(tabAdsConfig)
     jest.advanceTimersByTime(41)
     await flushAllPromises()
