@@ -263,6 +263,78 @@ describe('indexExchangeBidder: fetchBids', () => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
+
+  it('returns the expected IX bid responses in the rawBidResponses key', async () => {
+    expect.assertions(1)
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
+    const mockBidResponse = mockIndexExchangeBidResponse()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback(mockBidResponse)
+    )
+    const tabAdsConfig = setConfig()
+    const { rawBidResponses } = await indexExchangeBidder.fetchBids(
+      tabAdsConfig
+    )
+    expect(rawBidResponses).toEqual(mockBidResponse)
+  })
+
+  it('returns the expected normalized BidResponses in the bidResponses key', async () => {
+    expect.assertions(1)
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
+    const mockBidResponse = mockIndexExchangeBidResponse()
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback(mockBidResponse)
+    )
+    const tabAdsConfig = setConfig()
+    const { bidResponses } = await indexExchangeBidder.fetchBids(tabAdsConfig)
+    const expectedBidResponses = {
+      // The long leaderboard ad.
+      'div-gpt-ad-1464385677836-0': [
+        {
+          revenue: 120 / 10e4,
+          advertiserName: 'indexExchange',
+          adSize: '728x90',
+          encodedRevenue: null,
+          DFPAdvertiserId: null,
+        },
+      ],
+      // The primary rectangle ad (bottom-right).
+      'div-gpt-ad-1464385742501-0': [
+        {
+          revenue: 3500 / 10e4,
+          advertiserName: 'indexExchange',
+          adSize: '300x250',
+          encodedRevenue: null,
+          DFPAdvertiserId: null,
+        },
+      ],
+      // The second rectangle ad (right side, above the first).
+      'div-gpt-ad-1539903223131-0': [
+        {
+          revenue: 5324 / 10e4,
+          advertiserName: 'indexExchange',
+          adSize: '300x250',
+          encodedRevenue: null,
+          DFPAdvertiserId: null,
+        },
+      ],
+    }
+    expect(bidResponses).toEqual(expectedBidResponses)
+  })
 })
 
 describe('indexExchangeBidder: setTargeting', () => {
