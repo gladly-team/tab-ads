@@ -7,7 +7,6 @@ import {
 } from 'src/utils/test-utils'
 import { setConfig } from 'src/config'
 
-jest.mock('src/consentManagement')
 jest.mock('src/providers/amazon/getAmazonTag')
 jest.mock('src/utils/logger')
 
