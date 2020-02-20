@@ -1,6 +1,5 @@
 /* eslint-env jest */
 import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
-import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import { setConfig } from 'src/config'
 import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
@@ -18,10 +17,6 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-  // Mock apstag
-  delete window.apstag
-  window.apstag = getAmazonTag()
-
   // Set up googletag
   delete window.googletag
   window.googletag = getGoogleTag()
@@ -34,7 +29,6 @@ afterEach(() => {
 
 afterAll(() => {
   delete window.googletag
-  delete window.apstag
 })
 
 describe('fetchAds', () => {
