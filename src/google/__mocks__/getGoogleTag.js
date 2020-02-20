@@ -57,7 +57,7 @@ export const __runEventListenerCallbacks = (eventName, ...args) => {
 }
 
 const mockCmd = []
-mockCmd.push = f => f()
+mockCmd.push = jest.fn(f => f())
 
 export default jest.fn(() => {
   window.googletag = window.googletag || {
