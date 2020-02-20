@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { get } from 'lodash/object'
+import { isNil } from 'lodash/lang'
 
 const defaultConfig = {
   disableAds: false, // true if we should't call for bids
@@ -61,19 +62,36 @@ const defaultConfig = {
       sizes: [[300, 250]],
     },
   },
-  logLevel: 'debug', // TODO: change the default to "error"
+  logLevel: 'error',
 }
 
 let config
 
 // Throw if the provided config is inadequate.
 const validateConfig = userConfig => {
-  // TODO: more validation
-  if (!get(userConfig, 'publisher.domain')) {
+  if (isNil(get(userConfig, 'publisher.domain'))) {
     throw new Error('Config error: the publisher.domain property must be set.')
   }
-  if (!get(userConfig, 'publisher.pageUrl')) {
+  if (typeof get(userConfig, 'publisher.domain') !== 'string') {
+    throw new Error(
+      'Config error: the publisher.domain property must be a string.'
+    )
+  }
+  if (isNil(get(userConfig, 'publisher.pageUrl'))) {
     throw new Error('Config error: the publisher.pageUrl property must be set.')
+  }
+  if (typeof get(userConfig, 'publisher.pageUrl') !== 'string') {
+    throw new Error(
+      'Config error: the publisher.pageUrl property must be a string.'
+    )
+  }
+  if (isNil(get(userConfig, 'consent.isEU'))) {
+    throw new Error('Config error: the consent.isEU function must be set.')
+  }
+  if (typeof get(userConfig, 'consent.isEU') !== 'function') {
+    throw new Error(
+      'Config error: the consent.isEU property must be an async function.'
+    )
   }
 }
 

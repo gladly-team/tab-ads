@@ -54,26 +54,26 @@ const defaultConfigStructure = {
   logLevel: expect.any(String),
 }
 
+const getMinimalValidUserConfig = () => ({
+  consent: {
+    isEU: () => Promise.resolve(false),
+  },
+  publisher: {
+    domain: 'example.com',
+    pageUrl: 'https://example.com/foo',
+  },
+})
+
 describe('config: setConfig', () => {
   it('returns an object', () => {
     const { setConfig } = require('src/config')
-    expect(
-      setConfig({
-        publisher: {
-          domain: 'example.com',
-          pageUrl: 'https://example.com/foo',
-        },
-      })
-    ).toEqual(expect.any(Object))
+    expect(setConfig(getMinimalValidUserConfig())).toEqual(expect.any(Object))
   })
 
   it('returns an object with the expected default structure', () => {
     const { setConfig } = require('src/config')
     const config = setConfig({
-      publisher: {
-        domain: 'example.com',
-        pageUrl: 'https://example.com/foo',
-      },
+      ...getMinimalValidUserConfig(),
     })
     expect(config).toEqual(defaultConfigStructure)
   })
@@ -82,15 +82,18 @@ describe('config: setConfig', () => {
     const { setConfig } = require('src/config')
     const isEUFunc = () => new Promise(true)
     const modifiedConfig = {
+      ...getMinimalValidUserConfig(),
       disableAds: true,
       // useMockAds should use the default
       auctionTimeout: 200,
       bidderTimeout: 12,
       consent: {
-        isEu: isEUFunc,
+        ...getMinimalValidUserConfig().consent,
+        isEU: isEUFunc,
         // timeout should use the default
       },
       publisher: {
+        ...getMinimalValidUserConfig().publisher,
         domain: 'example.com',
         pageUrl: 'https://example.com/foo',
       },
@@ -102,7 +105,7 @@ describe('config: setConfig', () => {
       auctionTimeout: 200,
       bidderTimeout: 12,
       consent: {
-        isEu: isEUFunc,
+        isEU: isEUFunc,
         timeout: 50, // default value
       },
       publisher: {
@@ -113,27 +116,87 @@ describe('config: setConfig', () => {
       adUnits: expect.any(Array), // default value
     })
   })
+})
 
+describe('config: setConfig validation', () => {
   it('throws if the publisher domain is not provided', () => {
     const { setConfig } = require('src/config')
     expect(() => {
       setConfig({
+        ...getMinimalValidUserConfig(),
         publisher: {
+          domain: undefined,
           pageUrl: 'https://example.com/something/',
         },
       })
     }).toThrow('Config error: the publisher.domain property must be set.')
   })
 
+  it('throws if the publisher domain is not a string', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        publisher: {
+          domain: 123,
+          pageUrl: 'https://example.com/something/',
+        },
+      })
+    }).toThrow('Config error: the publisher.domain property must be a string.')
+  })
+
   it('throws if the publisher page URL is not provided', () => {
     const { setConfig } = require('src/config')
     expect(() => {
       setConfig({
+        ...getMinimalValidUserConfig(),
         publisher: {
           domain: 'example.com',
+          pageUrl: undefined,
         },
       })
     }).toThrow('Config error: the publisher.pageUrl property must be set.')
+  })
+
+  it('throws if the publisher page URL is not a string', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        publisher: {
+          domain: 'example.com',
+          pageUrl: () => {},
+        },
+      })
+    }).toThrow('Config error: the publisher.pageUrl property must be a string.')
+  })
+
+  it('throws if the consent.isEU property is not provided', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        consent: {
+          ...getMinimalValidUserConfig(),
+          isEU: undefined,
+        },
+      })
+    }).toThrow('Config error: the consent.isEU function must be set.')
+  })
+
+  it('throws if the consent.isEU property is not a function', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        consent: {
+          ...getMinimalValidUserConfig(),
+          isEU: false,
+        },
+      })
+    }).toThrow(
+      'Config error: the consent.isEU property must be an async function.'
+    )
   })
 })
 
@@ -148,7 +211,9 @@ describe('config: getConfig', () => {
   it('returns the stored config', () => {
     const { setConfig, getConfig } = require('src/config')
     const modifiedConfig = {
+      ...getMinimalValidUserConfig(),
       publisher: {
+        ...getMinimalValidUserConfig().publisher,
         domain: 'example.com',
         pageUrl: 'https://example.com/foo',
       },

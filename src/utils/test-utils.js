@@ -270,6 +270,9 @@ export const mockPrebidBidResponses = () => {
 
 // Provide a valid config for testing.
 export const getMockTabAdsUserConfig = () => ({
+  consent: {
+    isEU: () => Promise.resolve(false),
+  },
   publisher: {
     domain: 'example.com',
     pageUrl: 'https://example.com/foo',
