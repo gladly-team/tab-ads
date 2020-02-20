@@ -297,4 +297,18 @@ describe('fetchAds', () => {
     await fetchAds(tabAdsConfig)
     expect(mockOnError).toHaveBeenCalledWith(mockErr)
   })
+
+  it('calls logger.error when something goes wrong when attempting to call the ad server', async () => {
+    expect.assertions(1)
+
+    const mockErr = new Error('The Google tag messed up.')
+    getGoogleTag.mockImplementationOnce(() => {
+      throw mockErr
+    })
+
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    await fetchAds(tabAdsConfig)
+    await flushAllPromises()
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
 })
