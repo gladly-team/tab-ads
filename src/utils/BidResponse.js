@@ -1,5 +1,7 @@
 import { isNil } from 'lodash/lang'
 
+// TODO: add adId as a required field.
+
 // Create a BidResponse object. This is a standardized set of info
 // about a bid for a particular ad slot.
 const BidResponse = ({
