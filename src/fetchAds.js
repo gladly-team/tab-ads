@@ -3,7 +3,7 @@ import { get, set } from 'lodash/object'
 // Ad server.
 import getGoogleTag from 'src/google/getGoogleTag'
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
-import adDisplayListeners from 'src/adDisplayListeners'
+import { setUpAdDisplayListeners } from 'src/adDisplayListeners'
 
 // Bidders.
 import prebidBidder from 'src/providers/prebid/prebidBidder'
@@ -112,8 +112,8 @@ const fetchAds = async userConfig => {
     // Define slots and enable ad services.
     setUpGoogleAds(config)
 
-    // Track loaded ads for analytics
-    adDisplayListeners()
+    // Track loaded ads for analytics.
+    setUpAdDisplayListeners()
 
     // Call the ad server after some time to avoid waiting
     // too long for bid responses.

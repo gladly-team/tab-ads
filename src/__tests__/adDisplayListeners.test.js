@@ -33,7 +33,13 @@ afterAll(() => {
   clearAdDataStore()
 })
 
-describe('adDisplayListeners', () => {
+describe('adDisplayListeners: onAdRendered', () => {
+  it('TODO', () => {
+    expect(true).toBe(true)
+  })
+})
+
+describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   it('adds a slot ID to the ad data storage\'s "rendered slots" object when GPT\'s "slotRenderEnded" event is fired', () => {
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
@@ -46,8 +52,8 @@ describe('adDisplayListeners', () => {
         googleEventListenerCalls[eventName].push([eventName, callback])
       })
 
-    const adDisplayListeners = require('src/adDisplayListeners').default
-    adDisplayListeners()
+    const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
+    setUpAdDisplayListeners()
 
     // Run the queued googletag commands
     window.googletag.cmd.forEach(cmd => cmd())
@@ -97,8 +103,8 @@ describe('adDisplayListeners', () => {
         googleEventListenerCalls[eventName].push([eventName, callback])
       })
 
-    const adDisplayListeners = require('src/adDisplayListeners').default
-    adDisplayListeners()
+    const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
+    setUpAdDisplayListeners()
 
     // Run the queued googletag commands
     window.googletag.cmd.forEach(cmd => cmd())
@@ -127,8 +133,8 @@ describe('adDisplayListeners', () => {
         googleEventListenerCalls[eventName].push([eventName, callback])
       })
 
-    const adDisplayListeners = require('src/adDisplayListeners').default
-    adDisplayListeners()
+    const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
+    setUpAdDisplayListeners()
 
     // Run the queued googletag commands
     window.googletag.cmd.forEach(cmd => cmd())
@@ -174,8 +180,8 @@ describe('adDisplayListeners', () => {
         googleEventListenerCalls[eventName].push([eventName, callback])
       })
 
-    const adDisplayListeners = require('src/adDisplayListeners').default
-    adDisplayListeners()
+    const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
+    setUpAdDisplayListeners()
 
     // Run the queued googletag commands
     window.googletag.cmd.forEach(cmd => cmd())
@@ -204,8 +210,8 @@ describe('adDisplayListeners', () => {
         googleEventListenerCalls[eventName].push([eventName, callback])
       })
 
-    const adDisplayListeners = require('src/adDisplayListeners').default
-    adDisplayListeners()
+    const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
+    setUpAdDisplayListeners()
 
     // Run the queued googletag commands
     window.googletag.cmd.forEach(cmd => cmd())
@@ -246,8 +252,8 @@ describe('adDisplayListeners', () => {
         googleEventListenerCalls[eventName].push([eventName, callback])
       })
 
-    const adDisplayListeners = require('src/adDisplayListeners').default
-    adDisplayListeners()
+    const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
+    setUpAdDisplayListeners()
 
     // Run the queued googletag commands
     window.googletag.cmd.forEach(cmd => cmd())
@@ -266,8 +272,8 @@ describe('adDisplayListeners', () => {
   it('logs an error if googletag throws', () => {
     getGoogleTag.mockReturnValueOnce({})
 
-    const adDisplayListeners = require('src/adDisplayListeners').default
-    adDisplayListeners()
+    const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
+    setUpAdDisplayListeners()
 
     expect(logger.error).toHaveBeenCalled()
   })

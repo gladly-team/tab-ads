@@ -2,26 +2,27 @@ import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
 
-// TODO: call displayAd callbacks
-// Keep track of what ad slots have loaded. When slots load, call
-// the callbacks provided in displayAd.
-export default () => {
+/**
+ * Register a callback for when an ad with ID `adId` is rendered.
+ * @param {String} adId - An ad ID.
+ * @param {Function} callback - The function to call when the ad renders.
+ * @return {undefined}
+ */
+export const onAdRendered = (adId, callback) => {
+  // TODO
+  logger.debug(`Listening for ad render for ${adId}.`)
+  const winningAdData = {}
+  callback(winningAdData)
+}
+
+/**
+ * Listen for various ad load and display events and store them.
+ * @return {undefined}
+ */
+export const setUpAdDisplayListeners = () => {
   try {
     const googletag = getGoogleTag()
     const adDataStore = getAdDataStore()
-
-    const storeRenderedSlotData = (slotId, eventData) => {
-      adDataStore.adManager.slotsRendered[slotId] = eventData
-    }
-
-    const markSlotAsViewable = slotId => {
-      adDataStore.adManager.slotsViewable[slotId] = true
-    }
-
-    const markSlotAsLoaded = slotId => {
-      adDataStore.adManager.slotsLoaded[slotId] = true
-    }
-
     googletag.cmd.push(() => {
       // 'slotRenderEnded' event is at end of slot (iframe) render but before
       // the ad creative loads:
@@ -36,7 +37,9 @@ export default () => {
       googletag.pubads().addEventListener('slotRenderEnded', event => {
         try {
           const slotId = event.slot.getSlotElementId()
-          storeRenderedSlotData(slotId, event)
+
+          // Store the rendered slot data.
+          adDataStore.adManager.slotsRendered[slotId] = event
         } catch (e) {
           logger.error(e)
         }
@@ -46,7 +49,9 @@ export default () => {
       googletag.pubads().addEventListener('impressionViewable', event => {
         try {
           const slotId = event.slot.getSlotElementId()
-          markSlotAsViewable(slotId)
+
+          // Mark the slot as viewable.
+          adDataStore.adManager.slotsViewable[slotId] = true
         } catch (e) {
           logger.error(e)
         }
@@ -56,7 +61,9 @@ export default () => {
       googletag.pubads().addEventListener('slotOnload', event => {
         try {
           const slotId = event.slot.getSlotElementId()
-          markSlotAsLoaded(slotId)
+
+          // Makr the slot as loaded.
+          adDataStore.adManager.slotsLoaded[slotId] = true
         } catch (e) {
           logger.error(e)
         }

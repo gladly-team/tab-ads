@@ -278,12 +278,12 @@ describe('fetchAds: bid and ad server requests', () => {
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
-  it('calls adDisplayListeners', async () => {
+  it('calls setUpAdDisplayListeners', async () => {
     expect.assertions(1)
-    const adDisplayListeners = require('src/adDisplayListeners').default
+    const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
-    expect(adDisplayListeners).toHaveBeenCalledTimes(1)
+    expect(setUpAdDisplayListeners).toHaveBeenCalledTimes(1)
   })
 
   it("calls logger.error when something goes wrong when calling bidders' fetchBids", async () => {
