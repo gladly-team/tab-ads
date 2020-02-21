@@ -2,16 +2,7 @@ import { get, set } from 'lodash/object'
 import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
-
-/**
- * Get the winning BidResponse data for the ad with ID `adId`.
- * @param {String} adId - An ad ID.
- * @return {Object} Return a BidResponse, the winning bid for this ad
- */
-const getWinningBidResponse = adId => {
-  // TODO
-  return { adId, some: 'data' }
-}
+import getWinningBidResponse from 'src/utils/getWinningBidResponse'
 
 const adDisplayCallbacks = {
   // key = adId; value: { onAdRendered: [() => {}] }
