@@ -6,8 +6,6 @@ import {
   mockGoogleTagSlotOnloadData,
   mockGoogleTagSlotRenderEndedData,
 } from 'src/utils/test-utils'
-import logger from 'src/utils/logger'
-import getGoogleTag from 'src/google/getGoogleTag'
 
 jest.mock('src/utils/logger')
 jest.mock('src/google/getGoogleTag')
@@ -28,6 +26,10 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
+afterEach(() => {
+  jest.resetModules()
+})
+
 afterAll(() => {
   delete window.googletag
   clearAdDataStore()
@@ -41,6 +43,8 @@ describe('adDisplayListeners: onAdRendered', () => {
 
 describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   it('adds a slot ID to the ad data storage\'s "rendered slots" object when GPT\'s "slotRenderEnded" event is fired', () => {
+    const logger = require('src/utils/logger').default
+
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -92,6 +96,8 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   })
 
   it('logs an error when we fail to store GPT\'s "slotRenderEnded" event', () => {
+    const logger = require('src/utils/logger').default
+
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -122,6 +128,8 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   })
 
   it('marks a slot as loaded on the ad data storage\'s "viewable slots" object when GPT\'s "impressionViewable" event is fired', () => {
+    const logger = require('src/utils/logger').default
+
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -169,6 +177,8 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   })
 
   it('logs an error when we fail to store GPT\'s "impressionViewable" event', () => {
+    const logger = require('src/utils/logger').default
+
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -199,6 +209,8 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   })
 
   it('marks a slot as loaded on the ad data storage\'s "loaded slots" object when GPT\'s "slotOnload" event is fired', () => {
+    const logger = require('src/utils/logger').default
+
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -241,6 +253,8 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   })
 
   it('logs an error when we fail to store GPT\'s "slotOnload" event', () => {
+    const logger = require('src/utils/logger').default
+
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
     window.googletag
@@ -270,6 +284,9 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   })
 
   it('logs an error if googletag throws', () => {
+    const logger = require('src/utils/logger').default
+    const getGoogleTag = require('src/google/getGoogleTag').default
+
     getGoogleTag.mockReturnValueOnce({})
 
     const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
