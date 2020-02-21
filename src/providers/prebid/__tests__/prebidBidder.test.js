@@ -95,6 +95,22 @@ describe('prebidBidder: fetchBids', () => {
     expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
   })
 
+  it('does not include consentManagement setting if consent.isEU throws', async () => {
+    expect.assertions(1)
+
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      consent: {
+        isEU: () => {
+          throw new Error('Uh oh.')
+        },
+      },
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
+  })
+
   it('includes the expected list of bidders for each ad', async () => {
     expect.assertions(3)
     const pbjs = getPrebidPbjs()
@@ -139,6 +155,15 @@ describe('prebidBidder: fetchBids', () => {
     expect(pbjs.requestBids).toHaveBeenCalledWith({
       bidsBackHandler: expect.any(Function),
     })
+  })
+
+  it('sets pbjs.bidderSettings to include the AOL 80% bidCpmAdjustment', async () => {
+    expect.assertions(2)
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    await prebidBidder.fetchBids(tabAdsConfig)
+    expect(pbjs.bidderSettings.aol).toBeDefined()
+    expect(pbjs.bidderSettings.aol.bidCpmAdjustment(2)).toEqual(1.6)
   })
 
   it('returns the expected BidResponseData structure', async () => {
