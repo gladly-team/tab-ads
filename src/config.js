@@ -34,7 +34,7 @@ const defaultConfig = {
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
     // An async function that resolves to true if the user is in the European Union.
-    isEU: () => null, // required to be provided by user
+    // isEU: async () => false, // required to be provided by user
     timeout: 50, // Time to wait for the consent management platform (CMP) to respond
   },
   publisher: {
