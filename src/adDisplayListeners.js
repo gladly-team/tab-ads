@@ -3,8 +3,32 @@ import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
 
+/**
+ * Get the winning BidResponse data for the ad with ID `adId`.
+ * @param {String} adId - An ad ID.
+ * @return {Object} Return a BidResponse, the winning bid for this ad
+ */
+const getWinningBidResponse = adId => {
+  // TODO
+  return { adId, some: 'data' }
+}
+
 const adDisplayCallbacks = {
   // key = adId; value: { onAdRendered: [() => {}] }
+}
+
+/**
+ * Calls all callbacks registered for the "ad render" event for the ad
+ * with ID `adId`.
+ * @param {String} adId - An ad ID.
+ * @return {undefined}
+ */
+const callAdRenderedCallbacks = adId => {
+  const winningBid = getWinningBidResponse(adId)
+  const callbacks = get(adDisplayCallbacks, [adId, 'onAdRendered'], [])
+  callbacks.forEach(cb => {
+    cb(winningBid)
+  })
 }
 
 /**
@@ -20,10 +44,16 @@ export const onAdRendered = (adId, callback) => {
   const callbacksStore = get(adDisplayCallbacks, [adId, 'onAdRendered'], [])
   set(adDisplayCallbacks, [adId, 'onAdRendered'], [...callbacksStore, callback])
 
-  // TODO
   // If the ad has already rendered, immediately call the callback.
-  const winningAdData = { some: 'data' }
-  callback(winningAdData)
+  const adDataStore = getAdDataStore()
+  const adAlreadyLoaded = !!get(adDataStore, [
+    'adManager',
+    'slotsRendered',
+    adId,
+  ])
+  if (adAlreadyLoaded) {
+    callAdRenderedCallbacks(adId)
+  }
 }
 
 /**
@@ -51,6 +81,9 @@ export const setUpAdDisplayListeners = () => {
 
           // Store the rendered slot data.
           adDataStore.adManager.slotsRendered[slotId] = event
+
+          // Call any callbacks.
+          callAdRenderedCallbacks(slotId)
         } catch (e) {
           logger.error(e)
         }

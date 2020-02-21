@@ -68,13 +68,44 @@ describe('adDisplayListeners: onAdRendered', () => {
       // Simulate that the "slot render ended" event has already occurred
       // for this ad.
       const adId = 'abc-123'
-      runMockSlotRenderEndedEventForAd('abc-123')
+      runMockSlotRenderEndedEventForAd(adId)
 
       onAdRendered(adId, adData => {
-        expect(adData).toEqual({ some: 'data' }) // TODO: use correct data
+        expect(adData).toEqual({ adId, some: 'data' }) // TODO: use correct data
         done()
       })
     })
+  })
+
+  it('calls the callback when the ad renders later', () => {
+    return new Promise(done => {
+      const { onAdRendered } = require('src/adDisplayListeners')
+
+      const adId = 'xyz-987'
+      onAdRendered(adId, adData => {
+        expect(adData).toEqual({ adId, some: 'data' }) // TODO: use correct data
+        done()
+      })
+
+      // The ad renders after the callback is registered.
+      runMockSlotRenderEndedEventForAd(adId)
+    })
+  })
+
+  it('calls multiple callback when the ad renders', async () => {
+    expect.assertions(2)
+    const { onAdRendered } = require('src/adDisplayListeners')
+
+    const adId = 'def-246'
+    onAdRendered(adId, adData => {
+      expect(adData).toEqual({ adId, some: 'data' }) // TODO: use correct data
+    })
+    onAdRendered(adId, adData => {
+      expect(adData).toEqual({ adId, some: 'data' }) // TODO: use correct data
+    })
+
+    // The ad renders after the callback is registered.
+    runMockSlotRenderEndedEventForAd(adId)
   })
 })
 
