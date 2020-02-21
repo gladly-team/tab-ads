@@ -17,7 +17,7 @@ jest.mock('src/providers/amazon/getAmazonTag')
 jest.mock('src/providers/prebid/prebidBidder')
 jest.mock('src/providers/amazon/amazonBidder')
 jest.mock('src/providers/indexExchange/indexExchangeBidder')
-jest.mock('src/handleAdsLoaded')
+jest.mock('src/adDisplayListeners')
 jest.mock('src/google/setUpGoogleAds')
 jest.mock('src/utils/logger')
 
@@ -278,12 +278,12 @@ describe('fetchAds: bid and ad server requests', () => {
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
-  it('calls handleAdsLoaded', async () => {
+  it('calls adDisplayListeners', async () => {
     expect.assertions(1)
-    const handleAdsLoaded = require('src/handleAdsLoaded').default
+    const adDisplayListeners = require('src/adDisplayListeners').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
-    expect(handleAdsLoaded).toHaveBeenCalledTimes(1)
+    expect(adDisplayListeners).toHaveBeenCalledTimes(1)
   })
 
   it("calls logger.error when something goes wrong when calling bidders' fetchBids", async () => {

@@ -12,7 +12,6 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks()
-  // jest.resetModules()
 })
 
 describe('displayAd', () => {

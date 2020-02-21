@@ -3,7 +3,7 @@ import { get, set } from 'lodash/object'
 // Ad server.
 import getGoogleTag from 'src/google/getGoogleTag'
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
-import handleAdsLoaded from 'src/handleAdsLoaded'
+import adDisplayListeners from 'src/adDisplayListeners'
 
 // Bidders.
 import prebidBidder from 'src/providers/prebid/prebidBidder'
@@ -113,7 +113,7 @@ const fetchAds = async userConfig => {
     setUpGoogleAds(config)
 
     // Track loaded ads for analytics
-    handleAdsLoaded()
+    adDisplayListeners()
 
     // Call the ad server after some time to avoid waiting
     // too long for bid responses.
