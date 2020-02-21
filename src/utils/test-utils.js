@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import BidResponse from 'src/utils/BidResponse'
+
 /**
  * Create a mock object of the googletag 'SlotRenderEnded' event. See:
  * https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
@@ -282,4 +284,15 @@ export const getMockTabAdsUserConfig = () => ({
 // Provide a valid config for testing.
 export const flushAllPromises = async () => {
   await new Promise(resolve => setImmediate(resolve))
+}
+
+// Return a mockBidResponse object.
+export const getMockBidResponse = () => {
+  return BidResponse({
+    // adId: 'my-ad-id', // TODO
+    revenue: 0.12,
+    GAMAdvertiserId: 2468,
+    advertiserName: 'SomeAdvertiser',
+    adSize: '300x250',
+  })
 }
