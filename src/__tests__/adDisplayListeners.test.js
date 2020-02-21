@@ -35,9 +35,46 @@ afterAll(() => {
   clearAdDataStore()
 })
 
+const runMockSlotRenderEndedEventForAd = adId => {
+  // Mock GPT's pubads addEventListener so we can fake an event
+  const googleEventListenerCalls = {}
+  window.googletag
+    .pubads()
+    .addEventListener.mockImplementation((eventName, callback) => {
+      if (!googleEventListenerCalls[eventName]) {
+        googleEventListenerCalls[eventName] = []
+      }
+      googleEventListenerCalls[eventName].push([eventName, callback])
+    })
+
+  const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
+  setUpAdDisplayListeners()
+
+  // Run the queued googletag commands
+  window.googletag.cmd.forEach(cmd => cmd())
+
+  // Fake the event callback
+  const mockSlotRenderEventData = mockGoogleTagSlotRenderEndedData(adId)
+  const slotRenderEndedEventCallback =
+    googleEventListenerCalls.slotRenderEnded[0][1]
+  slotRenderEndedEventCallback(mockSlotRenderEventData)
+}
+
 describe('adDisplayListeners: onAdRendered', () => {
-  it('TODO', () => {
-    expect(true).toBe(true)
+  it('immediately calls the callback if the ad has already rendered', () => {
+    return new Promise(done => {
+      const { onAdRendered } = require('src/adDisplayListeners')
+
+      // Simulate that the "slot render ended" event has already occurred
+      // for this ad.
+      const adId = 'abc-123'
+      runMockSlotRenderEndedEventForAd('abc-123')
+
+      onAdRendered(adId, adData => {
+        expect(adData).toEqual({ some: 'data' }) // TODO: use correct data
+        done()
+      })
+    })
   })
 })
 

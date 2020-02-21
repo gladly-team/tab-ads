@@ -1,6 +1,11 @@
+import { get, set } from 'lodash/object'
 import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
+
+const adDisplayCallbacks = {
+  // key = adId; value: { onAdRendered: [() => {}] }
+}
 
 /**
  * Register a callback for when an ad with ID `adId` is rendered.
@@ -9,9 +14,15 @@ import { getAdDataStore } from 'src/utils/storage'
  * @return {undefined}
  */
 export const onAdRendered = (adId, callback) => {
-  // TODO
   logger.debug(`Listening for ad render for ${adId}.`)
-  const winningAdData = {}
+
+  // Store the callback.
+  const callbacksStore = get(adDisplayCallbacks, [adId, 'onAdRendered'], [])
+  set(adDisplayCallbacks, [adId, 'onAdRendered'], [...callbacksStore, callback])
+
+  // TODO
+  // If the ad has already rendered, immediately call the callback.
+  const winningAdData = { some: 'data' }
   callback(winningAdData)
 }
 
