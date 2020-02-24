@@ -275,7 +275,6 @@ describe('amazonBidder: fetchBids', () => {
           advertiserName: 'amazon',
           adSize: '728x90', // Uses ad size from the tab-ads config
           revenue: null,
-          GAMAdvertiserId: null,
         },
       ],
       'div-gpt-ad-13579135-0': [
@@ -285,7 +284,6 @@ describe('amazonBidder: fetchBids', () => {
           advertiserName: 'amazon',
           adSize: '300x250',
           revenue: null,
-          GAMAdvertiserId: null,
         },
       ],
       'div-gpt-ad-24680246-0': [
@@ -295,7 +293,6 @@ describe('amazonBidder: fetchBids', () => {
           advertiserName: 'amazon',
           adSize: '300x250',
           revenue: null,
-          GAMAdvertiserId: null,
         },
       ],
     }

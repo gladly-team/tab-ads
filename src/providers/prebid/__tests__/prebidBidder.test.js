@@ -215,7 +215,6 @@ describe('prebidBidder: fetchBids', () => {
           advertiserName: 'openx',
           adSize: '728x90',
           encodedRevenue: null,
-          GAMAdvertiserId: null,
         },
         {
           adId: 'div-gpt-ad-1464385677836-0',
@@ -223,7 +222,6 @@ describe('prebidBidder: fetchBids', () => {
           advertiserName: 'appnexus',
           adSize: '728x90',
           encodedRevenue: null,
-          GAMAdvertiserId: null,
         },
         {
           adId: 'div-gpt-ad-1464385677836-0',
@@ -231,7 +229,6 @@ describe('prebidBidder: fetchBids', () => {
           advertiserName: 'emxdigital',
           adSize: '728x90',
           encodedRevenue: null,
-          GAMAdvertiserId: null,
         },
       ],
       // The primary rectangle ad (bottom-right).
@@ -244,7 +241,6 @@ describe('prebidBidder: fetchBids', () => {
           advertiserName: 'openx',
           adSize: '300x250',
           encodedRevenue: null,
-          GAMAdvertiserId: null,
         },
       ],
     }

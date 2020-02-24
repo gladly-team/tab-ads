@@ -286,12 +286,11 @@ export const flushAllPromises = async () => {
   await new Promise(resolve => setImmediate(resolve))
 }
 
-// Return a mockBidResponse object.
+// Return a mock BidResponse object.
 export const getMockBidResponse = () => {
   return BidResponse({
     adId: 'my-ad-id',
     revenue: 0.12,
-    GAMAdvertiserId: 2468,
     advertiserName: 'SomeAdvertiser',
     adSize: '300x250',
   })

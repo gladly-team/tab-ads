@@ -1,12 +1,12 @@
 import { isNil } from 'lodash/lang'
 
-// Create a BidResponse object. This is a standardized set of info
-// about a bid for a particular ad slot.
-const BidResponse = ({
+// Create a DisplayedAdInfo object. This is a standardized set of info
+// about an ad that's been shown.
+const DisplayedAdInfo = ({
   adId,
   revenue = null,
   encodedRevenue = null,
-  advertiserName,
+  GAMAdvertiserId,
   adSize,
 }) => {
   if (isNil(adId)) {
@@ -23,11 +23,11 @@ const BidResponse = ({
   if (!isNil(revenue) && typeof revenue !== 'number') {
     throw new Error('The "revenue" value must be a number.')
   }
-  if (isNil(advertiserName)) {
-    throw new Error('The "advertiserName" value must be provided.')
+  if (isNil(GAMAdvertiserId)) {
+    throw new Error('The "GAMAdvertiserId" value must be provided.')
   }
-  if (typeof advertiserName !== 'string') {
-    throw new Error('The "advertiserName" value must be a string.')
+  if (!isNil(GAMAdvertiserId) && typeof GAMAdvertiserId !== 'number') {
+    throw new Error('The "GAMAdvertiserId" value must be a number.')
   }
   if (isNil(adSize)) {
     throw new Error('The "adSize" value must be provided.')
@@ -40,9 +40,9 @@ const BidResponse = ({
     adId,
     revenue, // Float|null
     encodedRevenue, // String|null
-    advertiserName, // String
+    GAMAdvertiserId, // Number|null
     adSize, // String, such as "728x90"
   }
 }
 
-export default BidResponse
+export default DisplayedAdInfo
