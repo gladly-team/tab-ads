@@ -1,6 +1,6 @@
 import { get } from 'lodash/object'
 import { getAdDataStore } from 'src/utils/storage'
-import BidResponse from 'src/utils/BidResponse'
+import DisplayedAdInfo from 'src/utils/DisplayedAdInfo'
 
 /**
  * Get the Google Ad Manager advertiser ID of the advertiser that
@@ -33,19 +33,22 @@ const getTopBidForAd = adId => {
     encodedRevenue: 'abc-123',
     advertiserName: 'example',
     adSize: '728x90',
-    GAMAdvertiserId: null,
   }
 }
 
 /**
- * Get the winning BidResponse data for the ad with ID `adId`.
+ * Get the winning DisplayedAdInfo data for the ad with ID `adId`.
  * @param {String} adId - An ad ID.
- * @return {Object} A BidResponse, the winning bid for this ad
+ * @return {Object|null} A DisplayedAdInfo, the winning bid for this ad,
+ *   or null if an ad hasn't been displayed.
  */
 export const getWinningBidForAd = adId => {
   const GAMAdvertiserId = getGAMAdvertiserIdForDisplayedAd(adId)
+  if (!GAMAdvertiserId) {
+    return null
+  }
   const topBid = getTopBidForAd(adId)
-  return BidResponse({
+  return DisplayedAdInfo({
     ...topBid,
     adId,
     GAMAdvertiserId,
@@ -53,10 +56,10 @@ export const getWinningBidForAd = adId => {
 }
 
 /**
- * Get the winning BidResponse data for each ad ID
+ * Get the winning DisplayedAdInfo data for each ad ID
  * @param {String} adId - An ad ID.
  * @return {Object} An object with keys equal to ad IDs, each with
- *   value BidResponse or null
+ *   value DisplayedAdInfo or null
  */
 export const getAllWinningBids = () => {
   // TODO
