@@ -38,7 +38,7 @@ function sendAdserverRequest() {
   }
   adserverRequestSent = true
 
-  logger.debug(`Sending request to ad server.`)
+  logger.debug(`Ending auction.`)
 
   // Set targeting and make a request to GAM.
   const googletag = getGoogleTag()
@@ -50,6 +50,8 @@ function sendAdserverRequest() {
 
     // Fetch ads.
     googletag.pubads().refresh()
+
+    logger.debug(`Sent request to ad server.`)
 
     // Mark which bidders returned bids in time to be included
     // in the ad server request.
