@@ -1,16 +1,23 @@
 import { isNil } from 'lodash/lang'
 
-// TODO: add adId as a required field.
-
 // Create a BidResponse object. This is a standardized set of info
 // about a bid for a particular ad slot.
 const BidResponse = ({
+  adId,
   revenue = null,
   encodedRevenue = null,
+  // GAMAdvertiserId will only be set for a winning ad that's already
+  // been displayed. We won't know it beforehand.
   GAMAdvertiserId = null,
   advertiserName,
   adSize,
 }) => {
+  if (isNil(adId)) {
+    throw new Error('The "adId" value must be provided.')
+  }
+  if (typeof adId !== 'string') {
+    throw new Error('The "adId" value must be a string.')
+  }
   if (isNil(revenue) && isNil(encodedRevenue)) {
     throw new Error(
       'A bid response must have either the "revenue" or "encodedRevenue" property.'
@@ -36,6 +43,7 @@ const BidResponse = ({
   }
 
   return {
+    adId,
     revenue, // Float|null
     encodedRevenue, // String|null
     GAMAdvertiserId, // Number|null

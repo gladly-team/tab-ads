@@ -289,7 +289,7 @@ export const flushAllPromises = async () => {
 // Return a mockBidResponse object.
 export const getMockBidResponse = () => {
   return BidResponse({
-    // adId: 'my-ad-id', // TODO
+    adId: 'my-ad-id',
     revenue: 0.12,
     GAMAdvertiserId: 2468,
     advertiserName: 'SomeAdvertiser',

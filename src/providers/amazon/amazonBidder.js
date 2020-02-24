@@ -23,8 +23,9 @@ const normalizeBidResponses = (rawBidData = []) => {
   //   size: '0x0',
   //   slotID: 'div-gpt-ad-123456789-0'
   // }
-  const normalizeBid = rawBid => {
+  const normalizeBid = (adId, rawBid) => {
     return BidResponse({
+      adId,
       encodedRevenue: rawBid.amznbid,
       advertiserName: amazonBidderName,
       adSize: rawBid.size,
@@ -34,7 +35,7 @@ const normalizeBidResponses = (rawBidData = []) => {
   const normalizedBids = rawBidData.reduce((accumulator, rawBid) => {
     return {
       ...accumulator,
-      [rawBid.slotID]: normalizeBid(rawBid),
+      [rawBid.slotID]: normalizeBid(rawBid.slotID, rawBid),
     }
   }, {})
 

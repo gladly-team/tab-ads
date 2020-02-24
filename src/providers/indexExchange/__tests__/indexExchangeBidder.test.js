@@ -302,6 +302,7 @@ describe('indexExchangeBidder: fetchBids', () => {
       // The long leaderboard ad.
       'div-gpt-ad-1464385677836-0': [
         {
+          adId: 'div-gpt-ad-1464385677836-0',
           revenue: 120 / 10e4,
           advertiserName: 'indexExchange',
           adSize: '728x90',
@@ -312,6 +313,7 @@ describe('indexExchangeBidder: fetchBids', () => {
       // The primary rectangle ad (bottom-right).
       'div-gpt-ad-1464385742501-0': [
         {
+          adId: 'div-gpt-ad-1464385742501-0',
           revenue: 3500 / 10e4,
           advertiserName: 'indexExchange',
           adSize: '300x250',
@@ -322,6 +324,7 @@ describe('indexExchangeBidder: fetchBids', () => {
       // The second rectangle ad (right side, above the first).
       'div-gpt-ad-1539903223131-0': [
         {
+          adId: 'div-gpt-ad-1539903223131-0',
           revenue: 5324 / 10e4,
           advertiserName: 'indexExchange',
           adSize: '300x250',

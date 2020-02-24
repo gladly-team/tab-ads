@@ -210,6 +210,7 @@ describe('prebidBidder: fetchBids', () => {
       // The long leaderboard ad.
       'div-gpt-ad-1464385677836-0': [
         {
+          adId: 'div-gpt-ad-1464385677836-0',
           revenue: 0.582 / 1000,
           advertiserName: 'openx',
           adSize: '728x90',
@@ -217,6 +218,7 @@ describe('prebidBidder: fetchBids', () => {
           GAMAdvertiserId: null,
         },
         {
+          adId: 'div-gpt-ad-1464385677836-0',
           revenue: 4.21 / 1000,
           advertiserName: 'appnexus',
           adSize: '728x90',
@@ -224,6 +226,7 @@ describe('prebidBidder: fetchBids', () => {
           GAMAdvertiserId: null,
         },
         {
+          adId: 'div-gpt-ad-1464385677836-0',
           revenue: 0.19 / 1000,
           advertiserName: 'emxdigital',
           adSize: '728x90',
@@ -236,6 +239,7 @@ describe('prebidBidder: fetchBids', () => {
       // The second rectangle ad (right side, above the first).
       'div-gpt-ad-1539903223131-0': [
         {
+          adId: 'div-gpt-ad-1539903223131-0',
           revenue: 1.01 / 1000,
           advertiserName: 'openx',
           adSize: '300x250',

@@ -211,8 +211,9 @@ const getAdUnits = config => {
  *   bidder's normalized bids for that ad.
  */
 const normalizeBidResponses = (rawBidData = {}) => {
-  const normalizeBid = rawBid => {
+  const normalizeBid = (adId, rawBid) => {
     return BidResponse({
+      adId,
       revenue: rawBid.cpm / 1000 || 0,
       advertiserName: rawBid.bidderCode,
       adSize: rawBid.size,
@@ -222,7 +223,7 @@ const normalizeBidResponses = (rawBidData = {}) => {
     const rawBidsForAdId = get(rawBidData, [adId, 'bids'], [])
     return {
       ...accumulator,
-      [adId]: rawBidsForAdId.map(rawBid => normalizeBid(rawBid)),
+      [adId]: rawBidsForAdId.map(rawBid => normalizeBid(adId, rawBid)),
     }
   }, {})
   return normalizedBids

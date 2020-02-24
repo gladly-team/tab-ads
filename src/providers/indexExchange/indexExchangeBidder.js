@@ -64,8 +64,9 @@ const mapIXSlotToAdId = IXSlotId => {
  *   bidder's normalized bids for that ad.
  */
 const normalizeBidResponses = (rawBidData = []) => {
-  const normalizeBid = rawBid => {
+  const normalizeBid = (adId, rawBid) => {
     return BidResponse({
+      adId,
       // Index Exchange’s returned "price" field is a CPM in cents, so
       // 265 = $2.65 CPM. Convert to impression revenue.
       revenue: rawBid.price / 10e4,
@@ -78,9 +79,14 @@ const normalizeBidResponses = (rawBidData = []) => {
     (accumulator, IXSlotId) => {
       const IXBidsForThisSlot = get(IXBidsBySlot, IXSlotId, [])
       const adId = mapIXSlotToAdId(IXSlotId)
+
+      // This will happen if IX returns some unexpected slot ID.
+      if (!adId) {
+        return accumulator
+      }
       return {
         ...accumulator,
-        [adId]: IXBidsForThisSlot.map(IXBid => normalizeBid(IXBid)),
+        [adId]: IXBidsForThisSlot.map(IXBid => normalizeBid(adId, IXBid)),
       }
     },
     {}

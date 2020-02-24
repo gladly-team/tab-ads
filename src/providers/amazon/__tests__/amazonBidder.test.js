@@ -216,6 +216,7 @@ describe('amazonBidder: fetchBids', () => {
     const { bidResponses } = await amazonBidder.fetchBids(tabAdsConfig)
     const expectedBidResponses = {
       'div-gpt-ad-123456789-0': {
+        adId: 'div-gpt-ad-123456789-0',
         encodedRevenue: 'encoded-revenue-abcdef',
         advertiserName: 'amazon',
         adSize: '728x90',
@@ -223,6 +224,7 @@ describe('amazonBidder: fetchBids', () => {
         GAMAdvertiserId: null,
       },
       'div-gpt-ad-13579135-0': {
+        adId: 'div-gpt-ad-13579135-0',
         encodedRevenue: 'encoded-revenue-ghijkl',
         advertiserName: 'amazon',
         adSize: '300x250',
@@ -230,6 +232,7 @@ describe('amazonBidder: fetchBids', () => {
         GAMAdvertiserId: null,
       },
       'div-gpt-ad-24680246-0': {
+        adId: 'div-gpt-ad-24680246-0',
         encodedRevenue: 'encoded-revenue-mnopqr',
         advertiserName: 'amazon',
         adSize: '300x250',
