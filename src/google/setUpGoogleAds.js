@@ -1,5 +1,6 @@
 import getGoogleTag from 'src/google/getGoogleTag'
 
+// @feature/configurable-ad-count
 // TODO: assumes we are showing all 3 ads. Make that configurable.
 export default config => {
   const {

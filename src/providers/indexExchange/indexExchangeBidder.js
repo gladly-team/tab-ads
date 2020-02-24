@@ -94,6 +94,7 @@ const normalizeBidResponses = (rawBidData = []) => {
   return normalizedBids
 }
 
+// @feature/configurable-ad-count
 // TODO: assumes we are showing all 3 ads. Make that configurable.
 /**
  * Return a promise that resolves when the Index Exchange bid

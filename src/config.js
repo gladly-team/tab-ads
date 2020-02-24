@@ -8,6 +8,7 @@ const defaultConfig = {
   // Set "useMockAds" to true if we should display fake ad content. This
   // is for development only and only if "disableAds" is also true.
   useMockAds: false,
+  // @feature/configurable-ad-count
   // TODO: pass array to know which ads to load.
   // For now, we'll hardcode them.
   adUnits: [

@@ -5,6 +5,7 @@ import Bidder from 'src/utils/Bidder'
 import BidResponse from 'src/utils/BidResponse'
 import logger from 'src/utils/logger'
 
+// @feature/configurable-ad-count
 // TODO: assumes we are showing all 3 ads. Make that configurable.
 const getAdUnits = config => {
   const {
