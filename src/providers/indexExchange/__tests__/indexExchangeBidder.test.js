@@ -2,7 +2,6 @@
 
 import { setConfig } from 'src/config'
 import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
-import logger from 'src/utils/logger'
 
 jest.mock('src/providers/indexExchange/getIndexExchangeTag')
 jest.mock('src/google/getGoogleTag')
@@ -27,6 +26,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
 })
 
 afterAll(() => {
@@ -61,9 +61,20 @@ describe('indexExchangeBidder: fetchBids', () => {
     ])
   })
 
+  it('calls logger.debug with info when fetching bids', async () => {
+    expect.assertions(1)
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    await indexExchangeBidder.fetchBids(tabAdsConfig)
+    const logger = require('src/utils/logger').default
+    expect(logger.debug).toHaveBeenCalledWith('IndexExchange: bids requested')
+  })
+
   // eslint-disable-next-line jest/expect-expect
   it('the bidder resolves when the bid response returns', () => {
-    return new Promise(done => {
+    expect.assertions(0)
+    return new Promise(resolve => {
       const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
         .default
       const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
@@ -76,15 +87,46 @@ describe('indexExchangeBidder: fetchBids', () => {
       })
       const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
       indexExchangeBidder.fetchBids(tabAdsConfig).then(() => {
-        done()
+        resolve()
       })
       retrieveDemandCallback()
     })
   })
 
+  it('calls logger.debug with info when the auction ends', () => {
+    expect.assertions(1)
+    return new Promise((resolve, reject) => {
+      const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+        .default
+      const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
+        .default
+      const ixTag = getIndexExchangeTag()
+      const logger = require('src/utils/logger').default
+
+      let retrieveDemandCallback
+      ixTag.retrieveDemand.mockImplementation((config, callback) => {
+        retrieveDemandCallback = callback
+      })
+      const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+      indexExchangeBidder
+        .fetchBids(tabAdsConfig)
+        .then(() => {
+          expect(logger.debug).toHaveBeenLastCalledWith(
+            'IndexExchange: auction ended'
+          )
+          resolve()
+        })
+        .catch(e => {
+          reject(e)
+        })
+      retrieveDemandCallback()
+    })
+  })
+
   // eslint-disable-next-line jest/expect-expect
-  it('the bidder resolves when we pass the bidder timeout', () => {
-    return new Promise(done => {
+  it('the bidder resolves when we exceed the bidder timeout', () => {
+    expect.assertions(0)
+    return new Promise(resolve => {
       const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
         .default
       const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
@@ -95,7 +137,7 @@ describe('indexExchangeBidder: fetchBids', () => {
       ixTag.retrieveDemand.mockImplementation(() => {})
       const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
       indexExchangeBidder.fetchBids(tabAdsConfig).then(() => {
-        done()
+        resolve()
       })
 
       // Here, bidder timeout is 700ms.
@@ -119,6 +161,8 @@ describe('indexExchangeBidder: fetchBids', () => {
     )
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
+
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -142,6 +186,8 @@ describe('indexExchangeBidder: fetchBids', () => {
     ixTag.retrieveDemand.mockImplementation((config, callback) => callback({}))
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
+
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -171,6 +217,8 @@ describe('indexExchangeBidder: fetchBids', () => {
     )
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
+
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -213,6 +261,8 @@ describe('indexExchangeBidder: fetchBids', () => {
     )
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
+
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -252,6 +302,8 @@ describe('indexExchangeBidder: fetchBids', () => {
     )
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
+
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -508,6 +560,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     // Set targeting.
     indexExchangeBidder.setTargeting()
 
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -555,6 +608,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     // Set targeting.
     indexExchangeBidder.setTargeting()
 
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -607,6 +661,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     // Set targeting.
     indexExchangeBidder.setTargeting()
 
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -650,6 +705,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     // Set targeting.
     indexExchangeBidder.setTargeting()
 
+    const logger = require('src/utils/logger').default
     expect(logger.error).not.toHaveBeenCalled()
     googletag
       .pubads()
@@ -687,6 +743,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     // Set targeting.
     indexExchangeBidder.setTargeting()
 
+    const logger = require('src/utils/logger').default
     expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 })

@@ -94,6 +94,12 @@ const normalizeBidResponses = (rawBidData = []) => {
   return normalizedBids
 }
 
+// Index Exchange sometimes calls the retrieveDemand more than once.
+// Keep track of requests so we only handle the first one. Note that
+// we'll have to refactor this if we ever call for bids more than once
+// per page load.
+let bidsReturned = false
+
 // @feature/configurable-ad-count
 // TODO: assumes we are showing all 3 ads. Make that configurable.
 /**
@@ -104,6 +110,8 @@ const normalizeBidResponses = (rawBidData = []) => {
  *   or time out.
  */
 const fetchBids = async config => {
+  bidsReturned = false
+
   // Note: use ixTag.cmd.push because the JS may not have
   // loaded. Index Exchange hasn't documented the cmd
   // behavior so it may break.
@@ -127,8 +135,12 @@ const fetchBids = async config => {
   ]
 
   return new Promise(resolve => {
+    let timeoutId
     function handleAuctionEnd(rawBidResponses) {
-      logger.debug(`Index Exchange: auction ended`)
+      logger.debug(`IndexExchange: auction ended`)
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
       resolve({
         bidResponses: normalizeBidResponses(rawBidResponses),
         rawBidResponses,
@@ -138,16 +150,19 @@ const fetchBids = async config => {
     // Note that Index Exchange hasn't documented the cmd
     // behavior so it may break.
     ixTag.cmd.push(() => {
-      // console.log('Index Exchange: retrieving demand')
-
       // IX appears to reinitialize the variable on load.
       const ixTagAgain = getIndexExchangeTag()
 
-      logger.debug(`Index Exchange: bids requested`)
+      logger.debug(`IndexExchange: bids requested`)
 
       // Fetch bid responses from Index Exchange.
       // Note: the current request is to a casalemedia URL.
       ixTagAgain.retrieveDemand(IXSlots, rawBidResponses => {
+        if (bidsReturned) {
+          // Ignore any responses except the first.
+          return
+        }
+        bidsReturned = true
         ixRawBidResponses = rawBidResponses
         handleAuctionEnd(rawBidResponses)
       })
@@ -155,7 +170,7 @@ const fetchBids = async config => {
 
     // Resolve after some time to avoid waiting too long
     // for responses.
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       handleAuctionEnd()
     }, config.bidderTimeout)
   })
@@ -206,7 +221,7 @@ const setTargeting = () => {
     logger.error(e)
   }
 
-  logger.debug(`Index Exchange: set ad server targeting`)
+  logger.debug(`IndexExchange: set ad server targeting`)
 }
 
 const IndexExchangeBidder = Bidder({
