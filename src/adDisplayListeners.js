@@ -2,7 +2,7 @@ import { get, set } from 'lodash/object'
 import getGoogleTag from 'src/google/getGoogleTag'
 import logger from 'src/utils/logger'
 import { getAdDataStore } from 'src/utils/storage'
-import getWinningBidResponse from 'src/utils/getWinningBidResponse'
+import { getWinningBidForAd } from 'src/utils/getWinningBids'
 
 const adDisplayCallbacks = {
   // key = adId; value: { onAdRendered: [() => {}] }
@@ -15,7 +15,7 @@ const adDisplayCallbacks = {
  * @return {undefined}
  */
 const callAdRenderedCallbacks = adId => {
-  const winningBid = getWinningBidResponse(adId)
+  const winningBid = getWinningBidForAd(adId)
   const callbacks = get(adDisplayCallbacks, [adId, 'onAdRendered'], [])
   callbacks.forEach(cb => {
     cb(winningBid)

@@ -2,9 +2,11 @@
 
 import { getMockBidResponse } from 'src/utils/test-utils'
 
-export default jest.fn(adId => {
+export const getWinningBidForAd = jest.fn(adId => {
   return {
     adId,
     ...getMockBidResponse(),
   }
 })
+
+export const getAllWinningBids = jest.fn(() => ({}))

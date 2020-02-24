@@ -10,7 +10,7 @@ afterAll(() => {
   clearAdDataStore()
 })
 
-describe('getWinningBidResponse', () => {
+describe('getWinningBidForAd', () => {
   it('placeholder', () => {
     const store = getAdDataStore()
     expect(store).toEqual(expect.any(Object))

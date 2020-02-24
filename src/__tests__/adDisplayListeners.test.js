@@ -9,7 +9,7 @@ import {
 
 jest.mock('src/utils/logger')
 jest.mock('src/google/getGoogleTag')
-jest.mock('src/utils/getWinningBidResponse')
+jest.mock('src/utils/getWinningBids')
 
 beforeEach(() => {
   delete window.googletag
@@ -71,9 +71,8 @@ describe('adDisplayListeners: onAdRendered', () => {
       const adId = 'abc-123'
       runMockSlotRenderEndedEventForAd(adId)
 
-      const getWinningBidResponse = require('src/utils/getWinningBidResponse')
-        .default
-      const expectedMockWinningSlot = getWinningBidResponse(adId)
+      const { getWinningBidForAd } = require('src/utils/getWinningBids')
+      const expectedMockWinningSlot = getWinningBidForAd(adId)
       onAdRendered(adId, adData => {
         try {
           expect(adData).toEqual(expectedMockWinningSlot)
@@ -90,9 +89,8 @@ describe('adDisplayListeners: onAdRendered', () => {
       const { onAdRendered } = require('src/adDisplayListeners')
 
       const adId = 'xyz-987'
-      const getWinningBidResponse = require('src/utils/getWinningBidResponse')
-        .default
-      const expectedMockWinningSlot = getWinningBidResponse(adId)
+      const { getWinningBidForAd } = require('src/utils/getWinningBids')
+      const expectedMockWinningSlot = getWinningBidForAd(adId)
       onAdRendered(adId, adData => {
         try {
           expect(adData).toEqual(expectedMockWinningSlot)
@@ -125,9 +123,8 @@ describe('adDisplayListeners: onAdRendered', () => {
       }
 
       const adId = 'def-246'
-      const getWinningBidResponse = require('src/utils/getWinningBidResponse')
-        .default
-      const expectedMockWinningSlot = getWinningBidResponse(adId)
+      const { getWinningBidForAd } = require('src/utils/getWinningBids')
+      const expectedMockWinningSlot = getWinningBidForAd(adId)
       onAdRendered(adId, adData => {
         try {
           expect(adData).toEqual(expectedMockWinningSlot)
@@ -150,17 +147,16 @@ describe('adDisplayListeners: onAdRendered', () => {
     })
   })
 
-  it('calls getWinningBidResponse with the expected ad ID', () => {
+  it('calls getWinningBidForAd with the expected ad ID', () => {
     return new Promise((resolve, reject) => {
       const { onAdRendered } = require('src/adDisplayListeners')
 
       const adId = 'my-special-ad'
-      const getWinningBidResponse = require('src/utils/getWinningBidResponse')
-        .default
+      const { getWinningBidForAd } = require('src/utils/getWinningBids')
       onAdRendered(adId, () => {
         try {
-          expect(getWinningBidResponse).toHaveBeenCalledTimes(1)
-          expect(getWinningBidResponse).toHaveBeenCalledWith('my-special-ad')
+          expect(getWinningBidForAd).toHaveBeenCalledTimes(1)
+          expect(getWinningBidForAd).toHaveBeenCalledWith('my-special-ad')
           resolve()
         } catch (e) {
           reject(e)

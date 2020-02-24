@@ -3,9 +3,12 @@
  * @param {String} adId - An ad ID.
  * @return {Object} Return a BidResponse, the winning bid for this ad
  */
-const getWinningBidResponse = adId => {
+export const getWinningBidForAd = adId => {
   // TODO
   return { adId, some: 'data' }
 }
 
-export default getWinningBidResponse
+export const getAllWinningBids = () => {
+  // TODO
+  return {}
+}
