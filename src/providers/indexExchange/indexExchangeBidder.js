@@ -116,8 +116,8 @@ const fetchBids = async config => {
     rectangleAdSecondary,
   } = config.newTabAds
 
-  // TODO
-  // Only get bids for the number of ads we'll show.
+  // @feature/configurable-ad-count
+  // TODO: only get bids for the the ads we'll show.
   const IXSlots = [
     { htSlotName: mapGAMSlotToIXSlot(leaderboard.adUnitId) },
     { htSlotName: mapGAMSlotToIXSlot(rectangleAdPrimary.adUnitId) },
