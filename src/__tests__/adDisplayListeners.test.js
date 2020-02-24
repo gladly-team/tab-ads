@@ -9,9 +9,7 @@ import {
 
 jest.mock('src/utils/logger')
 jest.mock('src/google/getGoogleTag')
-
-// FIXME: this breaks tests?
-// jest.mock('src/utils/getWinningBidResponse')
+jest.mock('src/utils/getWinningBidResponse')
 
 beforeEach(() => {
   delete window.googletag
@@ -65,7 +63,7 @@ const runMockSlotRenderEndedEventForAd = adId => {
 
 describe('adDisplayListeners: onAdRendered', () => {
   it('immediately calls the callback if the ad has already rendered', () => {
-    return new Promise(done => {
+    return new Promise((resolve, reject) => {
       const { onAdRendered } = require('src/adDisplayListeners')
 
       // Simulate that the "slot render ended" event has already occurred
@@ -73,21 +71,35 @@ describe('adDisplayListeners: onAdRendered', () => {
       const adId = 'abc-123'
       runMockSlotRenderEndedEventForAd(adId)
 
+      const getWinningBidResponse = require('src/utils/getWinningBidResponse')
+        .default
+      const expectedMockWinningSlot = getWinningBidResponse(adId)
       onAdRendered(adId, adData => {
-        expect(adData).toEqual({ adId, some: 'data' }) // TODO: use correct data
-        done()
+        try {
+          expect(adData).toEqual(expectedMockWinningSlot)
+          resolve()
+        } catch (e) {
+          reject(e)
+        }
       })
     })
   })
 
   it('calls the callback when the ad renders later', () => {
-    return new Promise(done => {
+    return new Promise((resolve, reject) => {
       const { onAdRendered } = require('src/adDisplayListeners')
 
       const adId = 'xyz-987'
+      const getWinningBidResponse = require('src/utils/getWinningBidResponse')
+        .default
+      const expectedMockWinningSlot = getWinningBidResponse(adId)
       onAdRendered(adId, adData => {
-        expect(adData).toEqual({ adId, some: 'data' }) // TODO: use correct data
-        done()
+        try {
+          expect(adData).toEqual(expectedMockWinningSlot)
+          resolve()
+        } catch (e) {
+          reject(e)
+        }
       })
 
       // The ad renders after the callback is registered.
@@ -95,20 +107,67 @@ describe('adDisplayListeners: onAdRendered', () => {
     })
   })
 
-  it('calls multiple callbacks when the ad renders', async () => {
-    expect.assertions(2)
-    const { onAdRendered } = require('src/adDisplayListeners')
+  it('calls multiple callbacks when the ad renders', () => {
+    const numCallbacks = 2
+    expect.assertions(numCallbacks)
+    return new Promise((resolve, reject) => {
+      const { onAdRendered } = require('src/adDisplayListeners')
 
-    const adId = 'def-246'
-    onAdRendered(adId, adData => {
-      expect(adData).toEqual({ adId, some: 'data' }) // TODO: use correct data
-    })
-    onAdRendered(adId, adData => {
-      expect(adData).toEqual({ adId, some: 'data' }) // TODO: use correct data
-    })
+      let completedCallbacks = 0
+      const complete = err => {
+        if (err) {
+          reject(err)
+        }
+        completedCallbacks += 1
+        if (completedCallbacks === numCallbacks) {
+          resolve()
+        }
+      }
 
-    // The ad renders after the callback is registered.
-    runMockSlotRenderEndedEventForAd(adId)
+      const adId = 'def-246'
+      const getWinningBidResponse = require('src/utils/getWinningBidResponse')
+        .default
+      const expectedMockWinningSlot = getWinningBidResponse(adId)
+      onAdRendered(adId, adData => {
+        try {
+          expect(adData).toEqual(expectedMockWinningSlot)
+          complete()
+        } catch (e) {
+          complete(e)
+        }
+      })
+      onAdRendered(adId, adData => {
+        try {
+          expect(adData).toEqual(expectedMockWinningSlot)
+          complete()
+        } catch (e) {
+          complete(e)
+        }
+      })
+
+      // The ad renders after the callback is registered.
+      runMockSlotRenderEndedEventForAd(adId)
+    })
+  })
+
+  it('calls getWinningBidResponse with the expected ad ID', () => {
+    return new Promise((resolve, reject) => {
+      const { onAdRendered } = require('src/adDisplayListeners')
+
+      const adId = 'my-special-ad'
+      const getWinningBidResponse = require('src/utils/getWinningBidResponse')
+        .default
+      onAdRendered(adId, () => {
+        try {
+          expect(getWinningBidResponse).toHaveBeenCalledTimes(1)
+          expect(getWinningBidResponse).toHaveBeenCalledWith('my-special-ad')
+          resolve()
+        } catch (e) {
+          reject(e)
+        }
+      })
+      runMockSlotRenderEndedEventForAd(adId)
+    })
   })
 })
 

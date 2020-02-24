@@ -2,9 +2,9 @@
 
 import { getMockBidResponse } from 'src/utils/test-utils'
 
-export default adId => {
+export default jest.fn(adId => {
   return {
     adId,
     ...getMockBidResponse(),
   }
-}
+})
