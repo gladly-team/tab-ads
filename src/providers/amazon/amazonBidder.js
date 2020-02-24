@@ -28,14 +28,14 @@ const normalizeBidResponses = (rawBidData = []) => {
       adId,
       encodedRevenue: rawBid.amznbid,
       advertiserName: amazonBidderName,
-      adSize: rawBid.size,
+      adSize: rawBid.size, // FIXME: this will always be 0x0
     })
   }
 
   const normalizedBids = rawBidData.reduce((accumulator, rawBid) => {
     return {
       ...accumulator,
-      [rawBid.slotID]: normalizeBid(rawBid.slotID, rawBid),
+      [rawBid.slotID]: [normalizeBid(rawBid.slotID, rawBid)],
     }
   }, {})
 

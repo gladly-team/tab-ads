@@ -29,9 +29,9 @@ const getDefaultAdDataStore = () => ({
     // amazon: {
     //   // Bid response for each slot, standardized.
     //   bidResponses: {
-    //     'div-gpt-abc-123': {
-    //       // Standardized structure across bidders.
-    //     },
+    //     'div-gpt-abc-123': [
+    //       {} // BidResponse
+    //     ],
     //   },
     //   // true if the bidder responded in time to be included in the auction.
     //   includedInAdRequest: false,
