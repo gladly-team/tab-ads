@@ -132,7 +132,10 @@ describe('amazonBidder: fetchBids', () => {
   it('returns the expected Amazon bid responses in the rawBidResponses key', async () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+
+    const mockLeaderboardAdId = 'div-gpt-ad-123456789-0'
+    const mockRectanglePrimaryAdId = 'div-gpt-ad-13579135-0'
+    const mockRectangleSecondaryAdId = 'div-gpt-ad-24680246-0'
 
     // Set the mock Amazon bid responses.
     const mockBid = mockAmazonBidResponse()
@@ -142,93 +145,143 @@ describe('amazonBidder: fetchBids', () => {
         amznbid: 'abcdef',
         amzniid: 'some-id-number-1',
         amznp: '1',
-        amznsz: '728x90',
-        size: '728x90',
-        slotID: 'div-gpt-ad-123456789-0',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockLeaderboardAdId,
       },
       {
         ...mockBid,
         amznbid: 'ghijkl',
         amzniid: 'some-id-number-2',
         amznp: '1',
-        amznsz: '300x250',
-        size: '300x250',
-        slotID: 'div-gpt-ad-13579135-0',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockRectanglePrimaryAdId,
       },
       {
         ...mockBid,
         amznbid: 'mnopqr',
         amzniid: 'some-id-number-3',
         amznp: '1',
-        amznsz: '300x250',
-        size: '300x250',
-        slotID: 'div-gpt-ad-24680246-0',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockRectangleSecondaryAdId,
       },
     ]
     apstag.fetchBids = jest.fn((config, callback) => {
       callback(mockBidResponses)
     })
 
-    const { rawBidResponses } = await amazonBidder.fetchBids(tabAdsConfig)
+    // Manually override the tab-ads config to use the mock ad IDs.
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const tabAdsConfigModified = {
+      ...tabAdsConfig,
+      newTabAds: {
+        leaderboard: {
+          adId: mockLeaderboardAdId,
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+        rectangleAdPrimary: {
+          adId: mockRectanglePrimaryAdId,
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+        },
+        rectangleAdSecondary: {
+          adId: mockRectangleSecondaryAdId,
+          adUnitId: '/43865596/HBTR2',
+          sizes: [[300, 250]],
+        },
+      },
+    }
+    const { rawBidResponses } = await amazonBidder.fetchBids(
+      tabAdsConfigModified
+    )
     expect(rawBidResponses).toEqual(mockBidResponses)
   })
 
   it('returns the expected normalized BidResponses in the bidResponses key', async () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+
+    const mockLeaderboardAdId = 'div-gpt-ad-123456789-0'
+    const mockRectanglePrimaryAdId = 'div-gpt-ad-13579135-0'
+    const mockRectangleSecondaryAdId = 'div-gpt-ad-24680246-0'
 
     // Set the mock Amazon bid responses.
     const mockBid = mockAmazonBidResponse()
     const mockBidResponses = [
       {
         ...mockBid,
-        amznbid: 'encoded-revenue-abcdef',
+        amznbid: 'abcdef',
         amzniid: 'some-id-number-1',
         amznp: '1',
-        amznsz: '728x90',
-        size: '728x90',
-        slotID: 'div-gpt-ad-123456789-0',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockLeaderboardAdId,
       },
       {
         ...mockBid,
-        amznbid: 'encoded-revenue-ghijkl',
+        amznbid: 'ghijkl',
         amzniid: 'some-id-number-2',
         amznp: '1',
-        amznsz: '300x250',
-        size: '300x250',
-        slotID: 'div-gpt-ad-13579135-0',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockRectanglePrimaryAdId,
       },
       {
         ...mockBid,
-        amznbid: 'encoded-revenue-mnopqr',
+        amznbid: 'mnopqr',
         amzniid: 'some-id-number-3',
         amznp: '1',
-        amznsz: '300x250',
-        size: '300x250',
-        slotID: 'div-gpt-ad-24680246-0',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockRectangleSecondaryAdId,
       },
     ]
     apstag.fetchBids = jest.fn((config, callback) => {
       callback(mockBidResponses)
     })
 
-    const { bidResponses } = await amazonBidder.fetchBids(tabAdsConfig)
+    // Manually override the tab-ads config to use the mock ad IDs.
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const tabAdsConfigModified = {
+      ...tabAdsConfig,
+      newTabAds: {
+        leaderboard: {
+          adId: mockLeaderboardAdId,
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+        rectangleAdPrimary: {
+          adId: mockRectanglePrimaryAdId,
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+        },
+        rectangleAdSecondary: {
+          adId: mockRectangleSecondaryAdId,
+          adUnitId: '/43865596/HBTR2',
+          sizes: [[300, 250]],
+        },
+      },
+    }
+
+    const { bidResponses } = await amazonBidder.fetchBids(tabAdsConfigModified)
     const expectedBidResponses = {
       'div-gpt-ad-123456789-0': [
         {
-          adId: 'div-gpt-ad-123456789-0',
-          encodedRevenue: 'encoded-revenue-abcdef',
+          adId: mockLeaderboardAdId,
+          encodedRevenue: 'abcdef',
           advertiserName: 'amazon',
-          adSize: '728x90',
+          adSize: '728x90', // Uses ad size from the tab-ads config
           revenue: null,
           GAMAdvertiserId: null,
         },
       ],
       'div-gpt-ad-13579135-0': [
         {
-          adId: 'div-gpt-ad-13579135-0',
-          encodedRevenue: 'encoded-revenue-ghijkl',
+          adId: mockRectanglePrimaryAdId,
+          encodedRevenue: 'ghijkl',
           advertiserName: 'amazon',
           adSize: '300x250',
           revenue: null,
@@ -237,8 +290,8 @@ describe('amazonBidder: fetchBids', () => {
       ],
       'div-gpt-ad-24680246-0': [
         {
-          adId: 'div-gpt-ad-24680246-0',
-          encodedRevenue: 'encoded-revenue-mnopqr',
+          adId: mockRectangleSecondaryAdId,
+          encodedRevenue: 'mnopqr',
           advertiserName: 'amazon',
           adSize: '300x250',
           revenue: null,
