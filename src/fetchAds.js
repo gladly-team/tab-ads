@@ -5,17 +5,11 @@ import getGoogleTag from 'src/google/getGoogleTag'
 import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import { setUpAdDisplayListeners } from 'src/adDisplayListeners'
 
-// Bidders.
-import prebidBidder from 'src/providers/prebid/prebidBidder'
-import amazonBidder from 'src/providers/amazon/amazonBidder'
-import indexExchangeBidder from 'src/providers/indexExchange/indexExchangeBidder'
-
 // Other helpers.
+import bidders from 'src/bidders'
 import logger from 'src/utils/logger'
 import { setConfig } from 'src/config'
 import { getAdDataStore } from 'src/utils/storage'
-
-const BIDDERS = [prebidBidder, amazonBidder, indexExchangeBidder]
 
 // Set to true if we send a request to the ad server.
 let adserverRequestSent = false
@@ -44,7 +38,7 @@ function sendAdserverRequest() {
   const googletag = getGoogleTag()
   googletag.cmd.push(() => {
     // Set ad server targeting.
-    BIDDERS.forEach(bidder => {
+    bidders.forEach(bidder => {
       bidder.setTargeting()
     })
 
@@ -55,7 +49,7 @@ function sendAdserverRequest() {
 
     // Mark which bidders returned bids in time to be included
     // in the ad server request.
-    BIDDERS.forEach(bidder => {
+    bidders.forEach(bidder => {
       const store = getAdDataStore()
 
       // This is true if the bidder has returned bid responses.
@@ -80,7 +74,7 @@ const callBidders = async config => {
 
   try {
     await Promise.all(
-      BIDDERS.map(async bidder => {
+      bidders.map(async bidder => {
         try {
           const bidResponseData = await bidder.fetchBids(config)
           const store = getAdDataStore()

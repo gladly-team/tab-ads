@@ -4,11 +4,7 @@ import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' /
 import { setConfig } from 'src/config'
 import logger from 'src/utils/logger'
 import { getAdDataStore, clearAdDataStore } from 'src/utils/storage'
-
-// Bidders.
-import prebidBidder from 'src/providers/prebid/prebidBidder'
-import amazonBidder from 'src/providers/amazon/amazonBidder'
-import indexExchangeBidder from 'src/providers/indexExchange/indexExchangeBidder'
+import enabledBidders from 'src/bidders'
 
 import { flushAllPromises, getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
@@ -33,7 +29,7 @@ afterEach(() => {
 
 // Return an array of active Bidder modules.
 const getBidders = () => {
-  return [prebidBidder, amazonBidder, indexExchangeBidder]
+  return enabledBidders
 }
 
 describe('fetchAds: bid and ad server requests', () => {
