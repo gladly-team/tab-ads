@@ -10,6 +10,8 @@ describe('index.js', () => {
     const index = require('src/index')
     expect(index.fetchAds).toBeDefined()
     expect(index.fetchAds).toEqual(expect.any(Function))
+    expect(index.getAllWinningBids).toBeDefined()
+    expect(index.getAllWinningBids).toEqual(expect.any(Function))
   })
 
   it('fetches ads with no config', async () => {
@@ -26,5 +28,10 @@ describe('index.js', () => {
     const myConfig = { foo: 'bar' }
     await fetchAds(myConfig)
     expect(getAds).toHaveBeenCalledWith(myConfig)
+  })
+
+  it('assigns expected functions to the tabAds global', () => {
+    const { getAllWinningBids } = require('src/index')
+    expect(window.tabAds.getAllWinningBids).toBe(getAllWinningBids)
   })
 })

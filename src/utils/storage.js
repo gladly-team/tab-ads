@@ -45,8 +45,8 @@ const getDefaultAdDataStore = () => ({
   },
 })
 
-window.tabAds = {}
-window.tabAds.adDataStore = getDefaultAdDataStore()
+window.tabAds = window.tabAds || {}
+window.tabAds.adDataStore = window.tabAds.adDataStore || getDefaultAdDataStore()
 
 export const clearAdDataStore = () => {
   window.tabAds.adDataStore = getDefaultAdDataStore()
