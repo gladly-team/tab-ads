@@ -10,6 +10,9 @@ import {
 jest.mock('src/utils/logger')
 jest.mock('src/google/getGoogleTag')
 
+// FIXME: this breaks tests?
+// jest.mock('src/utils/getWinningBidResponse')
+
 beforeEach(() => {
   delete window.googletag
   clearAdDataStore()
@@ -92,7 +95,7 @@ describe('adDisplayListeners: onAdRendered', () => {
     })
   })
 
-  it('calls multiple callback when the ad renders', async () => {
+  it('calls multiple callbacks when the ad renders', async () => {
     expect.assertions(2)
     const { onAdRendered } = require('src/adDisplayListeners')
 
