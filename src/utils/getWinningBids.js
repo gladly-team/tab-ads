@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash/lang'
 import { get } from 'lodash/object'
 import bidders from 'src/bidders'
+import { getConfig } from 'src/config'
 import { getAdDataStore } from 'src/utils/storage'
 import BidResponse from 'src/utils/BidResponse'
 import DisplayedAdInfo from 'src/utils/DisplayedAdInfo'
@@ -124,6 +125,10 @@ export const getWinningBidForAd = adId => {
  *   value DisplayedAdInfo or null
  */
 export const getAllWinningBids = () => {
-  // TODO
-  return {}
+  const tabConfig = getConfig()
+  const adUnits = get(tabConfig, 'adUnits', [])
+  const winningBidsByAd = adUnits.reduce((acc, adUnit) => {
+    return { ...acc, [adUnit.adId]: getWinningBidForAd(adUnit.adId) }
+  }, {})
+  return winningBidsByAd
 }

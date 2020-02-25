@@ -416,3 +416,187 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toBeNull()
   })
 })
+
+describe('getWinningBids: getAllWinningBids', () => {
+  it('returns the expected DisplayedAdInfo by adId', () => {
+    const { newTabAds } = getConfig()
+
+    // Set up the store.
+    const store = getAdDataStore()
+    setUpStoreWithBidders()
+
+    // Set up stored bids for the leaderboard ad.
+    store.bidResponses.amazon.bidResponses[newTabAds.leaderboard.adId].push(
+      BidResponse({
+        adId: newTabAds.leaderboard.adId,
+        encodedRevenue: 'some-encoded-revenue-0101',
+        advertiserName: 'amazon',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.indexExchange.bidResponses[
+      newTabAds.leaderboard.adId
+    ].push(
+      BidResponse({
+        adId: newTabAds.leaderboard.adId,
+        revenue: 0.0131,
+        advertiserName: 'indexExchange',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.prebid.bidResponses[newTabAds.leaderboard.adId].push(
+      BidResponse({
+        adId: newTabAds.leaderboard.adId,
+        revenue: 0.0002,
+        advertiserName: 'openx',
+        adSize: '728x90',
+      }),
+      BidResponse({
+        adId: newTabAds.leaderboard.adId,
+        revenue: 0.00998,
+        advertiserName: 'appnexus',
+        adSize: '728x90',
+      })
+    )
+
+    // Set that the leaderboard ad was displayed.
+    store.adManager.slotsRendered[
+      newTabAds.leaderboard.adId
+    ] = mockGoogleTagSlotRenderEndedData(
+      newTabAds.leaderboard,
+      '/123456/some-ad/',
+      {
+        advertiserId: 112233,
+      }
+    )
+
+    // Set up stored bids for the first rectangle ad.
+    store.bidResponses.amazon.bidResponses[
+      newTabAds.rectangleAdPrimary.adId
+    ] = undefined
+    store.bidResponses.indexExchange.bidResponses[
+      newTabAds.rectangleAdPrimary.adId
+    ].push(
+      BidResponse({
+        adId: newTabAds.rectangleAdPrimary.adId,
+        revenue: 0.00842,
+        advertiserName: 'indexExchange',
+        adSize: '300x250',
+      })
+    )
+    store.bidResponses.prebid.bidResponses[
+      newTabAds.rectangleAdPrimary.adId
+    ].push(
+      BidResponse({
+        adId: newTabAds.rectangleAdPrimary.adId,
+        revenue: 0.00019,
+        advertiserName: 'openx',
+        adSize: '300x250',
+      }),
+      BidResponse({
+        adId: newTabAds.rectangleAdPrimary.adId,
+        revenue: 0.016,
+        advertiserName: 'sonobi',
+        adSize: '300x250',
+      }),
+      BidResponse({
+        adId: newTabAds.rectangleAdPrimary.adId,
+        revenue: 0.013,
+        advertiserName: 'pulsepoint',
+        adSize: '300x250',
+      })
+    )
+
+    // Set that the second rectangle ad was displayed.
+    store.adManager.slotsRendered[
+      newTabAds.rectangleAdPrimary.adId
+    ] = mockGoogleTagSlotRenderEndedData(
+      newTabAds.rectangleAdPrimary.adId,
+      '/123456/some-ad/',
+      {
+        advertiserId: 445566,
+      }
+    )
+
+    // Set up stored bids for the second rectangle ad.
+    store.bidResponses.amazon.bidResponses[
+      newTabAds.rectangleAdSecondary.adId
+    ].push(
+      BidResponse({
+        adId: newTabAds.leaderboard.adId,
+        encodedRevenue: 'some-encoded-revenue-9292',
+        advertiserName: 'amazon',
+        adSize: '300x250',
+      })
+    )
+    store.bidResponses.indexExchange.bidResponses[
+      newTabAds.rectangleAdSecondary.adId
+    ].push(
+      BidResponse({
+        adId: newTabAds.rectangleAdSecondary.adId,
+        revenue: 0.007,
+        advertiserName: 'indexExchange',
+        adSize: '300x250',
+      })
+    )
+    store.bidResponses.prebid.bidResponses[
+      newTabAds.rectangleAdSecondary.adId
+    ].push(
+      BidResponse({
+        adId: newTabAds.rectangleAdSecondary.adId,
+        revenue: 0.00029,
+        advertiserName: 'openx',
+        adSize: '300x250',
+      }),
+      BidResponse({
+        adId: newTabAds.rectangleAdSecondary.adId,
+        revenue: 0.0011,
+        advertiserName: 'sonobi',
+        adSize: '300x250',
+      }),
+      BidResponse({
+        adId: newTabAds.rectangleAdSecondary.adId,
+        revenue: 0.0018,
+        advertiserName: 'pulsepoint',
+        adSize: '300x250',
+      })
+    )
+
+    // Set that the second rectangle ad was displayed.
+    store.adManager.slotsRendered[
+      newTabAds.rectangleAdSecondary.adId
+    ] = mockGoogleTagSlotRenderEndedData(
+      newTabAds.rectangleAdSecondary.adId,
+      '/123456/some-ad/',
+      {
+        advertiserId: 778899,
+      }
+    )
+
+    const { getAllWinningBids } = require('src/utils/getWinningBids')
+    const allWinningBids = getAllWinningBids()
+    expect(allWinningBids).toEqual({
+      [newTabAds.leaderboard.adId]: {
+        adId: newTabAds.leaderboard.adId,
+        revenue: 0.0131,
+        GAMAdvertiserId: 112233,
+        encodedRevenue: 'some-encoded-revenue-0101',
+        adSize: '728x90',
+      },
+      [newTabAds.rectangleAdPrimary.adId]: {
+        adId: newTabAds.rectangleAdPrimary.adId,
+        revenue: 0.016,
+        GAMAdvertiserId: 445566,
+        encodedRevenue: null,
+        adSize: '300x250',
+      },
+      [newTabAds.rectangleAdSecondary.adId]: {
+        adId: newTabAds.rectangleAdSecondary.adId,
+        revenue: 0.007,
+        encodedRevenue: 'some-encoded-revenue-9292',
+        GAMAdvertiserId: 778899,
+        adSize: '300x250',
+      },
+    })
+  })
+})
