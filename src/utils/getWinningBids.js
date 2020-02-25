@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash/lang'
 import { get } from 'lodash/object'
 import bidders from 'src/bidders'
 import { getAdDataStore } from 'src/utils/storage'
@@ -76,11 +77,17 @@ const getTopBidForAd = adId => {
   )
 
   // Combine the top revenue bid with the encoded revenue bid.
-  const topBidResponse = BidResponse({
+  const encodedRevenue = get(topBids, 'encodedRevenueBid.encodedRevenue', null)
+  const mergedBid = {
     ...get(topBids, 'topRevenueBid', {}),
-    encodedRevenue: get(topBids, 'encodedRevenueBid.encodedRevenue', null),
-  })
-  return topBidResponse
+    ...(encodedRevenue && { encodedRevenue }),
+  }
+
+  if (isEmpty(mergedBid)) {
+    return null
+  }
+
+  return BidResponse(mergedBid)
 }
 
 /**
@@ -95,6 +102,9 @@ export const getWinningBidForAd = adId => {
     return null
   }
   const topBid = getTopBidForAd(adId)
+  if (!topBid) {
+    return null
+  }
   return DisplayedAdInfo({
     ...topBid,
     adId,
