@@ -130,6 +130,114 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toBeNull()
   })
 
+  it('returns the expected winning DisplayedAdInfo when we have bids from some bidders but not others', () => {
+    const mockGAMAdvertiserId = 246810
+    const { newTabAds } = getConfig()
+    const { adId } = newTabAds.leaderboard
+
+    // Set up the store.
+    const store = getAdDataStore()
+
+    // Set up stored bids for the leaderboard ad.
+    setUpStoreWithBidders()
+    store.bidResponses.amazon.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        encodedRevenue: 'some-encoded-revenue-0101',
+        advertiserName: 'amazon',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.indexExchange = undefined // no bids
+    store.bidResponses.prebid.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        revenue: 0.1231,
+        advertiserName: 'openx',
+        adSize: '728x90',
+      }),
+      BidResponse({
+        adId,
+        revenue: 0.00012,
+        advertiserName: 'appnexus',
+        adSize: '728x90',
+      })
+    )
+
+    // Set that the leaderboard ad was displayed.
+    store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
+      adId,
+      '/123456/some-ad/',
+      {
+        advertiserId: mockGAMAdvertiserId,
+      }
+    )
+
+    const { getWinningBidForAd } = require('src/utils/getWinningBids')
+    const adInfo = getWinningBidForAd(adId)
+    expect(adInfo).toEqual({
+      adId,
+      GAMAdvertiserId: mockGAMAdvertiserId,
+      revenue: 0.1231,
+      encodedRevenue: 'some-encoded-revenue-0101',
+      adSize: '728x90',
+    })
+  })
+
+  it('returns the expected winning DisplayedAdInfo when we do not have any encodedRevenue values', () => {
+    const mockGAMAdvertiserId = 112233
+    const { newTabAds } = getConfig()
+    const { adId } = newTabAds.leaderboard
+
+    // Set up the store.
+    const store = getAdDataStore()
+
+    // Set up stored bids for the leaderboard ad.
+    setUpStoreWithBidders()
+    store.bidResponses.amazon.bidResponses = undefined // no encodedRevenue values
+    store.bidResponses.indexExchange.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        revenue: 0.0031,
+        advertiserName: 'indexExchange',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.prebid.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        revenue: 0.0002,
+        advertiserName: 'openx',
+        adSize: '728x90',
+      }),
+      BidResponse({
+        adId,
+        revenue: 0.02024,
+        advertiserName: 'appnexus',
+        adSize: '728x90',
+      })
+    )
+
+    // Set that the leaderboard ad was displayed.
+    store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
+      adId,
+      '/123456/some-ad/',
+      {
+        advertiserId: mockGAMAdvertiserId,
+      }
+    )
+
+    const { getWinningBidForAd } = require('src/utils/getWinningBids')
+    const adInfo = getWinningBidForAd(adId)
+    expect(adInfo).toEqual({
+      adId,
+      GAMAdvertiserId: mockGAMAdvertiserId,
+      revenue: 0.02024,
+      encodedRevenue: null,
+      adSize: '728x90',
+    })
+  })
+
   it("returns null if there isn't any stored data for the rendered ad", () => {
     const adId = 'my-ad-id-123'
 
