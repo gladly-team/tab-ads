@@ -79,6 +79,7 @@ const getTopBidForAd = adId => {
   // Combine the top revenue bid with the encoded revenue bid.
   const encodedRevenue = get(topBids, 'encodedRevenueBid.encodedRevenue', null)
   const mergedBid = {
+    ...get(topBids, 'encodedRevenueBid', {}),
     ...get(topBids, 'topRevenueBid', {}),
     ...(encodedRevenue && { encodedRevenue }),
   }

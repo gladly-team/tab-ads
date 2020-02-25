@@ -238,6 +238,47 @@ describe('getWinningBids: getWinningBidForAd', () => {
     })
   })
 
+  it('returns the expected winning DisplayedAdInfo when we only have an encodedRevenue bid', () => {
+    const mockGAMAdvertiserId = 112233
+    const { newTabAds } = getConfig()
+    const { adId } = newTabAds.leaderboard
+
+    // Set up the store.
+    const store = getAdDataStore()
+
+    // Set up stored bids for the leaderboard ad.
+    setUpStoreWithBidders()
+    store.bidResponses.amazon.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        encodedRevenue: 'some-cool-encoded-revenue',
+        advertiserName: 'amazon',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.indexExchange.bidResponses = undefined
+    store.bidResponses.prebid.bidResponses = undefined
+
+    // Set that the leaderboard ad was displayed.
+    store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
+      adId,
+      '/123456/some-ad/',
+      {
+        advertiserId: mockGAMAdvertiserId,
+      }
+    )
+
+    const { getWinningBidForAd } = require('src/utils/getWinningBids')
+    const adInfo = getWinningBidForAd(adId)
+    expect(adInfo).toEqual({
+      adId,
+      GAMAdvertiserId: mockGAMAdvertiserId,
+      revenue: null,
+      encodedRevenue: 'some-cool-encoded-revenue',
+      adSize: '728x90',
+    })
+  })
+
   it("returns null if there isn't any stored data for the rendered ad", () => {
     const adId = 'my-ad-id-123'
 
