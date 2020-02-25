@@ -27,7 +27,6 @@ const getGAMAdvertiserIdForDisplayedAd = adId => {
   return GAMAdvertiserId
 }
 
-// FIXME: filter out bidders that weren't included in the ad server request.
 /**
  * Get the winning BidResponse for the ad with ID `adId`, merging any
  * encodedRevenue value with the top revenue value.
@@ -38,6 +37,11 @@ const getGAMAdvertiserIdForDisplayedAd = adId => {
 const getTopBidForAd = adId => {
   const store = getAdDataStore()
   const allBidsForAd = bidders.reduce((acc, bidder) => {
+    // If the bidder did not respond in time to be part of the
+    // ad server request, don't consider their bids.
+    if (!get(store, ['bidResponses', bidder.name, 'includedInAdRequest'])) {
+      return acc
+    }
     const bidsForBidder = get(store, [
       'bidResponses',
       bidder.name,
