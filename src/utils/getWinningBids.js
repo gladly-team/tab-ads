@@ -1,5 +1,7 @@
 import { get } from 'lodash/object'
+import bidders from 'src/bidders'
 import { getAdDataStore } from 'src/utils/storage'
+import BidResponse from 'src/utils/BidResponse'
 import DisplayedAdInfo from 'src/utils/DisplayedAdInfo'
 
 /**
@@ -24,16 +26,61 @@ const getGAMAdvertiserIdForDisplayedAd = adId => {
   return GAMAdvertiserId
 }
 
-// TODO
+// FIXME: filter out bidders that weren't included in the ad server request.
+/**
+ * Get the winning BidResponse for the ad with ID `adId`, merging any
+ * encodedRevenue value with the top revenue value.
+ * @param {String} adId - An ad ID.
+ * @return {Object|null} A BidResponse, the winning bid for this ad,
+ *   or null if there is no bid.
+ */
 const getTopBidForAd = adId => {
-  // TODO
-  return {
-    adId,
-    revenue: 0.23,
-    encodedRevenue: 'abc-123',
-    advertiserName: 'example',
-    adSize: '728x90',
-  }
+  const store = getAdDataStore()
+  const allBidsForAd = bidders.reduce((acc, bidder) => {
+    const bidsForBidder = get(store, [
+      'bidResponses',
+      bidder.name,
+      'bidResponses',
+      adId,
+    ])
+    return acc.concat(bidsForBidder)
+  }, [])
+
+  // We get both the top unencoded revenue bid response and any
+  // encoded revenue bid response. We want to send both the revenue
+  // and encodedRevenue values because we don't know which is
+  // higher. Note that this only works because we know we only have
+  // one bidder with encoded revenue values.
+  const topBids = allBidsForAd.reduce(
+    (acc, bid) => {
+      const newAcc = {
+        topRevenueBid: { ...acc.topRevenueBid },
+        encodedRevenueBid: { ...acc.encodedRevenueBid },
+      }
+
+      // If this bid has a higher revenue value, set it as the new
+      // top-revenue bid. Note that this only works because we know we
+      // only have one bidder with encoded revenue values.
+      if (get(bid, 'revenue', 0) > get(acc, 'topRevenueBid.revenue', 0)) {
+        newAcc.topRevenueBid = bid
+      }
+
+      // If this bid has an encodedRevenue value, set it as the bid
+      // with encodedRevenue.
+      if (get(bid, 'encodedRevenue')) {
+        newAcc.encodedRevenueBid = bid
+      }
+      return newAcc
+    },
+    { topRevenueBid: {}, encodedRevenueBid: {} }
+  )
+
+  // Combine the top revenue bid with the encoded revenue bid.
+  const topBidResponse = BidResponse({
+    ...get(topBids, 'topRevenueBid', {}),
+    encodedRevenue: get(topBids, 'encodedRevenueBid.encodedRevenue', null),
+  })
+  return topBidResponse
 }
 
 /**
