@@ -34,4 +34,36 @@ describe('Ad component', () => {
     const { container } = render(<AdComponent {...mockProps} />)
     expect(container.firstChild).toHaveStyle(mockProps.style)
   })
+
+  it('does not rerender after the initial mount', () => {
+    expect.assertions(4)
+    const AdComponent = require('src/AdComponent').default
+    const mockProps = {
+      ...getMockProps(),
+      adId: 'this-is-the-id',
+      style: {
+        display: 'inline',
+        backgroundColor: 'green',
+      },
+    }
+    const { container, getByTestId, rerender } = render(
+      <AdComponent {...mockProps} />
+    )
+    expect(getByTestId('ad-container')).toHaveAttribute('id', mockProps.adId)
+    expect(container.firstChild).toHaveStyle(mockProps.style)
+
+    const newMockProps = {
+      ...getMockProps(),
+      adId: 'another-id',
+      style: {
+        display: 'block',
+        backgroundColor: 'purple',
+      },
+    }
+    rerender(<AdComponent {...newMockProps} />)
+
+    // Component should not have changed.
+    expect(getByTestId('ad-container')).toHaveAttribute('id', mockProps.adId)
+    expect(container.firstChild).toHaveStyle(mockProps.style)
+  })
 })
