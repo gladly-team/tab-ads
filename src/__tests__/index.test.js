@@ -15,10 +15,9 @@ describe('index.js', () => {
     expect(index.fetchAds).toEqual(expect.any(Function))
   })
 
-  it('exports getAllWinningBids', () => {
+  it('does not export getAllWinningBids', () => {
     const index = require('src/index')
-    expect(index.getAllWinningBids).toBeDefined()
-    expect(index.getAllWinningBids).toBe(getAllWinningBids)
+    expect(index.getAllWinningBids).toBeUndefined()
   })
 
   it('exports AdComponent', () => {
