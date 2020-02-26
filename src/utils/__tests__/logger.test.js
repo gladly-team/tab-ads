@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-env jest */
 
-// import { setConfig } from 'src/config'
 import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
 afterEach(() => {
