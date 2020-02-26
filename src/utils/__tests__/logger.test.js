@@ -12,6 +12,7 @@ const formatMessage = msg => `tab-ads: ${msg}`
 
 beforeEach(() => {
   jest.resetModules()
+  jest.clearAllMocks()
 
   const { setConfig } = require('src/config')
   // Reset the config each time. By default, use logLevel === "debug".
@@ -106,6 +107,22 @@ describe('logger', () => {
     expect(console.warn).not.toHaveBeenCalled()
   })
 
+  test('logger.log logs to console when the logLevel is "info"', () => {
+    // Suppress expected console message.
+    jest.spyOn(console, 'log').mockImplementationOnce(jest.fn())
+
+    const { setConfig } = require('src/config')
+    setConfig({
+      ...getMockTabAdsUserConfig(),
+      logLevel: 'info',
+    })
+
+    const logger = require('src/utils/logger').default
+    const theMsg = 'A thing happened, FYI'
+    logger.log(theMsg)
+    expect(console.log).toHaveBeenCalledWith(formatMessage(theMsg))
+  })
+
   test('logger.error logs to console when the logLevel is "error"', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
@@ -153,7 +170,7 @@ describe('logger', () => {
     const { setConfig } = require('src/config')
     setConfig({
       ...getMockTabAdsUserConfig(),
-      logLevel: 'info',
+      logLevel: 'debug',
     })
     expect(console.log).toHaveBeenCalledWith(formatMessage(theMsg))
   })

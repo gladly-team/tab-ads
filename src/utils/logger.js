@@ -4,17 +4,17 @@ import queue from 'src/utils/queue'
 import { getConfig } from 'src/config'
 
 const logLevels = {}
-logLevels.LOG = 'log'
 logLevels.DEBUG = 'debug'
 logLevels.INFO = 'info'
+logLevels.LOG = 'log'
 logLevels.WARN = 'warn'
 logLevels.ERROR = 'error'
 logLevels.NONE = 'none'
 
 const logLevelsOrder = [
   logLevels.DEBUG,
-  logLevels.LOG,
   logLevels.INFO,
+  logLevels.LOG,
   logLevels.WARN,
   logLevels.ERROR,
   logLevels.NONE, // don't log anything
@@ -26,7 +26,6 @@ export const shouldLog = (logLevel, globalLogLevel) =>
 const log = (msg, logLevel) => {
   queue(() => {
     const logLevelThreshold = getConfig().logLevel
-    console.log(getConfig().logLevel)
     if (!shouldLog(logLevel, logLevelThreshold)) {
       return
     }
@@ -35,11 +34,11 @@ const log = (msg, logLevel) => {
       case logLevels.DEBUG:
         console.debug(finalMsg)
         break
-      case logLevels.LOG:
-        console.log(finalMsg)
-        break
       case logLevels.INFO:
         console.info(finalMsg)
+        break
+      case logLevels.LOG:
+        console.log(finalMsg)
         break
       case logLevels.WARN:
         console.warn(finalMsg)
