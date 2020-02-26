@@ -1,6 +1,7 @@
 import { find } from 'lodash/collection'
 import googleDisplayAd from 'src/google/googleDisplayAd'
 import { getConfig } from 'src/config'
+import queue from 'src/utils/queue'
 
 const mockDisplayAd = (adId, config) => {
   let mockNetworkDelayMs = 0
@@ -38,10 +39,14 @@ const mockDisplayAd = (adId, config) => {
 }
 
 export default adId => {
-  const config = getConfig()
-  if (!config.disableAds) {
-    googleDisplayAd(adId)
-  } else if (config.useMockAds) {
-    mockDisplayAd(adId, config)
-  }
+  // `fetchAds` may not have been called yet, so queue
+  // any commands that rely on the config.
+  queue(() => {
+    const config = getConfig()
+    if (!config.disableAds) {
+      googleDisplayAd(adId)
+    } else if (config.useMockAds) {
+      mockDisplayAd(adId, config)
+    }
+  })
 }
