@@ -1,17 +1,29 @@
 /* eslint-env jest */
 
 import getAds from 'src/fetchAds'
+import AdComponent from 'src/AdComponent'
+import { getAllWinningBids } from 'src/utils/getWinningBids'
 
+jest.mock('src/AdComponent')
 jest.mock('src/fetchAds')
 jest.mock('src/utils/logger')
 
 describe('index.js', () => {
-  it('contains the expected exports', () => {
+  it('exports fetchAds', () => {
     const index = require('src/index')
     expect(index.fetchAds).toBeDefined()
     expect(index.fetchAds).toEqual(expect.any(Function))
-    expect(index.getAllWinningBids).toBeDefined()
-    expect(index.getAllWinningBids).toEqual(expect.any(Function))
+  })
+
+  it('does not export getAllWinningBids', () => {
+    const index = require('src/index')
+    expect(index.getAllWinningBids).toBeUndefined()
+  })
+
+  it('exports AdComponent', () => {
+    const index = require('src/index')
+    expect(index.AdComponent).toBeDefined()
+    expect(index.AdComponent).toBe(AdComponent)
   })
 
   it('fetches ads with no config', async () => {
@@ -30,8 +42,7 @@ describe('index.js', () => {
     expect(getAds).toHaveBeenCalledWith(myConfig)
   })
 
-  it('assigns expected functions to the tabAds global', () => {
-    const { getAllWinningBids } = require('src/index')
+  it('assigns getAllWinningBids to the tabAds global', () => {
     expect(window.tabAds.getAllWinningBids).toBe(getAllWinningBids)
   })
 })

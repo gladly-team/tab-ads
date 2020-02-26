@@ -2,6 +2,7 @@
 
 import { get } from 'lodash/object'
 import { isNil } from 'lodash/lang'
+import queue from 'src/utils/queue'
 
 const defaultConfig = {
   disableAds: false, // true if we should't call for bids
@@ -116,6 +117,12 @@ export const setConfig = userConfig => {
     newTabAds: defaultConfig.newTabAds, // Don't allow modifying this.
   }
   config = fullConfig
+
+  // The command queue is waiting for the tab-ads config to be
+  // set. Execute tab-ads queue and set it to auto-run future
+  // commands.
+  queue.runQueue(true)
+
   return fullConfig
 }
 

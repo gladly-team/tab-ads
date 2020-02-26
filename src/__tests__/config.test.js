@@ -1,5 +1,9 @@
 /* eslint-env jest */
 
+import queue from 'src/utils/queue'
+
+jest.mock('src/utils/queue')
+
 afterEach(() => {
   jest.resetModules()
 })
@@ -116,6 +120,12 @@ describe('config: setConfig', () => {
       newTabAds: expect.any(Object), // default value
       adUnits: expect.any(Array), // default value
     })
+  })
+
+  it('calls queue.runQueue(true)', () => {
+    const { setConfig } = require('src/config')
+    setConfig(getMinimalValidUserConfig())
+    expect(queue.runQueue).toHaveBeenCalledWith(true)
   })
 })
 
