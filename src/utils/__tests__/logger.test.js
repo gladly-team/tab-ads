@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-env jest */
 
-import { setConfig } from 'src/config'
+// import { setConfig } from 'src/config'
 import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
 afterEach(() => {
@@ -11,6 +11,9 @@ afterEach(() => {
 const formatMessage = msg => `tab-ads: ${msg}`
 
 beforeEach(() => {
+  jest.resetModules()
+
+  const { setConfig } = require('src/config')
   // Reset the config each time. By default, use logLevel === "debug".
   setConfig({
     ...getMockTabAdsUserConfig(),
@@ -78,6 +81,7 @@ describe('logger', () => {
   })
 
   test('logger.debug does not log to console when the logLevel is "info"', () => {
+    const { setConfig } = require('src/config')
     setConfig({
       ...getMockTabAdsUserConfig(),
       logLevel: 'info',
@@ -90,6 +94,7 @@ describe('logger', () => {
   })
 
   test('logger.warn does not log to console when the logLevel is "error"', () => {
+    const { setConfig } = require('src/config')
     setConfig({
       ...getMockTabAdsUserConfig(),
       logLevel: 'error',
@@ -105,6 +110,7 @@ describe('logger', () => {
     // Suppress expected console message.
     jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
 
+    const { setConfig } = require('src/config')
     setConfig({
       ...getMockTabAdsUserConfig(),
       logLevel: 'error',
@@ -117,6 +123,7 @@ describe('logger', () => {
   })
 
   test('logger.error does not log to console when the logLevel is "none"', () => {
+    const { setConfig } = require('src/config')
     setConfig({
       ...getMockTabAdsUserConfig(),
       logLevel: 'none',
@@ -126,5 +133,28 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
     expect(console.error).not.toHaveBeenCalled()
+  })
+
+  test('it queues logging until the config has been set', () => {
+    // Make sure the config is unset.
+    jest.resetModules()
+
+    // Suppress expected console message.
+    jest.spyOn(console, 'log').mockImplementationOnce(jest.fn())
+
+    const logger = require('src/utils/logger').default
+    const theMsg = 'A thing happened, FYI'
+    logger.log(theMsg)
+
+    // We will not log until the queue runs.
+    expect(console.log).not.toHaveBeenCalled()
+
+    // Setting the config will run the queue.
+    const { setConfig } = require('src/config')
+    setConfig({
+      ...getMockTabAdsUserConfig(),
+      logLevel: 'info',
+    })
+    expect(console.log).toHaveBeenCalledWith(formatMessage(theMsg))
   })
 })

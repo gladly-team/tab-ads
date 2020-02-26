@@ -1,5 +1,6 @@
 /* eslint no-console: 0 */
 
+import queue from 'src/utils/queue'
 import { getConfig } from 'src/config'
 
 const logLevels = {}
@@ -23,30 +24,33 @@ export const shouldLog = (logLevel, globalLogLevel) =>
   logLevelsOrder.indexOf(logLevel) >= logLevelsOrder.indexOf(globalLogLevel)
 
 const log = (msg, logLevel) => {
-  const logLevelThreshold = getConfig().logLevel
-  if (!shouldLog(logLevel, logLevelThreshold)) {
-    return
-  }
-  const finalMsg = `tab-ads: ${msg}`
-  switch (logLevel) {
-    case logLevels.DEBUG:
-      console.debug(finalMsg)
-      break
-    case logLevels.LOG:
-      console.log(finalMsg)
-      break
-    case logLevels.INFO:
-      console.info(finalMsg)
-      break
-    case logLevels.WARN:
-      console.warn(finalMsg)
-      break
-    case logLevels.ERROR:
-      console.error(finalMsg)
-      break
-    default:
-      console.error(finalMsg)
-  }
+  queue(() => {
+    const logLevelThreshold = getConfig().logLevel
+    console.log(getConfig().logLevel)
+    if (!shouldLog(logLevel, logLevelThreshold)) {
+      return
+    }
+    const finalMsg = `tab-ads: ${msg}`
+    switch (logLevel) {
+      case logLevels.DEBUG:
+        console.debug(finalMsg)
+        break
+      case logLevels.LOG:
+        console.log(finalMsg)
+        break
+      case logLevels.INFO:
+        console.info(finalMsg)
+        break
+      case logLevels.WARN:
+        console.warn(finalMsg)
+        break
+      case logLevels.ERROR:
+        console.error(finalMsg)
+        break
+      default:
+        console.error(finalMsg)
+    }
+  })
 }
 
 const logger = {
