@@ -3,13 +3,20 @@
 
 import React from 'react'
 import { render } from '@testing-library/react'
+import displayAd from 'src/displayAd'
 
 // https://github.com/testing-library/jest-dom#table-of-contents
 import '@testing-library/jest-dom/extend-expect'
 
+jest.mock('src/displayAd')
+
 const getMockProps = () => ({
   adId: 'my-wonderful-ad-id',
   style: undefined,
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 describe('Ad component', () => {
@@ -65,5 +72,14 @@ describe('Ad component', () => {
     // Component should not have changed.
     expect(getByTestId('ad-container')).toHaveAttribute('id', mockProps.adId)
     expect(container.firstChild).toHaveStyle(mockProps.style)
+  })
+
+  it('calls displayAd on mount', () => {
+    expect.assertions(2)
+    const AdComponent = require('src/AdComponent').default
+    const mockProps = getMockProps()
+    render(<AdComponent {...mockProps} />)
+    expect(displayAd).toHaveBeenCalledWith(mockProps.adId)
+    expect(displayAd).toHaveBeenCalledTimes(1)
   })
 })

@@ -1,11 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import displayAd from 'src/displayAd'
 
 // Suggestions on a React component using Google ads:
 // https://stackoverflow.com/q/25435066/1332513
 class Ad extends React.Component {
   componentDidMount() {
-    // TODO: call to display ad
+    const { adId } = this.props
+    displayAd(adId)
+
     // TODO: call callbacks when ad is displayed
   }
 
