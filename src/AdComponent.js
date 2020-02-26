@@ -19,7 +19,7 @@ class Ad extends React.Component {
     const { adId, style } = this.props
     return (
       <div style={style}>
-        <div id={adId} />
+        <div id={adId} data-testid="ad-container" />
       </div>
     )
   }
