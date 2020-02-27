@@ -1,6 +1,6 @@
 {
   "name": "tab-ads",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An NPM package to manage ads logic for Tab for a Cause",
   "main": "build/index.js",
   "repository": "git@github.com:gladly-team/tab-ads.git",
