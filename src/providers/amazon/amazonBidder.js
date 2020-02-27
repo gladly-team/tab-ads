@@ -42,6 +42,12 @@ const normalizeBidResponses = (config, rawBidData = []) => {
   //   slotID: 'div-gpt-ad-123456789-0'
   // }
   const normalizeBid = (adId, rawBid) => {
+    // If either amznbid or amazniid are nil or an empty string,
+    // that means there's no bid.
+    if (!(rawBid.amzniid && rawBid.amznbid)) {
+      return null
+    }
+
     // Get the ad size from the tab-ads config because Amazon does
     // not return useful ad size info.
     const size = getAdSizeByAdId(config, adId)
@@ -56,7 +62,9 @@ const normalizeBidResponses = (config, rawBidData = []) => {
   const normalizedBids = rawBidData.reduce((accumulator, rawBid) => {
     return {
       ...accumulator,
-      [rawBid.slotID]: [normalizeBid(rawBid.slotID, rawBid)],
+      [rawBid.slotID]: [normalizeBid(rawBid.slotID, rawBid)].filter(
+        item => !!item
+      ), // filter any nil bids
     }
   }, {})
 

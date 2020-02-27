@@ -298,6 +298,89 @@ describe('amazonBidder: fetchBids', () => {
     }
     expect(bidResponses).toEqual(expectedBidResponses)
   })
+
+  it('ignores any bids that have an empty string in the raw bid response "amzniid" property', async () => {
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+
+    const mockLeaderboardAdId = 'div-gpt-ad-123456789-0'
+    const mockRectanglePrimaryAdId = 'div-gpt-ad-13579135-0'
+    const mockRectangleSecondaryAdId = 'div-gpt-ad-24680246-0'
+
+    // Set the mock Amazon bid responses.
+    const mockBid = mockAmazonBidResponse()
+    const mockBidResponses = [
+      {
+        ...mockBid,
+        amznbid: 'abcdef',
+        amzniid: '', // should ignore this bid
+        amznp: '1',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockLeaderboardAdId,
+      },
+      {
+        ...mockBid,
+        amznbid: 'ghijkl',
+        amzniid: 'some-id-number-2',
+        amznp: '1',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockRectanglePrimaryAdId,
+      },
+      {
+        ...mockBid,
+        amznbid: 'mnopqr',
+        amzniid: '', // should ignore this bid
+        amznp: '1',
+        amznsz: '0x0',
+        size: '0x0',
+        slotID: mockRectangleSecondaryAdId,
+      },
+    ]
+    apstag.fetchBids = jest.fn((config, callback) => {
+      callback(mockBidResponses)
+    })
+
+    // Manually override the tab-ads config to use the mock ad IDs.
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const tabAdsConfigModified = {
+      ...tabAdsConfig,
+      newTabAds: {
+        leaderboard: {
+          adId: mockLeaderboardAdId,
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+        rectangleAdPrimary: {
+          adId: mockRectanglePrimaryAdId,
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+        },
+        rectangleAdSecondary: {
+          adId: mockRectangleSecondaryAdId,
+          adUnitId: '/43865596/HBTR2',
+          sizes: [[300, 250]],
+        },
+      },
+    }
+
+    const { bidResponses } = await amazonBidder.fetchBids(tabAdsConfigModified)
+    const expectedBidResponses = {
+      'div-gpt-ad-123456789-0': [], // no valid bid
+      'div-gpt-ad-13579135-0': [
+        {
+          adId: mockRectanglePrimaryAdId,
+          encodedRevenue: 'ghijkl',
+          advertiserName: 'amazon',
+          adSize: '300x250',
+          revenue: null,
+        },
+      ],
+      'div-gpt-ad-24680246-0': [], // no valid bid
+    }
+    expect(bidResponses).toEqual(expectedBidResponses)
+  })
 })
 
 describe('amazonBidder: setTargeting', () => {
