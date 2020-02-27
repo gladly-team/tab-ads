@@ -22,9 +22,10 @@ const getGAMAdvertiserIdForDisplayedAd = adId => {
     return null
   }
 
-  // AdSense will not have an ID. We use 99.
+  // AdSense will not have an ID or will have an ID of zero. We use 99.
   const DEFAULT_ADVERTISER_ID = 99
-  const GAMAdvertiserId = get(slot, 'advertiserId', DEFAULT_ADVERTISER_ID)
+  const GAMAdvertiserId =
+    get(slot, 'advertiserId', null) || DEFAULT_ADVERTISER_ID
   return GAMAdvertiserId
 }
 

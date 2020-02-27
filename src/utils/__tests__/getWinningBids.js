@@ -7,6 +7,7 @@ import {
 } from 'src/utils/test-utils'
 import { getConfig, setConfig } from 'src/config'
 import BidResponse from 'src/utils/BidResponse'
+import { storeA } from 'src/utils/test-fixtures'
 
 const getMockBidderStoredData = () => {
   const { newTabAds } = getConfig()
@@ -415,6 +416,126 @@ describe('getWinningBids: getWinningBidForAd', () => {
     const adInfo = getWinningBidForAd(adId)
     expect(adInfo).toBeNull()
   })
+
+  it('uses the default GAM advertiser ID (99) if the slot has a nil GAM advertiser ID value', () => {
+    const { newTabAds } = getConfig()
+    const { adId } = newTabAds.leaderboard
+
+    // Set up the store.
+    const store = getAdDataStore()
+
+    // Set up stored bids for the leaderboard ad.
+    setUpStoreWithBidders()
+    store.bidResponses.amazon.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        encodedRevenue: 'some-encoded-revenue-0101',
+        advertiserName: 'amazon',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.indexExchange.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        revenue: 0.0031,
+        advertiserName: 'indexExchange',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.prebid.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        revenue: 0.0002,
+        advertiserName: 'openx',
+        adSize: '728x90',
+      }),
+      BidResponse({
+        adId,
+        revenue: 0.02024,
+        advertiserName: 'appnexus',
+        adSize: '728x90',
+      })
+    )
+
+    // Set that the leaderboard ad was displayed.
+    store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
+      adId,
+      '/123456/some-ad/',
+      {
+        advertiserId: undefined, // No ID
+      }
+    )
+
+    const { getWinningBidForAd } = require('src/utils/getWinningBids')
+    const adInfo = getWinningBidForAd(adId)
+    expect(adInfo).toEqual({
+      adId,
+      GAMAdvertiserId: 99,
+      revenue: 0.02024,
+      encodedRevenue: 'some-encoded-revenue-0101',
+      adSize: '728x90',
+    })
+  })
+
+  it('uses the default GAM advertiser ID (99) if the slot has a GAM advertiser ID equal to zero', () => {
+    const { newTabAds } = getConfig()
+    const { adId } = newTabAds.leaderboard
+
+    // Set up the store.
+    const store = getAdDataStore()
+
+    // Set up stored bids for the leaderboard ad.
+    setUpStoreWithBidders()
+    store.bidResponses.amazon.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        encodedRevenue: 'some-encoded-revenue-0101',
+        advertiserName: 'amazon',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.indexExchange.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        revenue: 0.0031,
+        advertiserName: 'indexExchange',
+        adSize: '728x90',
+      })
+    )
+    store.bidResponses.prebid.bidResponses[adId].push(
+      BidResponse({
+        adId,
+        revenue: 0.0002,
+        advertiserName: 'openx',
+        adSize: '728x90',
+      }),
+      BidResponse({
+        adId,
+        revenue: 0.02024,
+        advertiserName: 'appnexus',
+        adSize: '728x90',
+      })
+    )
+
+    // Set that the leaderboard ad was displayed.
+    store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
+      adId,
+      '/123456/some-ad/',
+      {
+        advertiserId: 0, // Blank ID
+      }
+    )
+
+    const { getWinningBidForAd } = require('src/utils/getWinningBids')
+    const adInfo = getWinningBidForAd(adId)
+    expect(adInfo).toEqual({
+      adId,
+      GAMAdvertiserId: 99,
+      revenue: 0.02024,
+      encodedRevenue: 'some-encoded-revenue-0101',
+      adSize: '728x90',
+    })
+  })
 })
 
 describe('getWinningBids: getAllWinningBids', () => {
@@ -595,6 +716,41 @@ describe('getWinningBids: getAllWinningBids', () => {
         revenue: 0.007,
         encodedRevenue: 'some-encoded-revenue-9292',
         GAMAdvertiserId: 778899,
+        adSize: '300x250',
+      },
+    })
+  })
+
+  it('returns the expected DisplayedAdInfo by for fixtures example storeA', () => {
+    const { newTabAds } = getConfig()
+
+    // Set up the store.
+    const store = getAdDataStore()
+    store.adManager = storeA.adManager
+    store.bidResponses = storeA.bidResponses
+
+    const { getAllWinningBids } = require('src/utils/getWinningBids')
+    const allWinningBids = getAllWinningBids()
+    expect(allWinningBids).toEqual({
+      [newTabAds.leaderboard.adId]: {
+        adId: newTabAds.leaderboard.adId,
+        revenue: 0.000242,
+        GAMAdvertiserId: 99,
+        encodedRevenue: 'abc',
+        adSize: '728x90',
+      },
+      [newTabAds.rectangleAdPrimary.adId]: {
+        adId: newTabAds.rectangleAdPrimary.adId,
+        revenue: 0.000231,
+        GAMAdvertiserId: 99,
+        encodedRevenue: 'def',
+        adSize: '300x250',
+      },
+      [newTabAds.rectangleAdSecondary.adId]: {
+        adId: newTabAds.rectangleAdSecondary.adId,
+        revenue: 0.000234,
+        encodedRevenue: '2',
+        GAMAdvertiserId: 24681357,
         adSize: '300x250',
       },
     })
