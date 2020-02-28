@@ -16,6 +16,8 @@
 // before testing. We include Prebid files in Jest transformation
 // by setting transformIgnorePatterns as described here:
 // https://jestjs.io/docs/en/tutorial-react-native#transformignorepatterns-customization
+// Note that the Babel config must be named babel.config.js:
+// https://github.com/facebook/jest/issues/6229#issuecomment-392205646
 
 import { JSDOM } from 'jsdom'
 
