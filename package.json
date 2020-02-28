@@ -11,6 +11,7 @@
     "build": "npm-run-all -s build:clean build:src",
     "build:clean": "rm -rf ./build",
     "build:src": "babel src --out-dir build --ignore \"src/**/__tests__/*\",\"src/**/__mocks__/*\"",
+    "postinstall": "patch-package",
     "lint": "eslint ./src/",
     "test": "npm-run-all -s lint test:coverage coverage",
     "test:run": "jest --env=jsdom",
@@ -21,6 +22,7 @@
     "prebid:install": "cd ./node_modules/prebid.js/ && yarn install",
     "prebid:generate": "cd ./node_modules/prebid.js/ && ./node_modules/gulp/bin/gulp.js build  --modules \"../../src/providers/prebid/modules.json\"",
     "prebid:cp": "echo \"/* eslint-disable */\" > ./src/providers/prebid/built/pb.js && cat ./node_modules/prebid.js/build/dist/prebid.js >> ./src/providers/prebid/built/pb.js",
+    "prebid:create-patches": "yarn patch-package prebid.js --include '^(src|modules)/'",
     "dev:publish": "npm-run-all -s build dev:yalc-publish-push",
     "dev:yalc-publish-push": "yalc publish --push"
   },
@@ -49,6 +51,7 @@
     "jest": "^25.1.0",
     "mockdate": "^2.0.5",
     "npm-run-all": "^4.1.5",
+    "patch-package": "^6.2.0",
     "prettier": "^1.19.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
