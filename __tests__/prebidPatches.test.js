@@ -8,10 +8,6 @@
 // This file makes sure the patched Prebid code behaves as
 // expected.
 
-// The Prebid code uses imports relative to its root, so our
-// NODE_ENV must include node_modules/prebid.js/ before running
-// this test. We set it in our NPM script.
-
 // We must also transform Prebid files (node_modules/prebid.js/)
 // before testing. We include Prebid files in Jest transformation
 // by setting transformIgnorePatterns as described here:
