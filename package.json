@@ -14,7 +14,7 @@
     "postinstall": "patch-package",
     "lint": "eslint ./src/",
     "test": "npm-run-all -s lint test:coverage coverage",
-    "test:run": "jest --env=jsdom",
+    "test:run": "jest --env=jsdom --testPathIgnorePatterns=prebidPatches",
     "test:coverage": "yarn run test:run --coverage",
     "test:watch": "yarn run test:run --watch",
     "coverage": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
@@ -23,6 +23,9 @@
     "prebid:generate": "cd ./node_modules/prebid.js/ && ./node_modules/gulp/bin/gulp.js build  --modules \"../../src/providers/prebid/modules.json\"",
     "prebid:cp": "echo \"/* eslint-disable */\" > ./src/providers/prebid/built/pb.js && cat ./node_modules/prebid.js/build/dist/prebid.js >> ./src/providers/prebid/built/pb.js",
     "prebid:create-patches": "yarn patch-package prebid.js --include '^(src|modules)/'",
+    "prebid:test-patches": "npm-run-all -s prebid:test-patches:explanation prebid:test-patches:run",
+    "prebid:test-patches:run": "cross-env NODE_PATH=node_modules/prebid.js/ jest test --testMatch **/**/prebidPatches*",
+    "prebid:test-patches:explanation": "echo \"Testing Prebid patches. Be sure to run prebid:install first.\"",
     "dev:publish": "npm-run-all -s build dev:yalc-publish-push",
     "dev:yalc-publish-push": "yalc publish --push"
   },
@@ -37,6 +40,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "codecov": "^3.6.4",
     "core-js": "^3.6.4",
+    "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.10.0",
@@ -49,6 +53,7 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "if-env": "^1.0.4",
     "jest": "^25.1.0",
+    "jsdom": "^16.2.0",
     "mockdate": "^2.0.5",
     "npm-run-all": "^4.1.5",
     "patch-package": "^6.2.0",
@@ -78,7 +83,10 @@
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|dist|docs|node_modules)[/\\\\]"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!(prebid.js)/)"
+    ]
   },
   "peerDependencies": {
     "react": "^16.8.0",
