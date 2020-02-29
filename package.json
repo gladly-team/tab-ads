@@ -23,8 +23,8 @@
     "prebid:generate": "cd ./node_modules/prebid.js/ && ./node_modules/gulp/bin/gulp.js build  --modules \"../../src/providers/prebid/modules.json\"",
     "prebid:cp": "echo \"/* eslint-disable */\" > ./src/providers/prebid/built/pb.js && cat ./node_modules/prebid.js/build/dist/prebid.js >> ./src/providers/prebid/built/pb.js",
     "prebid:create-patches": "yarn patch-package prebid.js --include '^(src|modules)/'",
-    "prebid:test-patches": "npm-run-all -s prebid:test-patches:explanation prebid:test-patches:run",
-    "prebid:test-patches:run": "jest test --testMatch **/**/prebidPatches*",
+    "prebid:test-patches": "npm-run-all -s prebid:test-patches:explanation \"prebid:test-patches:run {1}\" --",
+    "prebid:test-patches:run": "jest test --env=jsdom --testMatch **/**/prebidPatches*",
     "prebid:test-patches:explanation": "echo \"Testing Prebid patches. Be sure to run prebid:install first.\"",
     "dev:publish": "npm-run-all -s build dev:yalc-publish-push",
     "dev:yalc-publish-push": "yalc publish --push"

@@ -1,13 +1,14 @@
 diff --git a/node_modules/prebid.js/src/refererDetection.js b/node_modules/prebid.js/src/refererDetection.js
-index 6019867..4f00dd4 100644
+index 6019867..1bf9654 100644
 --- a/node_modules/prebid.js/src/refererDetection.js
 +++ b/node_modules/prebid.js/src/refererDetection.js
-@@ -8,196 +8,22 @@
+@@ -8,196 +8,27 @@
   * Canonical URL which refers to an HTML link element, with the attribute of rel="canonical", found in the <head> element of your webpage
   */
  
 -import { logWarn } from './utils.js';
--
++import { config } from './config.js';
+ 
 +// @tab-ads-patch
 +// We modify this to use the referer info from the Prebid config
 +// because our page may be loaded in a new tab page iframe, which
@@ -20,7 +21,9 @@ index 6019867..4f00dd4 100644
 -  function getLevels() {
 -    let levels = walkUpWindows();
 -    let ancestors = getAncestorOrigins();
--
++  const prebidConfig = config.getConfig()
++  console.log('prebidConfig', prebidConfig)
+ 
 -    if (ancestors) {
 -      for (let i = 0, l = ancestors.length; i < l; i++) {
 -        levels[i].ancestor = ancestors[i];

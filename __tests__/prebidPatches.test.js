@@ -17,10 +17,20 @@
 
 import { JSDOM } from 'jsdom'
 
-const prebidPath = '../node_modules/prebid.js'
-const prebidSrcPath = `${prebidPath}/src`
+const prebidSrcPath = '../node_modules/prebid.js/src'
 
-const getPrebidSrcPath = filepath => `${prebidSrcPath}/${filepath}`
+jest.mock('../node_modules/prebid.js/src/config', () => {
+  const prebidConfigActual = require.requireActual(
+    '../node_modules/prebid.js/src/config'
+  )
+  return {
+    ...prebidConfigActual,
+    config: {
+      ...prebidConfigActual.config,
+      getConfig: jest.fn(() => ({ foo: 'bar!' })),
+    },
+  }
+})
 
 const getMockWindow = () => {
   // Create the window object we'd expect in our iframed new tab page.
@@ -109,7 +119,14 @@ const getMockWindow = () => {
 describe('Prebid.js patch test', () => {
   test('getRefererInfo returns expected values', () => {
     const mockWindow = getMockWindow()
-    const { getRefererInfo } = require(getPrebidSrcPath('refererDetection'))
+
+    const { config } = require('../node_modules/prebid.js/src/config')
+    console.log('here', config)
+    // config.getConfig.mockReturnValue({
+    //   hi: 'there',
+    // })
+
+    const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
 
     // Without our patch to Prebid, the referrer info would look like:
     // {
