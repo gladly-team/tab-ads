@@ -86,7 +86,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: mockGAMAdvertiserId,
       }
@@ -97,6 +97,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toEqual({
       adId,
       GAMAdvertiserId: mockGAMAdvertiserId,
+      GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
       revenue: 0.02024,
       encodedRevenue: 'some-encoded-revenue-0101',
       adSize: '728x90',
@@ -114,7 +115,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: mockGAMAdvertiserId,
       }
@@ -168,7 +169,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: mockGAMAdvertiserId,
       }
@@ -179,6 +180,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toEqual({
       adId,
       GAMAdvertiserId: mockGAMAdvertiserId,
+      GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
       revenue: 0.1231,
       encodedRevenue: 'some-encoded-revenue-0101',
       adSize: '728x90',
@@ -222,7 +224,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: mockGAMAdvertiserId,
       }
@@ -233,6 +235,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toEqual({
       adId,
       GAMAdvertiserId: mockGAMAdvertiserId,
+      GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
       revenue: 0.02024,
       encodedRevenue: null,
       adSize: '728x90',
@@ -263,7 +266,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: mockGAMAdvertiserId,
       }
@@ -274,6 +277,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toEqual({
       adId,
       GAMAdvertiserId: mockGAMAdvertiserId,
+      GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
       revenue: null,
       encodedRevenue: 'some-cool-encoded-revenue',
       adSize: '728x90',
@@ -328,7 +332,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: mockGAMAdvertiserId,
       }
@@ -339,6 +343,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toEqual({
       adId,
       GAMAdvertiserId: mockGAMAdvertiserId,
+      GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
       revenue: 0.032,
       encodedRevenue: 'some-encoded-revenue-0101',
       adSize: '728x90',
@@ -394,7 +399,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: mockGAMAdvertiserId,
       }
@@ -460,7 +465,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: undefined, // No ID
       }
@@ -471,6 +476,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toEqual({
       adId,
       GAMAdvertiserId: 99,
+      GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
       revenue: 0.02024,
       encodedRevenue: 'some-encoded-revenue-0101',
       adSize: '728x90',
@@ -520,7 +526,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set that the leaderboard ad was displayed.
     store.adManager.slotsRendered[adId] = mockGoogleTagSlotRenderEndedData(
       adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: 0, // Blank ID
       }
@@ -531,6 +537,7 @@ describe('getWinningBids: getWinningBidForAd', () => {
     expect(adInfo).toEqual({
       adId,
       GAMAdvertiserId: 99,
+      GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
       revenue: 0.02024,
       encodedRevenue: 'some-encoded-revenue-0101',
       adSize: '728x90',
@@ -585,7 +592,7 @@ describe('getWinningBids: getAllWinningBids', () => {
       newTabAds.leaderboard.adId
     ] = mockGoogleTagSlotRenderEndedData(
       newTabAds.leaderboard,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: 112233,
       }
@@ -633,7 +640,7 @@ describe('getWinningBids: getAllWinningBids', () => {
       newTabAds.rectangleAdPrimary.adId
     ] = mockGoogleTagSlotRenderEndedData(
       newTabAds.rectangleAdPrimary.adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: 445566,
       }
@@ -688,7 +695,7 @@ describe('getWinningBids: getAllWinningBids', () => {
       newTabAds.rectangleAdSecondary.adId
     ] = mockGoogleTagSlotRenderEndedData(
       newTabAds.rectangleAdSecondary.adId,
-      '/123456/some-ad/',
+      '/123456/ThisIsMyAdUnitName/',
       {
         advertiserId: 778899,
       }
@@ -701,6 +708,7 @@ describe('getWinningBids: getAllWinningBids', () => {
         adId: newTabAds.leaderboard.adId,
         revenue: 0.0131,
         GAMAdvertiserId: 112233,
+        GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
         encodedRevenue: 'some-encoded-revenue-0101',
         adSize: '728x90',
       },
@@ -708,6 +716,7 @@ describe('getWinningBids: getAllWinningBids', () => {
         adId: newTabAds.rectangleAdPrimary.adId,
         revenue: 0.016,
         GAMAdvertiserId: 445566,
+        GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
         encodedRevenue: null,
         adSize: '300x250',
       },
@@ -716,6 +725,7 @@ describe('getWinningBids: getAllWinningBids', () => {
         revenue: 0.007,
         encodedRevenue: 'some-encoded-revenue-9292',
         GAMAdvertiserId: 778899,
+        GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
         adSize: '300x250',
       },
     })
@@ -736,6 +746,7 @@ describe('getWinningBids: getAllWinningBids', () => {
         adId: newTabAds.leaderboard.adId,
         revenue: 0.000242,
         GAMAdvertiserId: 99,
+        GAMAdUnitId: '/43865596/HBTL',
         encodedRevenue: 'abc',
         adSize: '728x90',
       },
@@ -743,6 +754,7 @@ describe('getWinningBids: getAllWinningBids', () => {
         adId: newTabAds.rectangleAdPrimary.adId,
         revenue: 0.000231,
         GAMAdvertiserId: 99,
+        GAMAdUnitId: '/43865596/HBTR',
         encodedRevenue: 'def',
         adSize: '300x250',
       },
@@ -751,6 +763,7 @@ describe('getWinningBids: getAllWinningBids', () => {
         revenue: 0.000234,
         encodedRevenue: '2',
         GAMAdvertiserId: 24681357,
+        GAMAdUnitId: '/43865596/HBTR2',
         adSize: '300x250',
       },
     })

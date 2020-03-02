@@ -7,6 +7,7 @@ const DisplayedAdInfo = ({
   revenue = null,
   encodedRevenue = null,
   GAMAdvertiserId,
+  GAMAdUnitId,
   adSize,
 }) => {
   if (isNil(adId)) {
@@ -29,6 +30,12 @@ const DisplayedAdInfo = ({
   if (!isNil(GAMAdvertiserId) && typeof GAMAdvertiserId !== 'number') {
     throw new Error('The "GAMAdvertiserId" value must be a number.')
   }
+  if (isNil(GAMAdUnitId)) {
+    throw new Error('The "GAMAdUnitId" value must be provided.')
+  }
+  if (typeof GAMAdUnitId !== 'string') {
+    throw new Error('The "GAMAdUnitId" value must be a string.')
+  }
   if (isNil(adSize)) {
     throw new Error('The "adSize" value must be provided.')
   }
@@ -41,6 +48,7 @@ const DisplayedAdInfo = ({
     revenue, // Float|null
     encodedRevenue, // String|null
     GAMAdvertiserId, // Number|null
+    GAMAdUnitId, // String, such as "/12345678/SlotName"
     adSize, // String, such as "728x90"
   }
 }

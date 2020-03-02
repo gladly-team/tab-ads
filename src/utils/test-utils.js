@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import BidResponse from 'src/utils/BidResponse'
+import DisplayedAdInfo from 'src/utils/DisplayedAdInfo'
 
 /**
  * Create a mock object of the googletag 'SlotRenderEnded' event. See:
@@ -275,5 +276,16 @@ export const getMockBidResponse = () => {
     revenue: 0.12,
     advertiserName: 'SomeAdvertiser',
     adSize: '300x250',
+  })
+}
+
+// Return a mock BidResponse object.
+export const getMockDisplayedAdInfo = () => {
+  return DisplayedAdInfo({
+    adId: 'my-ad-id',
+    revenue: 0.12,
+    adSize: '300x250',
+    GAMAdvertiserId: 24681357,
+    GAMAdUnitId: '/123456789/MyAdSlot',
   })
 }

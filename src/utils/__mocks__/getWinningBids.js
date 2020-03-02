@@ -1,11 +1,11 @@
 /* eslint-env jest */
 
-import { getMockBidResponse } from 'src/utils/test-utils'
+import { getMockDisplayedAdInfo } from 'src/utils/test-utils'
 
 export const getWinningBidForAd = jest.fn(adId => {
   return {
     adId,
-    ...getMockBidResponse(),
+    ...getMockDisplayedAdInfo(),
   }
 })
 

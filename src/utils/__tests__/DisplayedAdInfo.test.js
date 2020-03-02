@@ -8,6 +8,7 @@ describe('DisplayedAdInfo', () => {
       revenue: 0.081,
       encodedRevenue: 'abcxyz',
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       adSize: '300x250',
     }
     const myDisplayedAdInfo = DisplayedAdInfo(input)
@@ -20,6 +21,7 @@ describe('DisplayedAdInfo', () => {
       // adId: 'abc-123',
       revenue: 0.081,
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -34,6 +36,7 @@ describe('DisplayedAdInfo', () => {
       adId: 123, // incorrect
       revenue: 0.081,
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -49,6 +52,7 @@ describe('DisplayedAdInfo', () => {
       // revenue: 0.081,
       // encodedRevenue: 'abcxyz',
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -65,6 +69,7 @@ describe('DisplayedAdInfo', () => {
       adId: 'abc-123',
       revenue: '0.081',
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -79,6 +84,7 @@ describe('DisplayedAdInfo', () => {
       adId: 'abc-123',
       encodedRevenue: 'abcdef',
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -93,6 +99,7 @@ describe('DisplayedAdInfo', () => {
       adId: 'abc-123',
       revenue: 0,
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -107,6 +114,7 @@ describe('DisplayedAdInfo', () => {
       adId: 'abc-123',
       revenue: 0.081,
       // GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -121,6 +129,7 @@ describe('DisplayedAdInfo', () => {
       adId: 'abc-123',
       revenue: 0.081,
       GAMAdvertiserId: '629518',
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -135,6 +144,7 @@ describe('DisplayedAdInfo', () => {
       adId: 'abc-123',
       revenue: 0.081,
       GAMAdvertiserId: 0,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: '300x250',
     }
@@ -143,12 +153,43 @@ describe('DisplayedAdInfo', () => {
     }).not.toThrow()
   })
 
+  it('throws if the GAMAdUnitId is not provided', () => {
+    const DisplayedAdInfo = require('src/utils/DisplayedAdInfo').default
+    const input = {
+      adId: 'abc-123',
+      revenue: 0.081,
+      GAMAdvertiserId: 629518,
+      // GAMAdUnitId: '/123456789/MySlotName',
+      advertiserName: 'SomeAdvertiser',
+      adSize: '300x250',
+    }
+    expect(() => {
+      DisplayedAdInfo(input)
+    }).toThrow('The "GAMAdUnitId" value must be provided.')
+  })
+
+  it('throws if the GAMAdUnitId is not a string', () => {
+    const DisplayedAdInfo = require('src/utils/DisplayedAdInfo').default
+    const input = {
+      adId: 'abc-123',
+      revenue: 0.081,
+      GAMAdvertiserId: 629518,
+      GAMAdUnitId: 123456789,
+      advertiserName: 'SomeAdvertiser',
+      adSize: '300x250',
+    }
+    expect(() => {
+      DisplayedAdInfo(input)
+    }).toThrow('The "GAMAdUnitId" value must be a string.')
+  })
+
   it('throws if the adSize is not provided', () => {
     const DisplayedAdInfo = require('src/utils/DisplayedAdInfo').default
     const input = {
       adId: 'abc-123',
       revenue: 0.081,
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       // adSize: '300x250',
     }
@@ -163,6 +204,7 @@ describe('DisplayedAdInfo', () => {
       adId: 'abc-123',
       revenue: 0.081,
       GAMAdvertiserId: 629518,
+      GAMAdUnitId: '/123456789/MySlotName',
       advertiserName: 'SomeAdvertiser',
       adSize: 300,
     }

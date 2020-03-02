@@ -2,7 +2,10 @@ export const storeA = {
   adManager: {
     slotsRendered: {
       'div-gpt-ad-1464385677836-0': {
-        slot: {},
+        slot: {
+          getAdUnitPath: () => '/43865596/HBTL',
+          // ... other stuff here
+        },
         serviceName: 'publisher_ads',
         isEmpty: false,
         slotContentChanged: true,
@@ -20,7 +23,10 @@ export const storeA = {
         companyIds: null,
       },
       'div-gpt-ad-1464385742501-0': {
-        slot: {},
+        slot: {
+          getAdUnitPath: () => '/43865596/HBTR',
+          // ... other stuff here
+        },
         serviceName: 'publisher_ads',
         isEmpty: false,
         slotContentChanged: true,
@@ -38,7 +44,10 @@ export const storeA = {
         companyIds: null,
       },
       'div-gpt-ad-1539903223131-0': {
-        slot: {},
+        slot: {
+          getAdUnitPath: () => '/43865596/HBTR2',
+          // ... other stuff here
+        },
         serviceName: 'publisher_ads',
         isEmpty: false,
         slotContentChanged: true,

@@ -30,6 +30,24 @@ const getGAMAdvertiserIdForDisplayedAd = adId => {
 }
 
 /**
+ * Get the Google Ad Manager ad slot ID of the displayed ad.
+ * @param {String} adId - An ad ID.
+ * @return {Number|null} The Google Ad Manager ad slot ID.
+ */
+const getGAMAdUnitId = adId => {
+  const store = getAdDataStore()
+  const renderedSlotData = get(store, ['adManager', 'slotsRendered', adId])
+
+  // If there's no data, the slot has not rendered, so there is
+  // no winning bid.
+  if (!renderedSlotData) {
+    return null
+  }
+  const adUnitId = renderedSlotData.slot.getAdUnitPath()
+  return adUnitId
+}
+
+/**
  * Get the winning BidResponse for the ad with ID `adId`, merging any
  * encodedRevenue value with the top revenue value.
  * @param {String} adId - An ad ID.
@@ -108,6 +126,7 @@ export const getWinningBidForAd = adId => {
   if (!GAMAdvertiserId) {
     return null
   }
+  const GAMAdUnitId = getGAMAdUnitId(adId)
   const topBid = getTopBidForAd(adId)
   if (!topBid) {
     return null
@@ -116,6 +135,7 @@ export const getWinningBidForAd = adId => {
     ...topBid,
     adId,
     GAMAdvertiserId,
+    GAMAdUnitId,
   })
 }
 
