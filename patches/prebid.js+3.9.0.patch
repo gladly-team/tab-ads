@@ -1,8 +1,8 @@
 diff --git a/node_modules/prebid.js/src/refererDetection.js b/node_modules/prebid.js/src/refererDetection.js
-index 6019867..c30a71e 100644
+index 6019867..f70f9c4 100644
 --- a/node_modules/prebid.js/src/refererDetection.js
 +++ b/node_modules/prebid.js/src/refererDetection.js
-@@ -8,196 +8,24 @@
+@@ -8,196 +8,23 @@
   * Canonical URL which refers to an HTML link element, with the attribute of rel="canonical", found in the <head> element of your webpage
   */
  
@@ -160,7 +160,14 @@ index 6019867..c30a71e 100644
 -      }
 -    } while (currentWindow != win.top);
 -    return acc;
--  }
++  const currentPage = config.getConfig().pageUrl || window.location.href
++  return {
++    canonicalUrl: null,
++    numIframes: 0,
++    reachedTop: true,
++    referer: currentPage,
++    stack: [currentPage],
+   }
 -
 -  /**
 -   * Referer info
@@ -176,8 +183,7 @@ index 6019867..c30a71e 100644
 -   * Get referer info
 -   * @returns {refererInfo}
 -   */
-+  const currentPage = config.getConfig().pageUrl
-   function refererInfo() {
+-  function refererInfo() {
 -    try {
 -      let levels = getLevels();
 -      let numIframes = levels.length - 1;
@@ -198,17 +204,13 @@ index 6019867..c30a71e 100644
 -      };
 -    } catch (e) {
 -      // Ignore error
-+    return {
-+      canonicalUrl: null,
-+      numIframes: 0,
-+      reachedTop: true,
-+      referer: currentPage,
-+      stack: [currentPage],
-     }
-   }
+-    }
+-  }
 -
 -  return refererInfo;
-+  return refererInfo
  }
  
- export const getRefererInfo = detectReferer(window);
+-export const getRefererInfo = detectReferer(window);
++export const getRefererInfo = () => {
++  return detectReferer(window)
++}

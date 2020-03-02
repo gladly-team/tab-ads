@@ -129,15 +129,20 @@ const getMockWindow = () => {
   }
   currentWindow.parent = parentWindowCrossDomain
   currentWindow.top = parentWindowCrossDomain
-
-  global.window = currentWindow
   return currentWindow
 }
 
+let windowSpy
+
 beforeEach(() => {
-  // Reset the mock Prebid confiv value.
+  // Reset the mock Prebid config value.
   const { config } = require('../node_modules/prebid.js/src/config')
   config.getConfig.mockReturnValue(getMockPrebidConfig())
+
+  // Use our mock window value.
+  // https://stackoverflow.com/a/56999581
+  windowSpy = jest.spyOn(global, 'window', 'get')
+  windowSpy.mockImplementation(() => getMockWindow())
 })
 
 describe('Prebid.js patch test', () => {
@@ -168,6 +173,24 @@ describe('Prebid.js patch test', () => {
       reachedTop: true,
       referer: 'https://foo.com/something/',
       stack: ['https://foo.com/something/'],
+    })
+  })
+
+  test('getRefererInfo uses the window href if the Prebid config does not set the pageUrl value', () => {
+    const { config } = require('../node_modules/prebid.js/src/config')
+    const mockPrebidConfig = {
+      ...getMockPrebidConfig(),
+      pageUrl: null,
+    }
+    config.getConfig.mockReturnValue(mockPrebidConfig)
+
+    const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
+    expect(getRefererInfo()).toEqual({
+      canonicalUrl: null,
+      numIframes: 0,
+      reachedTop: true,
+      referer: 'https://tab.gladly.io/newtab/', // set in mock window
+      stack: ['https://tab.gladly.io/newtab/'],
     })
   })
 })
