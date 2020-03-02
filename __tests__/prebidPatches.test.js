@@ -19,6 +19,22 @@ import { JSDOM } from 'jsdom'
 
 const prebidSrcPath = '../node_modules/prebid.js/src'
 
+const getMockPrebidConfig = () => ({
+  debug: false,
+  bidderTimeout: 850,
+  publisherDomain: 'https://example.com',
+  pageUrl: 'https://example.com/my-page/',
+  priceGranularity: 'medium',
+  customPriceBucket: {},
+  mediaTypePriceGranularity: {},
+  enableSendAllBids: true,
+  useBidCache: false,
+  bidderSequence: 'random',
+  timeoutBuffer: 400,
+  disableAjaxTimeout: false,
+})
+
+// Mock Prebid's config.getConfig method.
 jest.mock('../node_modules/prebid.js/src/config', () => {
   const prebidConfigActual = require.requireActual(
     '../node_modules/prebid.js/src/config'
@@ -27,7 +43,9 @@ jest.mock('../node_modules/prebid.js/src/config', () => {
     ...prebidConfigActual,
     config: {
       ...prebidConfigActual.config,
-      getConfig: jest.fn(() => ({ foo: 'bar!' })),
+      getConfig: jest.fn(() => ({
+        mock: 'config',
+      })),
     },
   }
 })
@@ -116,15 +134,21 @@ const getMockWindow = () => {
   return currentWindow
 }
 
-describe('Prebid.js patch test', () => {
-  test('getRefererInfo returns expected values', () => {
-    const mockWindow = getMockWindow()
+beforeEach(() => {
+  // Reset the mock Prebid confiv value.
+  const { config } = require('../node_modules/prebid.js/src/config')
+  config.getConfig.mockReturnValue(getMockPrebidConfig())
+})
 
+describe('Prebid.js patch test', () => {
+  test('getRefererInfo uses the publisher info in the Prebid config to populate values', () => {
     const { config } = require('../node_modules/prebid.js/src/config')
-    console.log('here', config)
-    // config.getConfig.mockReturnValue({
-    //   hi: 'there',
-    // })
+    const mockPrebidConfig = {
+      ...getMockPrebidConfig(),
+      publisherDomain: 'https://foo.com',
+      pageUrl: 'https://foo.com/something/',
+    }
+    config.getConfig.mockReturnValue(mockPrebidConfig)
 
     const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
 
@@ -138,11 +162,12 @@ describe('Prebid.js patch test', () => {
     //     'https://tab.gladly.io/newtab/'
     //   ]
     // }
-    expect(getRefererInfo(mockWindow)).toEqual({
+    expect(getRefererInfo()).toEqual({
+      canonicalUrl: null,
       numIframes: 0,
       reachedTop: true,
-      referer: 'https://tab.gladly.io/newtab/',
-      stack: ['https://tab.gladly.io/newtab/'],
+      referer: 'https://foo.com/something/',
+      stack: ['https://foo.com/something/'],
     })
   })
 })

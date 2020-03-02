@@ -1,8 +1,8 @@
 diff --git a/node_modules/prebid.js/src/refererDetection.js b/node_modules/prebid.js/src/refererDetection.js
-index 6019867..1bf9654 100644
+index 6019867..c30a71e 100644
 --- a/node_modules/prebid.js/src/refererDetection.js
 +++ b/node_modules/prebid.js/src/refererDetection.js
-@@ -8,196 +8,27 @@
+@@ -8,196 +8,24 @@
   * Canonical URL which refers to an HTML link element, with the attribute of rel="canonical", found in the <head> element of your webpage
   */
  
@@ -21,9 +21,7 @@ index 6019867..1bf9654 100644
 -  function getLevels() {
 -    let levels = walkUpWindows();
 -    let ancestors = getAncestorOrigins();
-+  const prebidConfig = config.getConfig()
-+  console.log('prebidConfig', prebidConfig)
- 
+-
 -    if (ancestors) {
 -      for (let i = 0, l = ancestors.length; i < l; i++) {
 -        levels[i].ancestor = ancestors[i];
@@ -178,6 +176,7 @@ index 6019867..1bf9654 100644
 -   * Get referer info
 -   * @returns {refererInfo}
 -   */
++  const currentPage = config.getConfig().pageUrl
    function refererInfo() {
 -    try {
 -      let levels = getLevels();
@@ -199,13 +198,12 @@ index 6019867..1bf9654 100644
 -      };
 -    } catch (e) {
 -      // Ignore error
-+    // TODO: use Prebid config to get URLs
 +    return {
-+      "canonicalUrl": undefined,
++      canonicalUrl: null,
 +      numIframes: 0,
 +      reachedTop: true,
-+      referer: 'https://tab.gladly.io/newtab/',
-+      stack: ['https://tab.gladly.io/newtab/'],
++      referer: currentPage,
++      stack: [currentPage],
      }
    }
 -
