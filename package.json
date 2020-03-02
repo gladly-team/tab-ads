@@ -17,7 +17,7 @@
     "test:coverage": "yarn run test:run --coverage",
     "test:watch": "yarn run test:run --watch",
     "coverage": "if-env LOG_TEST_COVERAGE=true && codecov || echo 'Skipping test coverage logging.'",
-    "prebid:build": "npm-run-all -s prebid:build:explanation prebid:install prebid:apply-patches prebid:generate prebid:cp",
+    "prebid:build": "npm-run-all -s prebid:build:explanation prebid:apply-patches prebid:install prebid:generate prebid:cp",
     "prebid:build:explanation": "echo \"Building Prebid. We apply any of our patches to the prebid.js module, build it from source, and keep the build Prebid JS in source control.\"",
     "prebid:apply-patches": "patch-package",
     "prebid:install": "cd ./node_modules/prebid.js/ && yarn install",
