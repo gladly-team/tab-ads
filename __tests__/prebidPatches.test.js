@@ -193,4 +193,28 @@ describe('Prebid.js patch test', () => {
       stack: ['https://tab.gladly.io/newtab/'],
     })
   })
+
+  test('getRefererInfo works as expected with an unmocked Prebid config (tests our assumptions of the Prebid config API)', () => {
+    const { config } = require('../node_modules/prebid.js/src/config')
+
+    // Use the real Prebid config getConfig.
+    const prebidConfigActual = require.requireActual(
+      '../node_modules/prebid.js/src/config'
+    )
+    config.getConfig.mockImplementation(prebidConfigActual.config.getConfig)
+
+    // Set the config.
+    config.setConfig({
+      pageUrl: 'https://this-should-work.xyz/right?hope=so',
+    })
+
+    const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
+    expect(getRefererInfo()).toEqual({
+      canonicalUrl: null,
+      numIframes: 0,
+      reachedTop: true,
+      referer: 'https://this-should-work.xyz/right?hope=so',
+      stack: ['https://this-should-work.xyz/right?hope=so'],
+    })
+  })
 })
