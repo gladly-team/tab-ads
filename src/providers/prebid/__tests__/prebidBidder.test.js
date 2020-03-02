@@ -52,6 +52,25 @@ describe('prebidBidder: fetchBids', () => {
     expect(config.publisherDomain).toBeDefined()
   })
 
+  it('sets the publisherDomain and pageUrl using the tab-config values', async () => {
+    expect.assertions(2)
+
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      publisher: {
+        domain: 'https://foo.com',
+        pageUrl: 'https://foo.com/something/',
+      },
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+
+    const config = pbjs.setConfig.mock.calls[0][0]
+
+    expect(config.pageUrl).toEqual('https://foo.com/something/')
+    expect(config.publisherDomain).toEqual('https://foo.com')
+  })
+
   it('sets up ad units', async () => {
     expect.assertions(3)
 
