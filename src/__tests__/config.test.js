@@ -11,23 +11,7 @@ afterEach(() => {
 const defaultConfigStructure = {
   disableAds: expect.any(Boolean),
   useMockAds: expect.any(Boolean),
-  adUnits: [
-    {
-      adId: expect.any(String),
-      adUnitId: expect.any(String),
-      sizes: expect.any(Array),
-    },
-    {
-      adId: expect.any(String),
-      adUnitId: expect.any(String),
-      sizes: expect.any(Array),
-    },
-    {
-      adId: expect.any(String),
-      adUnitId: expect.any(String),
-      sizes: expect.any(Array),
-    },
-  ],
+  adUnits: [],
   auctionTimeout: expect.any(Number),
   bidderTimeout: expect.any(Number),
   consent: {
@@ -122,6 +106,38 @@ describe('config: setConfig', () => {
     })
   })
 
+  it('defaults to an empty array of adUnits', () => {
+    const { setConfig } = require('src/config')
+    const config = setConfig(getMinimalValidUserConfig())
+    expect(config).toMatchObject({
+      adUnits: [],
+    })
+  })
+
+  it('allows customizing the adUnits property', () => {
+    const { setConfig } = require('src/config')
+    const modifiedConfig = {
+      ...getMinimalValidUserConfig(),
+      adUnits: [
+        {
+          adId: 'div-gpt-ad-2233445566-0',
+          adUnitId: '/11228899/HBTR',
+          sizes: [[300, 250]],
+        },
+      ],
+    }
+    const config = setConfig(modifiedConfig)
+    expect(config).toMatchObject({
+      adUnits: [
+        {
+          adId: 'div-gpt-ad-2233445566-0',
+          adUnitId: '/11228899/HBTR',
+          sizes: [[300, 250]],
+        },
+      ],
+    })
+  })
+
   it('calls queue.runQueue(true)', () => {
     const { setConfig } = require('src/config')
     setConfig(getMinimalValidUserConfig())
@@ -207,6 +223,122 @@ describe('config: setConfig validation', () => {
       })
     }).toThrow(
       'Config error: the consent.isEU property must be an async function.'
+    )
+  })
+
+  it('throws if an ad unit does not have an adId property', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        adUnits: [
+          {
+            adId: undefined, // missing
+            adUnitId: '/13572468/SomeAdUnit',
+            sizes: [[300, 250]],
+          },
+        ],
+      })
+    }).toThrow('Config error: adUnits objects must have an "adId" property.')
+  })
+
+  it("throws if an ad unit's adId property is not a string", () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        adUnits: [
+          {
+            adId: 12345, // wrong
+            adUnitId: '/13572468/SomeAdUnit',
+            sizes: [[300, 250]],
+          },
+        ],
+      })
+    }).toThrow('Config error: adUnits\' "adId" property must be a string.')
+  })
+
+  it('throws if an ad unit does not have an adUnitId property', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        adUnits: [
+          {
+            adId: 'div-gpt-ad-123456789-0',
+            adUnitId: undefined, // missing
+            sizes: [[300, 250]],
+          },
+        ],
+      })
+    }).toThrow(
+      'Config error: adUnits objects must have an "adUnitId" property.'
+    )
+  })
+
+  it("throws if an ad unit's adUnitId property is not a string", () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        adUnits: [
+          {
+            adId: 'div-gpt-ad-123456789-0',
+            adUnitId: false, // wrong
+            sizes: [[300, 250]],
+          },
+        ],
+      })
+    }).toThrow('Config error: adUnits\' "adUnitId" property must be a string.')
+  })
+
+  it('throws if an ad unit does not have a sizes property', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        adUnits: [
+          {
+            adId: 'div-gpt-ad-123456789-0',
+            adUnitId: '/13572468/SomeAdUnit',
+            sizes: undefined, // missing
+          },
+        ],
+      })
+    }).toThrow('Config error: adUnits objects must have an "sizes" property.')
+  })
+
+  it("throws if an ad unit's sizes property is not an array", () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        adUnits: [
+          {
+            adId: 'div-gpt-ad-123456789-0',
+            adUnitId: '/13572468/SomeAdUnit',
+            sizes: '300x250', // wrong
+          },
+        ],
+      })
+    }).toThrow('Config error: adUnits\' "sizes" property must be an array.')
+  })
+
+  it("throws if an ad unit's sizes property is an empty array", () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        adUnits: [
+          {
+            adId: 'div-gpt-ad-123456789-0',
+            adUnitId: '/13572468/SomeAdUnit',
+            sizes: [], // wrong
+          },
+        ],
+      })
+    }).toThrow(
+      'Config error: adUnits\' "sizes" property must have at least one size specified.'
     )
   })
 })
