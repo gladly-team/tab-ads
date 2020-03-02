@@ -145,7 +145,7 @@ beforeEach(() => {
   windowSpy.mockImplementation(() => getMockWindow())
 })
 
-describe('Prebid.js patch test', () => {
+describe('Prebid.js patch: refererDetection.js', () => {
   test('getRefererInfo uses the publisher info in the Prebid config to populate values', () => {
     const { config } = require('../node_modules/prebid.js/src/config')
     const mockPrebidConfig = {
@@ -218,3 +218,7 @@ describe('Prebid.js patch test', () => {
     })
   })
 })
+
+// Note: there are other untested patches for:
+// - emx_digitalBidAdapter.js's "site.ref" value
+// - pulsepointBidAdapter.js's "site.ref" value

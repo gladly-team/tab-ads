@@ -1,3 +1,60 @@
+diff --git a/node_modules/prebid.js/modules/emx_digitalBidAdapter.js b/node_modules/prebid.js/modules/emx_digitalBidAdapter.js
+index 22a7bb6..b7b6978 100644
+--- a/node_modules/prebid.js/modules/emx_digitalBidAdapter.js
++++ b/node_modules/prebid.js/modules/emx_digitalBidAdapter.js
+@@ -5,6 +5,9 @@ import { Renderer } from '../src/Renderer.js';
+ import includes from 'core-js/library/fn/array/includes.js';
+ import {parse as parseUrl} from '../src/url.js';
+ 
++// @tab-ads-patch
++import { config } from '../src/config.js';
++
+ const BIDDER_CODE = 'emx_digital';
+ const ENDPOINT = 'hb.emxdgt.com';
+ const RENDERER_URL = 'https://js.brealtime.com/outstream/1.30.0/bundle.js';
+@@ -123,10 +126,11 @@ export const emxAdapter = {
+     }
+   },
+   getReferrer: () => {
++    // @tab-ads-patch
+     try {
+-      return window.top.document.referrer;
++      return config.getConfig().pageUrl || window.location.href
+     } catch (err) {
+-      return document.referrer;
++      return ''
+     }
+   },
+   getSite: (refInfo) => {
+diff --git a/node_modules/prebid.js/modules/pulsepointBidAdapter.js b/node_modules/prebid.js/modules/pulsepointBidAdapter.js
+index cbe37e6..9209efd 100644
+--- a/node_modules/prebid.js/modules/pulsepointBidAdapter.js
++++ b/node_modules/prebid.js/modules/pulsepointBidAdapter.js
+@@ -3,6 +3,9 @@ import * as utils from '../src/utils.js';
+ import { registerBidder } from '../src/adapters/bidderFactory.js';
+ import { Renderer } from '../src/Renderer.js';
+ 
++// @tab-ads-patch
++import { config } from '../src/config.js';
++
+ const NATIVE_DEFAULTS = {
+   TITLE_LEN: 100,
+   DESCR_LEN: 200,
+@@ -337,10 +340,11 @@ function app(bidderRequest) {
+  * Attempts to capture the referrer url.
+  */
+ function referrer() {
++  // @tab-ads-patch
+   try {
+-    return window.top.document.referrer;
+-  } catch (e) {
+-    return document.referrer;
++    return config.getConfig().pageUrl || window.location.href
++  } catch (err) {
++    return ''
+   }
+ }
+ 
 diff --git a/node_modules/prebid.js/src/refererDetection.js b/node_modules/prebid.js/src/refererDetection.js
 index 6019867..f70f9c4 100644
 --- a/node_modules/prebid.js/src/refererDetection.js
