@@ -172,24 +172,6 @@ export const mockIndexExchangeBidResponse = () => {
   }
 }
 
-/**
- * Mock a response from window.fetch.
- * @return {Promise<Object>}
- */
-export const mockFetchResponse = overrides => ({
-  body: {},
-  bodyUsed: true,
-  headers: {},
-  json: () => Promise.resolve({}),
-  ok: true,
-  redirected: false,
-  status: 200,
-  statusText: '',
-  type: 'cors',
-  url: 'https://example.com/foo/',
-  ...overrides,
-})
-
 const mockPrebidBid = ({
   bidder = 'openx',
   cpm = 0.582,
