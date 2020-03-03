@@ -42,8 +42,6 @@ const defaultConfig = {
     timeout: 50, // Time to wait for the consent management platform (CMP) to respond
   },
   publisher: {
-    // TODO: maybe just handle this internally, with the knowledge
-    // that we may be running in an iframe context on the new tab page.
     domain: null, // required to be provided by user
     pageUrl: null, // required to be provided by user
   },
