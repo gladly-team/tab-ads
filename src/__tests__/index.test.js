@@ -3,6 +3,7 @@
 import getAds from 'src/fetchAds'
 import AdComponent from 'src/AdComponent'
 import { getAllWinningBids } from 'src/utils/getWinningBids'
+import getNewTabAdUnits from 'src/getAvailableAdUnits'
 
 jest.mock('src/AdComponent')
 jest.mock('src/fetchAds')
@@ -24,6 +25,12 @@ describe('index.js', () => {
     const index = require('src/index')
     expect(index.AdComponent).toBeDefined()
     expect(index.AdComponent).toBe(AdComponent)
+  })
+
+  it('exports getAvailableAdUnits', () => {
+    const index = require('src/index')
+    expect(index.getAvailableAdUnits).toBeDefined()
+    expect(index.getAvailableAdUnits).toBe(getNewTabAdUnits)
   })
 
   it('fetches ads with no config', async () => {
