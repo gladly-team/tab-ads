@@ -8,6 +8,7 @@ afterEach(() => {
 })
 
 const formatMessage = msg => `tab-ads: ${msg}`
+const onErrorHandler = jest.fn()
 
 beforeEach(() => {
   jest.resetModules()
@@ -18,6 +19,7 @@ beforeEach(() => {
   setConfig({
     ...getMockTabAdsUserConfig(),
     logLevel: 'debug',
+    onError: onErrorHandler,
   })
 })
 
@@ -80,6 +82,16 @@ describe('logger', () => {
     expect(console.error).toHaveBeenCalledWith(formatMessage(theMsg))
   })
 
+  test('logger.error calls config.onError with the original message', () => {
+    // Suppress expected console message.
+    jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
+
+    const logger = require('src/utils/logger').default
+    const theMsg = 'A thing happened, FYI'
+    logger.error(theMsg)
+    expect(onErrorHandler).toHaveBeenCalledWith(theMsg)
+  })
+
   test('logger.debug does not log to console when the logLevel is "info"', () => {
     const { setConfig } = require('src/config')
     setConfig({
@@ -138,6 +150,23 @@ describe('logger', () => {
     expect(console.error).toHaveBeenCalledWith(formatMessage(theMsg))
   })
 
+  test('logger.error calls config.onError with the original message when the logLevel is "error"', () => {
+    // Suppress expected console message.
+    jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
+
+    const { setConfig } = require('src/config')
+    setConfig({
+      ...getMockTabAdsUserConfig(),
+      logLevel: 'error',
+      onError: onErrorHandler,
+    })
+
+    const logger = require('src/utils/logger').default
+    const theMsg = 'A thing happened, FYI'
+    logger.error(theMsg)
+    expect(onErrorHandler).toHaveBeenCalledWith(theMsg)
+  })
+
   test('logger.error does not log to console when the logLevel is "none"', () => {
     const { setConfig } = require('src/config')
     setConfig({
@@ -149,6 +178,23 @@ describe('logger', () => {
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
     expect(console.error).not.toHaveBeenCalled()
+  })
+
+  test('logger.error does not call config.onError when the logLevel is "none"', () => {
+    // Suppress expected console message.
+    jest.spyOn(console, 'error').mockImplementationOnce(jest.fn())
+
+    const { setConfig } = require('src/config')
+    setConfig({
+      ...getMockTabAdsUserConfig(),
+      logLevel: 'none',
+      onError: onErrorHandler,
+    })
+
+    const logger = require('src/utils/logger').default
+    const theMsg = 'A thing happened, FYI'
+    logger.error(theMsg)
+    expect(onErrorHandler).not.toHaveBeenCalled()
   })
 
   test('it queues logging until the config has been set', () => {

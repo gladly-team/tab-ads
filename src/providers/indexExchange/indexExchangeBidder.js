@@ -210,7 +210,6 @@ const setTargeting = () => {
       })
     }
   } catch (e) {
-    // TODO: call config.onError
     logger.error(e)
   }
 

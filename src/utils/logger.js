@@ -25,7 +25,7 @@ export const shouldLog = (logLevel, globalLogLevel) =>
 
 const log = (msg, logLevel) => {
   queue(() => {
-    const logLevelThreshold = getConfig().logLevel
+    const { logLevel: logLevelThreshold, onError } = getConfig()
     if (!shouldLog(logLevel, logLevelThreshold)) {
       return
     }
@@ -44,6 +44,7 @@ const log = (msg, logLevel) => {
         console.warn(finalMsg)
         break
       case logLevels.ERROR:
+        onError(msg)
         console.error(finalMsg)
         break
       default:

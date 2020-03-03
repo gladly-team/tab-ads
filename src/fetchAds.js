@@ -86,7 +86,6 @@ const callBidders = async config => {
           }
           return bidResponseData
         } catch (e) {
-          config.onError(e)
           logger.error(e)
           return null
         }
@@ -97,7 +96,6 @@ const callBidders = async config => {
     // call the ad server (if we haven't already).
     sendAdserverRequest()
   } catch (e) {
-    config.onError(e)
     logger.error(e)
   }
 }
@@ -131,7 +129,7 @@ const fetchAds = async userConfig => {
       logger.debug('Ads are disabled. Not setting up GAM or fetching bids.')
     }
   } catch (e) {
-    config.onError(e)
+    logger.error(e)
   }
 }
 

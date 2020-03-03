@@ -33,7 +33,7 @@ const getBidders = () => {
 }
 
 describe('fetchAds: bid and ad server requests', () => {
-  it('calls config.onError if something throws in fetchAds', async () => {
+  it('calls logger.error if something throws in fetchAds', async () => {
     expect.assertions(1)
 
     // Mock some error.
@@ -43,13 +43,9 @@ describe('fetchAds: bid and ad server requests', () => {
       throw mockErr
     })
 
-    const mockOnErrorHandler = jest.fn()
-    const tabAdsConfig = setConfig({
-      ...getMockTabAdsUserConfig(),
-      onError: mockOnErrorHandler,
-    })
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
-    expect(mockOnErrorHandler).toHaveBeenCalledWith(mockErr)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 
   it('sets up the Google ad slots', async () => {
@@ -353,25 +349,6 @@ describe('fetchAds: bid and ad server requests', () => {
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
     expect(logger.error).toHaveBeenCalledWith(mockErr)
-  })
-
-  it("calls config.onError when something goes wrong when calling bidders' fetchBids", async () => {
-    expect.assertions(1)
-
-    // Mock that the first bidder throws an error
-    const bidders = getBidders()
-    const mockErr = new Error('Yikes.')
-    bidders[0].fetchBids.mockImplementationOnce(() => {
-      throw mockErr
-    })
-
-    const mockOnError = jest.fn()
-    const tabAdsConfig = setConfig({
-      ...getMockTabAdsUserConfig(),
-      onError: mockOnError,
-    })
-    await fetchAds(tabAdsConfig)
-    expect(mockOnError).toHaveBeenCalledWith(mockErr)
   })
 
   it('calls logger.error when something goes wrong when attempting to call the ad server', async () => {
