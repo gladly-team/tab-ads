@@ -104,28 +104,34 @@ const callBidders = async config => {
 
 const fetchAds = async userConfig => {
   const config = setConfig(userConfig)
-  if (!config.disableAds) {
-    const { adUnits } = config
-    if (!adUnits.length) {
-      logger.debug('No ad units provided. Not setting up GAM or fetching bids.')
-      return
+  try {
+    if (!config.disableAds) {
+      const { adUnits } = config
+      if (!adUnits.length) {
+        logger.debug(
+          'No ad units provided. Not setting up GAM or fetching bids.'
+        )
+        return
+      }
+
+      // Define slots and enable ad services.
+      setUpGoogleAds(config)
+
+      // Track loaded ads for analytics.
+      setUpAdDisplayListeners()
+
+      // Call the ad server after some time to avoid waiting
+      // too long for bid responses.
+      setTimeout(() => {
+        sendAdserverRequest()
+      }, config.auctionTimeout)
+
+      callBidders(config)
+    } else {
+      logger.debug('Ads are disabled. Not setting up GAM or fetching bids.')
     }
-
-    // Define slots and enable ad services.
-    setUpGoogleAds(config)
-
-    // Track loaded ads for analytics.
-    setUpAdDisplayListeners()
-
-    // Call the ad server after some time to avoid waiting
-    // too long for bid responses.
-    setTimeout(() => {
-      sendAdserverRequest()
-    }, config.auctionTimeout)
-
-    callBidders(config)
-  } else {
-    logger.debug('Ads are disabled. Not setting up GAM or fetching bids.')
+  } catch (e) {
+    config.onError(e)
   }
 }
 

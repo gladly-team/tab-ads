@@ -33,6 +33,25 @@ const getBidders = () => {
 }
 
 describe('fetchAds: bid and ad server requests', () => {
+  it('calls config.onError if something throws in fetchAds', async () => {
+    expect.assertions(1)
+
+    // Mock some error.
+    const mockErr = new Error('Sorry, fetching ads will fail.')
+    const setUpGoogleAds = require('src/google/setUpGoogleAds').default
+    setUpGoogleAds.mockImplementationOnce(() => {
+      throw mockErr
+    })
+
+    const mockOnErrorHandler = jest.fn()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      onError: mockOnErrorHandler,
+    })
+    await fetchAds(tabAdsConfig)
+    expect(mockOnErrorHandler).toHaveBeenCalledWith(mockErr)
+  })
+
   it('sets up the Google ad slots', async () => {
     expect.assertions(1)
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
