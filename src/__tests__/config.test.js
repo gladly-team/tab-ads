@@ -51,6 +51,7 @@ const getMinimalValidUserConfig = () => ({
     domain: 'example.com',
     pageUrl: 'https://example.com/foo',
   },
+  onError: () => {},
 })
 
 describe('config: setConfig', () => {
@@ -146,6 +147,26 @@ describe('config: setConfig', () => {
 })
 
 describe('config: setConfig validation', () => {
+  it('throws if the onError handler is not provided', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        onError: null,
+      })
+    }).toThrow('Config error: the onError property must be set.')
+  })
+
+  it('throws if the onError handler is not a function', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        onError: 'oops',
+      })
+    }).toThrow('Config error: the onError property must be a function.')
+  })
+
   it('throws if the publisher domain is not provided', () => {
     const { setConfig } = require('src/config')
     expect(() => {

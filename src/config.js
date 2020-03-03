@@ -48,13 +48,21 @@ const defaultConfig = {
   // Convenience to distinguish between the ads.
   newTabAds: newTabAdUnits,
   logLevel: 'error',
-  onError: () => {},
+  // onError: () => {}, // required to be provided by user
 }
 
 let config
 
 // Throw if the provided config is inadequate.
 const validateConfig = userConfig => {
+  // Validate the onError handler.
+  if (isNil(get(userConfig, 'onError'))) {
+    throw new Error('Config error: the onError property must be set.')
+  }
+  if (typeof get(userConfig, 'onError') !== 'function') {
+    throw new Error('Config error: the onError property must be a function.')
+  }
+
   // Validate publisher values.
   if (isNil(get(userConfig, 'publisher.domain'))) {
     throw new Error('Config error: the publisher.domain property must be set.')

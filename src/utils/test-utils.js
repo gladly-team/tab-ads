@@ -282,6 +282,7 @@ export const getMockTabAdsUserConfig = () => ({
     domain: 'example.com',
     pageUrl: 'https://example.com/foo',
   },
+  onError: () => {},
 })
 
 // Provide a valid config for testing.
