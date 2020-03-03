@@ -80,8 +80,6 @@ describe('indexExchangeBidder: fetchBids', () => {
     expect.assertions(1)
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
       adUnits: [],
