@@ -80,8 +80,15 @@ const normalizeBidResponses = (config, rawBidData = []) => {
  */
 const fetchBids = async config => {
   const apstag = getAmazonTag()
+  const { adUnits } = config
+  if (!adUnits.length) {
+    return Promise.resolve({
+      bidResponses: {},
+      rawBidResponses: {},
+    })
+  }
 
-  const slots = config.adUnits.map(adUnit => {
+  const slots = adUnits.map(adUnit => {
     return {
       slotID: adUnit.adId,
       sizes: adUnit.sizes,

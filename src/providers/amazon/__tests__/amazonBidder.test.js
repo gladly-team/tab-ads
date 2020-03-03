@@ -106,11 +106,11 @@ describe('amazonBidder: fetchBids', () => {
   })
 
   it('calls for the expected bids when all ads are enabled', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await amazonBidder.fetchBids(tabAdsConfig)
-    expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [
         {
@@ -129,7 +129,8 @@ describe('amazonBidder: fetchBids', () => {
     })
   })
 
-  it('calls for no bids when no ads are enabled', async () => {
+  it('does not call for any bids when no ads are enabled', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig({
@@ -137,13 +138,25 @@ describe('amazonBidder: fetchBids', () => {
       adUnits: [],
     })
     await amazonBidder.fetchBids(tabAdsConfig)
-    expect(apstag.fetchBids).toHaveBeenCalled()
-    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
-      slots: [],
+    expect(apstag.fetchBids).not.toHaveBeenCalled()
+  })
+
+  it('returns a Promise that resolves to empty bid response info when no ads are enabled', async () => {
+    expect.assertions(1)
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    const response = await amazonBidder.fetchBids(tabAdsConfig)
+    expect(response).toEqual({
+      bidResponses: {},
+      rawBidResponses: {},
     })
   })
 
   it('calls for one bid when one ad is enabled', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig({
@@ -158,7 +171,6 @@ describe('amazonBidder: fetchBids', () => {
       ],
     })
     await amazonBidder.fetchBids(tabAdsConfig)
-    expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [
         {
@@ -170,6 +182,7 @@ describe('amazonBidder: fetchBids', () => {
   })
 
   it('calls for two bids when two ads are enabled', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig({
@@ -190,7 +203,6 @@ describe('amazonBidder: fetchBids', () => {
       ],
     })
     await amazonBidder.fetchBids(tabAdsConfig)
-    expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [
         {
@@ -203,6 +215,7 @@ describe('amazonBidder: fetchBids', () => {
   })
 
   it('returns the expected Amazon bid responses in the rawBidResponses key', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
 
@@ -274,6 +287,7 @@ describe('amazonBidder: fetchBids', () => {
   })
 
   it('returns the expected normalized BidResponses in the bidResponses key', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
 
@@ -373,6 +387,7 @@ describe('amazonBidder: fetchBids', () => {
   })
 
   it('ignores any bids that have an empty string in the raw bid response "amzniid" property', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
 

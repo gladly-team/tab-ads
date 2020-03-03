@@ -61,8 +61,8 @@ describe('indexExchangeBidder: fetchBids', () => {
     ])
   })
 
-  it('gets bids for no ads when no ad units are enabled', async () => {
-    expect.assertions(2)
+  it('does not fetch bids when no ad units are enabled', async () => {
+    expect.assertions(1)
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
@@ -73,8 +73,24 @@ describe('indexExchangeBidder: fetchBids', () => {
       adUnits: [],
     })
     await indexExchangeBidder.fetchBids(tabAdsConfig)
-    expect(ixTag.retrieveDemand).toHaveBeenCalled()
-    expect(ixTag.retrieveDemand.mock.calls[0][0]).toEqual([])
+    expect(ixTag.retrieveDemand).not.toHaveBeenCalled()
+  })
+
+  it('returns a Promise that resolves to empty bid response info when no ads are enabled', async () => {
+    expect.assertions(1)
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
+      .default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    const response = await indexExchangeBidder.fetchBids(tabAdsConfig)
+    expect(response).toEqual({
+      bidResponses: {},
+      rawBidResponses: {},
+    })
   })
 
   it('gets bids for one ad when one ad unit is enabled', async () => {

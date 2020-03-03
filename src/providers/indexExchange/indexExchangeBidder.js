@@ -116,6 +116,12 @@ const fetchBids = async config => {
   const ixTag = getIndexExchangeTag()
   tabConfig = config
   const { adUnits } = config
+  if (!adUnits.length) {
+    return Promise.resolve({
+      bidResponses: {},
+      rawBidResponses: {},
+    })
+  }
 
   const IXSlots = adUnits.map(adUnit => {
     return { htSlotName: mapGAMSlotToIXSlot(adUnit.adUnitId) }

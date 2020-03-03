@@ -166,17 +166,29 @@ describe('prebidBidder: fetchBids', () => {
     ])
   })
 
-  it('does not set up any ad units if the tab-ads adUnits value is an empty array', async () => {
-    expect.assertions(1)
+  it('does not call for any bids if the tab-ads adUnits value is an empty array', async () => {
+    expect.assertions(2)
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
       adUnits: [],
     })
     await prebidBidder.fetchBids(tabAdsConfig)
-    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+    expect(pbjs.addAdUnits).not.toHaveBeenCalled()
+    expect(pbjs.requestBids).not.toHaveBeenCalled()
+  })
 
-    expect(adUnitConfig).toEqual([])
+  it('returns a Promise that resolves to empty bid response info when no ads are enabled', async () => {
+    expect.assertions(1)
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    const response = await prebidBidder.fetchBids(tabAdsConfig)
+    expect(response).toEqual({
+      bidResponses: {},
+      rawBidResponses: {},
+    })
   })
 
   it('sets up only the leaderboard ad unit if the tab-ads adUnits value is the one leaderboard ad', async () => {

@@ -266,6 +266,13 @@ const name = 'prebid'
  */
 const fetchBids = async config => {
   logger.debug(`Prebid: bids requested`)
+  const { adUnits: tabAdUnits } = config
+  if (!tabAdUnits.length) {
+    return Promise.resolve({
+      bidResponses: {},
+      rawBidResponses: {},
+    })
+  }
 
   // Determine if the user is in the EU, which may affect the
   // ads we show.
