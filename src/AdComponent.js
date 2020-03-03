@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ErrorBoundary from 'src/ErrorBoundary'
 import displayAd from 'src/displayAd'
 import { onAdRendered } from 'src/adDisplayListeners'
 
@@ -7,13 +8,17 @@ import { onAdRendered } from 'src/adDisplayListeners'
 // https://stackoverflow.com/q/25435066/1332513
 class Ad extends React.Component {
   componentDidMount() {
-    const { adId } = this.props
+    const { adId, onError } = this.props
 
-    // Display the ad as soon as it's available.
-    displayAd(adId)
+    try {
+      // Display the ad as soon as it's available.
+      displayAd(adId)
 
-    // On ad display, call the onAdDisplayed callback.
-    onAdRendered(adId, this.onAdDisplayedHandler.bind(this))
+      // On ad display, call the onAdDisplayed callback.
+      onAdRendered(adId, this.onAdDisplayedHandler.bind(this))
+    } catch (e) {
+      onError(e)
+    }
   }
 
   // Never update. This prevents unexpected unmounting or
@@ -28,11 +33,13 @@ class Ad extends React.Component {
   }
 
   render() {
-    const { adId, style } = this.props
+    const { adId, onError, style } = this.props
     return (
-      <div style={style}>
-        <div id={adId} data-testid="ad-container" />
-      </div>
+      <ErrorBoundary onError={onError}>
+        <div style={style}>
+          <div id={adId} data-testid="ad-container" />
+        </div>
+      </ErrorBoundary>
     )
   }
 }
@@ -40,11 +47,13 @@ class Ad extends React.Component {
 Ad.propTypes = {
   adId: PropTypes.string.isRequired,
   onAdDisplayed: PropTypes.func,
+  onError: PropTypes.func,
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 }
 
 Ad.defaultProps = {
   onAdDisplayed: () => {},
+  onError: () => {},
   style: {},
 }
 

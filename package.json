@@ -77,7 +77,7 @@
     "modulePaths": [
       "<rootDir>/"
     ],
-    "setupFiles": [
+    "setupFilesAfterEnv": [
       "<rootDir>/src/jestSetup.js"
     ],
     "testPathIgnorePatterns": [

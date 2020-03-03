@@ -7,9 +7,6 @@ import displayAd from 'src/displayAd'
 import { onAdRendered } from 'src/adDisplayListeners'
 import { getMockBidResponse } from 'src/utils/test-utils'
 
-// https://github.com/testing-library/jest-dom#table-of-contents
-import '@testing-library/jest-dom/extend-expect'
-
 jest.mock('src/displayAd')
 jest.mock('src/adDisplayListeners')
 
@@ -17,6 +14,7 @@ const getMockProps = () => ({
   adId: 'my-wonderful-ad-id',
   onAdDisplayed: jest.fn(),
   style: undefined,
+  onError: jest.fn(),
 })
 
 afterEach(() => {
@@ -112,5 +110,20 @@ describe('Ad component', () => {
     expect(mockProps.onAdDisplayed).not.toHaveBeenCalled()
     onAdRenderedHandler(mockBidResponse)
     expect(mockProps.onAdDisplayed).toHaveBeenCalledWith(mockBidResponse)
+  })
+
+  it('calls onError if displayAd throws', () => {
+    expect.assertions(1)
+    const AdComponent = require('src/AdComponent').default
+
+    // Mock an error in displayAd.
+    const mockErr = new Error('Problems, problems, problems.')
+    displayAd.mockImplementationOnce(() => {
+      throw mockErr
+    })
+
+    const mockProps = getMockProps()
+    render(<AdComponent {...mockProps} />)
+    expect(mockProps.onError).toHaveBeenCalledWith(mockErr)
   })
 })
