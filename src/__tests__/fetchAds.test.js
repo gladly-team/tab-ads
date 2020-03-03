@@ -82,6 +82,45 @@ describe('fetchAds: bid and ad server requests', () => {
     expect(googletagMockRefresh).toHaveBeenCalledTimes(1)
   })
 
+  it('does not call the expected bidders when no ad units are provided', async () => {
+    const bidders = getBidders()
+    expect.assertions(bidders.length)
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [], // no ads
+    })
+    await fetchAds(tabAdsConfig)
+
+    // Flush all promises
+    await flushAllPromises()
+
+    bidders.forEach(bidder => {
+      expect(bidder.fetchBids).not.toHaveBeenCalled()
+    })
+  })
+
+  it('does not call the ad server when no ad units are provided', async () => {
+    expect.assertions(1)
+
+    const googletagMockRefresh = jest.fn()
+    __setPubadsRefreshMock(googletagMockRefresh)
+
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [], // no ads
+    })
+    await fetchAds(tabAdsConfig)
+
+    // Flush all promises
+    await flushAllPromises()
+
+    expect(googletagMockRefresh).not.toHaveBeenCalled()
+  })
+
   it('does not call the expected bidders when ads are not enabled', async () => {
     const bidders = getBidders()
     expect.assertions(bidders.length)
