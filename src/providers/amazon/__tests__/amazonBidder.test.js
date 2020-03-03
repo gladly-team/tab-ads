@@ -129,6 +129,79 @@ describe('amazonBidder: fetchBids', () => {
     })
   })
 
+  it('calls for no bids when no ads are enabled', async () => {
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.fetchBids).toHaveBeenCalled()
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
+      slots: [],
+    })
+  })
+
+  it('calls for one bid when one ad is enabled', async () => {
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+      ],
+    })
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.fetchBids).toHaveBeenCalled()
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
+      slots: [
+        {
+          slotID: 'div-gpt-ad-1464385677836-0',
+          sizes: [[728, 90]],
+        },
+      ],
+    })
+  })
+
+  it('calls for two bids when two ads are enabled', async () => {
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+        {
+          // The second rectangle ad (right side, above the first).
+          adId: 'div-gpt-ad-1539903223131-0',
+          adUnitId: '/43865596/HBTR2',
+          sizes: [[300, 250]],
+        },
+      ],
+    })
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.fetchBids).toHaveBeenCalled()
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
+      slots: [
+        {
+          slotID: 'div-gpt-ad-1464385677836-0',
+          sizes: [[728, 90]],
+        },
+        { slotID: 'div-gpt-ad-1539903223131-0', sizes: [[300, 250]] },
+      ],
+    })
+  })
+
   it('returns the expected Amazon bid responses in the rawBidResponses key', async () => {
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default

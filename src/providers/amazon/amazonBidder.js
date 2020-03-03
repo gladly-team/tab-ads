@@ -81,8 +81,6 @@ const normalizeBidResponses = (config, rawBidData = []) => {
 const fetchBids = async config => {
   const apstag = getAmazonTag()
 
-  // @feature/configurable-ad-count
-  // TODO: test variable number of ad units
   const slots = config.adUnits.map(adUnit => {
     return {
       slotID: adUnit.adId,
