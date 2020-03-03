@@ -100,8 +100,6 @@ const normalizeBidResponses = (rawBidData = []) => {
 // per page load.
 let bidsReturned = false
 
-// @feature/configurable-ad-count
-// TODO: assumes we are showing all 3 ads. Make that configurable.
 /**
  * Return a promise that resolves when the Index Exchange bid
  * responses return or the request times out. See:
@@ -117,22 +115,11 @@ const fetchBids = async config => {
   // behavior so it may break.
   const ixTag = getIndexExchangeTag()
   tabConfig = config
+  const { adUnits } = config
 
-  const {
-    leaderboard,
-    rectangleAdPrimary,
-    rectangleAdSecondary,
-  } = config.newTabAds
-
-  // @feature/configurable-ad-count
-  // TODO: only get bids for the the ads we'll show.
-  const IXSlots = [
-    { htSlotName: mapGAMSlotToIXSlot(leaderboard.adUnitId) },
-    { htSlotName: mapGAMSlotToIXSlot(rectangleAdPrimary.adUnitId) },
-    {
-      htSlotName: mapGAMSlotToIXSlot(rectangleAdSecondary.adUnitId),
-    },
-  ]
+  const IXSlots = adUnits.map(adUnit => {
+    return { htSlotName: mapGAMSlotToIXSlot(adUnit.adUnitId) }
+  })
 
   return new Promise(resolve => {
     let timeoutId
