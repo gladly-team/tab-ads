@@ -5,200 +5,218 @@ import Bidder from 'src/utils/Bidder'
 import BidResponse from 'src/utils/BidResponse'
 import logger from 'src/utils/logger'
 
-// @feature/configurable-ad-count
-// TODO: assumes we are showing all 3 ads. Make that configurable.
-const getAdUnits = config => {
+/**
+ * Given an ad unit object from the tab-ads config, return the
+ * associated Prebid ad unit.
+ * @param {Object} tabAdUnit - The tab-ads ad unit.
+ * @param {Object} config - The tab-ads config object.
+ * @return {Object} A Prebid ad unit config object.
+ */
+const getPrebidAdUnit = (tabAdUnit, config) => {
   const {
     leaderboard,
     rectangleAdPrimary,
     rectangleAdSecondary,
   } = config.newTabAds
+  switch (tabAdUnit.adId) {
+    case leaderboard.adId:
+      // Leaderboard-style ad
+      return {
+        code: tabAdUnit.adId,
+        mediaTypes: {
+          banner: {
+            sizes: tabAdUnit.sizes,
+          },
+        },
+        bids: [
+          {
+            bidder: 'sonobi',
+            params: {
+              dom_id: tabAdUnit.adId,
+              ad_unit: tabAdUnit.adUnitId,
+            },
+          },
+          {
+            bidder: 'pulsepoint',
+            params: {
+              cf: '728X90',
+              cp: '560174',
+              ct: '460981',
+            },
+          },
+          {
+            bidder: 'aol',
+            params: {
+              network: '10559.1',
+              placement: '4117691',
+              sizeId: '225',
+            },
+          },
+          {
+            bidder: 'sovrn',
+            params: {
+              tagid: '438918',
+            },
+          },
+          {
+            bidder: 'openx',
+            params: {
+              unit: '538658529',
+              delDomain: 'tabforacause-d.openx.net',
+            },
+          },
+          // EMX Digital was formerly brealtime.
+          // http://prebid.org/dev-docs/bidders.html#emx_digital
+          {
+            bidder: 'emx_digital',
+            params: {
+              tagid: '29672',
+            },
+          },
+          {
+            bidder: 'rhythmone',
+            params: {
+              placementId: '73423',
+            },
+          },
+        ],
+      }
+    case rectangleAdPrimary.adId:
+      // Rectangle-style ad
+      return {
+        code: tabAdUnit.adId,
+        mediaTypes: {
+          banner: {
+            sizes: tabAdUnit.sizes,
+          },
+        },
+        bids: [
+          {
+            bidder: 'sonobi',
+            params: {
+              dom_id: tabAdUnit.adId,
+              ad_unit: tabAdUnit.adUnitId,
+            },
+          },
+          {
+            bidder: 'pulsepoint',
+            params: {
+              cf: '300X250',
+              cp: '560174',
+              ct: '460982',
+            },
+          },
+          {
+            bidder: 'aol',
+            params: {
+              network: '10559.1',
+              placement: '4117692',
+              sizeId: '170',
+            },
+          },
+          {
+            bidder: 'sovrn',
+            params: {
+              tagid: '438916',
+            },
+          },
+          {
+            bidder: 'openx',
+            params: {
+              unit: '538658529',
+              delDomain: 'tabforacause-d.openx.net',
+            },
+          },
+          {
+            bidder: 'emx_digital',
+            params: {
+              tagid: '29673',
+            },
+          },
+          {
+            bidder: 'rhythmone',
+            params: {
+              placementId: '73423',
+            },
+          },
+        ],
+      }
+    case rectangleAdSecondary.adId:
+      // Second rectangle-style ad
+      return {
+        code: tabAdUnit.adId,
+        mediaTypes: {
+          banner: {
+            sizes: tabAdUnit.sizes,
+          },
+        },
+        bids: [
+          {
+            bidder: 'sonobi',
+            params: {
+              dom_id: tabAdUnit.adId,
+              ad_unit: tabAdUnit.adUnitId,
+            },
+          },
+          {
+            bidder: 'pulsepoint',
+            params: {
+              cf: '300X250',
+              cp: '560174',
+              ct: '665497',
+            },
+          },
+          {
+            bidder: 'aol',
+            params: {
+              network: '10559.1',
+              placement: '4997858',
+              sizeId: '170',
+            },
+          },
+          {
+            bidder: 'sovrn',
+            params: {
+              tagid: '589343',
+            },
+          },
+          {
+            bidder: 'openx',
+            params: {
+              unit: '538658529',
+              delDomain: 'tabforacause-d.openx.net',
+            },
+          },
+          // {
+          //   bidder: 'emx_digital',
+          //   params: {
+          //     tagid: 'TODO'
+          //   }
+          // },
+          {
+            bidder: 'rhythmone',
+            params: {
+              placementId: '73423',
+            },
+          },
+        ],
+      }
+    default:
+      return null
+  }
+}
 
-  const adUnits = [
-    // Leaderboard-style ad
-    {
-      code: leaderboard.adId,
-      mediaTypes: {
-        banner: {
-          sizes: leaderboard.sizes,
-        },
-      },
-      bids: [
-        {
-          bidder: 'sonobi',
-          params: {
-            dom_id: leaderboard.adId,
-            ad_unit: leaderboard.adUnitId,
-          },
-        },
-        {
-          bidder: 'pulsepoint',
-          params: {
-            cf: '728X90',
-            cp: '560174',
-            ct: '460981',
-          },
-        },
-        {
-          bidder: 'aol',
-          params: {
-            network: '10559.1',
-            placement: '4117691',
-            sizeId: '225',
-          },
-        },
-        {
-          bidder: 'sovrn',
-          params: {
-            tagid: '438918',
-          },
-        },
-        {
-          bidder: 'openx',
-          params: {
-            unit: '538658529',
-            delDomain: 'tabforacause-d.openx.net',
-          },
-        },
-        // EMX Digital was formerly brealtime.
-        // http://prebid.org/dev-docs/bidders.html#emx_digital
-        {
-          bidder: 'emx_digital',
-          params: {
-            tagid: '29672',
-          },
-        },
-        {
-          bidder: 'rhythmone',
-          params: {
-            placementId: '73423',
-          },
-        },
-      ],
-    },
-
-    // Rectangle-style ad
-    {
-      code: rectangleAdPrimary.adId,
-      mediaTypes: {
-        banner: {
-          sizes: rectangleAdPrimary.sizes,
-        },
-      },
-      bids: [
-        {
-          bidder: 'sonobi',
-          params: {
-            dom_id: rectangleAdPrimary.adId,
-            ad_unit: rectangleAdPrimary.adUnitId,
-          },
-        },
-        {
-          bidder: 'pulsepoint',
-          params: {
-            cf: '300X250',
-            cp: '560174',
-            ct: '460982',
-          },
-        },
-        {
-          bidder: 'aol',
-          params: {
-            network: '10559.1',
-            placement: '4117692',
-            sizeId: '170',
-          },
-        },
-        {
-          bidder: 'sovrn',
-          params: {
-            tagid: '438916',
-          },
-        },
-        {
-          bidder: 'openx',
-          params: {
-            unit: '538658529',
-            delDomain: 'tabforacause-d.openx.net',
-          },
-        },
-        {
-          bidder: 'emx_digital',
-          params: {
-            tagid: '29673',
-          },
-        },
-        {
-          bidder: 'rhythmone',
-          params: {
-            placementId: '73423',
-          },
-        },
-      ],
-    },
-
-    // Second rectangle-style ad
-    {
-      code: rectangleAdSecondary.adId,
-      mediaTypes: {
-        banner: {
-          sizes: rectangleAdSecondary.sizes,
-        },
-      },
-      bids: [
-        {
-          bidder: 'sonobi',
-          params: {
-            dom_id: rectangleAdSecondary.adId,
-            ad_unit: rectangleAdSecondary.adUnitId,
-          },
-        },
-        {
-          bidder: 'pulsepoint',
-          params: {
-            cf: '300X250',
-            cp: '560174',
-            ct: '665497',
-          },
-        },
-        {
-          bidder: 'aol',
-          params: {
-            network: '10559.1',
-            placement: '4997858',
-            sizeId: '170',
-          },
-        },
-        {
-          bidder: 'sovrn',
-          params: {
-            tagid: '589343',
-          },
-        },
-        {
-          bidder: 'openx',
-          params: {
-            unit: '538658529',
-            delDomain: 'tabforacause-d.openx.net',
-          },
-        },
-        // {
-        //   bidder: 'emx_digital',
-        //   params: {
-        //     tagid: 'TODO'
-        //   }
-        // },
-        {
-          bidder: 'rhythmone',
-          params: {
-            placementId: '73423',
-          },
-        },
-      ],
-    },
-  ]
-
-  return adUnits
+/**
+ * Given the tab-ads config, return an array of Prebid ad units.
+ * @param {Object} config - The tab-ads config object.
+ * @return {Array} An array of Prebid ad unit config objects.
+ */
+const getAdUnits = config => {
+  const { adUnits } = config
+  const prebidAdUnits = adUnits.map(adUnit => {
+    return getPrebidAdUnit(adUnit, config)
+  })
+  return prebidAdUnits.filter(adUnit => !!adUnit)
 }
 
 /**
