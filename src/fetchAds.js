@@ -105,6 +105,12 @@ const callBidders = async config => {
 const fetchAds = async userConfig => {
   const config = setConfig(userConfig)
   if (!config.disableAds) {
+    const { adUnits } = config
+    if (!adUnits.length) {
+      logger.debug('No ad units provided. Not setting up GAM or fetching bids.')
+      return
+    }
+
     // Define slots and enable ad services.
     setUpGoogleAds(config)
 

@@ -44,7 +44,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     await indexExchangeBidder.fetchBids(tabAdsConfig)
   })
 
-  it('gets bids for the three ads', async () => {
+  it('gets bids for three ads when all ad units are enabled', async () => {
     expect.assertions(2)
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
@@ -58,6 +58,93 @@ describe('indexExchangeBidder: fetchBids', () => {
       { htSlotName: 'd-1-728x90-atf-bottom-leaderboard' },
       { htSlotName: 'd-3-300x250-atf-bottom-right_rectangle' },
       { htSlotName: 'd-2-300x250-atf-middle-right_rectangle' },
+    ])
+  })
+
+  it('does not fetch bids when no ad units are enabled', async () => {
+    expect.assertions(1)
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    await indexExchangeBidder.fetchBids(tabAdsConfig)
+    expect(ixTag.retrieveDemand).not.toHaveBeenCalled()
+  })
+
+  it('returns a Promise that resolves to empty bid response info when no ads are enabled', async () => {
+    expect.assertions(1)
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    const response = await indexExchangeBidder.fetchBids(tabAdsConfig)
+    expect(response).toEqual({
+      bidResponses: {},
+      rawBidResponses: {},
+    })
+  })
+
+  it('gets bids for one ad when one ad unit is enabled', async () => {
+    expect.assertions(2)
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+      ],
+    })
+    await indexExchangeBidder.fetchBids(tabAdsConfig)
+    expect(ixTag.retrieveDemand).toHaveBeenCalled()
+    expect(ixTag.retrieveDemand.mock.calls[0][0]).toEqual([
+      { htSlotName: 'd-1-728x90-atf-bottom-leaderboard' },
+    ])
+  })
+
+  it('gets bids for two ads when two ad units are enabled', async () => {
+    expect.assertions(2)
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+        {
+          // The primary rectangle ad (bottom-right).
+          adId: 'div-gpt-ad-1464385742501-0',
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+        },
+      ],
+    })
+    await indexExchangeBidder.fetchBids(tabAdsConfig)
+    expect(ixTag.retrieveDemand).toHaveBeenCalled()
+    expect(ixTag.retrieveDemand.mock.calls[0][0]).toEqual([
+      { htSlotName: 'd-1-728x90-atf-bottom-leaderboard' },
+      { htSlotName: 'd-3-300x250-atf-bottom-right_rectangle' },
     ])
   })
 
@@ -378,6 +465,48 @@ describe('indexExchangeBidder: fetchBids', () => {
           revenue: 5324 / 10e4,
           advertiserName: 'indexExchange',
           adSize: '300x250',
+          encodedRevenue: null,
+        },
+      ],
+    }
+    expect(bidResponses).toEqual(expectedBidResponses)
+  })
+
+  it('returns the expected normalized BidResponses in the bidResponses key when only one ad returns', async () => {
+    expect.assertions(1)
+
+    // Mock the bid response.
+    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
+      .default
+    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
+      .default
+    const ixTag = getIndexExchangeTag()
+    const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
+
+    // Mock that only one ad returns. This will happen when we request
+    // ads for only one ad unit.
+    const defaultMockBidResponse = mockIndexExchangeBidResponse()
+    const mockBidResponse = {
+      ...defaultMockBidResponse,
+      slot: {
+        'd-1-728x90-atf-bottom-leaderboard':
+          defaultMockBidResponse.slot['d-1-728x90-atf-bottom-leaderboard'],
+      },
+    }
+
+    ixTag.retrieveDemand.mockImplementation((config, callback) =>
+      callback(mockBidResponse)
+    )
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const { bidResponses } = await indexExchangeBidder.fetchBids(tabAdsConfig)
+    const expectedBidResponses = {
+      // The long leaderboard ad.
+      'div-gpt-ad-1464385677836-0': [
+        {
+          adId: 'div-gpt-ad-1464385677836-0',
+          revenue: 120 / 10e4,
+          advertiserName: 'indexExchange',
+          adSize: '728x90',
           encodedRevenue: null,
         },
       ],

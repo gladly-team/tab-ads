@@ -166,6 +166,162 @@ describe('prebidBidder: fetchBids', () => {
     ])
   })
 
+  it('does not call for any bids if the tab-ads adUnits value is an empty array', async () => {
+    expect.assertions(2)
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    expect(pbjs.addAdUnits).not.toHaveBeenCalled()
+    expect(pbjs.requestBids).not.toHaveBeenCalled()
+  })
+
+  it('returns a Promise that resolves to empty bid response info when no ads are enabled', async () => {
+    expect.assertions(1)
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    const response = await prebidBidder.fetchBids(tabAdsConfig)
+    expect(response).toEqual({
+      bidResponses: {},
+      rawBidResponses: {},
+    })
+  })
+
+  it('sets up only the leaderboard ad unit if the tab-ads adUnits value is the one leaderboard ad', async () => {
+    expect.assertions(2)
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+      ],
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+
+    expect(adUnitConfig.length).toBe(1)
+    expect(adUnitConfig[0]).toMatchObject({
+      code: 'div-gpt-ad-1464385677836-0',
+      mediaTypes: {
+        banner: {
+          sizes: [[728, 90]],
+        },
+      },
+      bids: expect.any(Array),
+    })
+  })
+
+  it('sets up only the primary rectangle ad unit if the tab-ads adUnits value is that one ad', async () => {
+    expect.assertions(2)
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The primary rectangle ad (bottom-right).
+          adId: 'div-gpt-ad-1464385742501-0',
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+        },
+      ],
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+
+    expect(adUnitConfig.length).toBe(1)
+    expect(adUnitConfig[0]).toMatchObject({
+      code: 'div-gpt-ad-1464385742501-0',
+      mediaTypes: {
+        banner: {
+          sizes: [[300, 250]],
+        },
+      },
+      bids: expect.any(Array),
+    })
+  })
+
+  it('sets up only the secondary rectangle ad unit if the tab-ads adUnits value is that one ad', async () => {
+    expect.assertions(2)
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The second rectangle ad (right side, above the first).
+          adId: 'div-gpt-ad-1539903223131-0',
+          adUnitId: '/43865596/HBTR2',
+          sizes: [[300, 250]],
+        },
+      ],
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+
+    expect(adUnitConfig.length).toBe(1)
+    expect(adUnitConfig[0]).toMatchObject({
+      code: 'div-gpt-ad-1539903223131-0',
+      mediaTypes: {
+        banner: {
+          sizes: [[300, 250]],
+        },
+      },
+      bids: expect.any(Array),
+    })
+  })
+
+  it('sets up two ads if the tab-ads adUnits value is two ads', async () => {
+    expect.assertions(3)
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+        {
+          // The second rectangle ad (right side, above the first).
+          adId: 'div-gpt-ad-1539903223131-0',
+          adUnitId: '/43865596/HBTR2',
+          sizes: [[300, 250]],
+        },
+      ],
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
+
+    expect(adUnitConfig.length).toBe(2)
+    expect(adUnitConfig[0]).toMatchObject({
+      code: 'div-gpt-ad-1464385677836-0',
+      mediaTypes: {
+        banner: {
+          sizes: [[728, 90]],
+        },
+      },
+      bids: expect.any(Array),
+    })
+    expect(adUnitConfig[1]).toMatchObject({
+      code: 'div-gpt-ad-1539903223131-0',
+      mediaTypes: {
+        banner: {
+          sizes: [[300, 250]],
+        },
+      },
+      bids: expect.any(Array),
+    })
+  })
+
   it('calls pbjs.requestBids', async () => {
     expect.assertions(1)
     const pbjs = getPrebidPbjs()
@@ -259,6 +415,54 @@ describe('prebidBidder: fetchBids', () => {
           revenue: 1.01 / 1000,
           advertiserName: 'openx',
           adSize: '300x250',
+          encodedRevenue: null,
+        },
+      ],
+    }
+    expect(bidResponses).toEqual(normalizedBidResponses)
+  })
+
+  it('returns the expected normalized BidResponses in the bidResponses key when there is only one ad returned', async () => {
+    expect.assertions(1)
+
+    const pbjs = getPrebidPbjs()
+
+    // Set the mock Prebid bid responses.
+    const mockBidResponses = {
+      // Only one ad response. This will happen if we only request for one ad unit.
+      'div-gpt-ad-1464385677836-0': mockPrebidBidResponses()[
+        'div-gpt-ad-1464385677836-0'
+      ],
+    }
+    pbjs.requestBids = jest.fn(requestBidsSettings => {
+      requestBidsSettings.bidsBackHandler(mockBidResponses)
+    })
+
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    const { bidResponses } = await prebidBidder.fetchBids(tabAdsConfig)
+
+    const normalizedBidResponses = {
+      // The long leaderboard ad.
+      'div-gpt-ad-1464385677836-0': [
+        {
+          adId: 'div-gpt-ad-1464385677836-0',
+          revenue: 0.582 / 1000,
+          advertiserName: 'openx',
+          adSize: '728x90',
+          encodedRevenue: null,
+        },
+        {
+          adId: 'div-gpt-ad-1464385677836-0',
+          revenue: 4.21 / 1000,
+          advertiserName: 'appnexus',
+          adSize: '728x90',
+          encodedRevenue: null,
+        },
+        {
+          adId: 'div-gpt-ad-1464385677836-0',
+          revenue: 0.19 / 1000,
+          advertiserName: 'emxdigital',
+          adSize: '728x90',
           encodedRevenue: null,
         },
       ],

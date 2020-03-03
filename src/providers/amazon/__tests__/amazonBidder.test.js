@@ -106,11 +106,11 @@ describe('amazonBidder: fetchBids', () => {
   })
 
   it('calls for the expected bids when all ads are enabled', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await amazonBidder.fetchBids(tabAdsConfig)
-    expect(apstag.fetchBids).toHaveBeenCalled()
     expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
       slots: [
         {
@@ -129,7 +129,93 @@ describe('amazonBidder: fetchBids', () => {
     })
   })
 
+  it('does not call for any bids when no ads are enabled', async () => {
+    expect.assertions(1)
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.fetchBids).not.toHaveBeenCalled()
+  })
+
+  it('returns a Promise that resolves to empty bid response info when no ads are enabled', async () => {
+    expect.assertions(1)
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    const response = await amazonBidder.fetchBids(tabAdsConfig)
+    expect(response).toEqual({
+      bidResponses: {},
+      rawBidResponses: {},
+    })
+  })
+
+  it('calls for one bid when one ad is enabled', async () => {
+    expect.assertions(1)
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+      ],
+    })
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
+      slots: [
+        {
+          slotID: 'div-gpt-ad-1464385677836-0',
+          sizes: [[728, 90]],
+        },
+      ],
+    })
+  })
+
+  it('calls for two bids when two ads are enabled', async () => {
+    expect.assertions(1)
+    const apstag = getAmazonTag()
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The long leaderboard ad.
+          adId: 'div-gpt-ad-1464385677836-0',
+          adUnitId: '/43865596/HBTL',
+          sizes: [[728, 90]],
+        },
+        {
+          // The second rectangle ad (right side, above the first).
+          adId: 'div-gpt-ad-1539903223131-0',
+          adUnitId: '/43865596/HBTR2',
+          sizes: [[300, 250]],
+        },
+      ],
+    })
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.fetchBids.mock.calls[0][0]).toMatchObject({
+      slots: [
+        {
+          slotID: 'div-gpt-ad-1464385677836-0',
+          sizes: [[728, 90]],
+        },
+        { slotID: 'div-gpt-ad-1539903223131-0', sizes: [[300, 250]] },
+      ],
+    })
+  })
+
   it('returns the expected Amazon bid responses in the rawBidResponses key', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
 
@@ -201,6 +287,7 @@ describe('amazonBidder: fetchBids', () => {
   })
 
   it('returns the expected normalized BidResponses in the bidResponses key', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
 
@@ -300,6 +387,7 @@ describe('amazonBidder: fetchBids', () => {
   })
 
   it('ignores any bids that have an empty string in the raw bid response "amzniid" property', async () => {
+    expect.assertions(1)
     const apstag = getAmazonTag()
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
 

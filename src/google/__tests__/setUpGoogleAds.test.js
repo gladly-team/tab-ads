@@ -22,7 +22,7 @@ describe('setUpGoogleAds', () => {
     setUpGoogleAds(tabAdsConfig)
   })
 
-  it('defines the expected ad slots', () => {
+  it('defines the expected ad slots when all ad units are enabled', () => {
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
@@ -42,6 +42,48 @@ describe('setUpGoogleAds', () => {
       expect.any(Array),
       'div-gpt-ad-1539903223131-0',
     ])
+  })
+
+  it('defines no ad slots when no ad units are enabled', () => {
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    setUpGoogleAds(tabAdsConfig)
+    const googletag = getGoogleTag()
+    expect(googletag.defineSlot).not.toHaveBeenCalled()
+  })
+
+  it('does not enable ad services when when no ad units are enabled', () => {
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [],
+    })
+    setUpGoogleAds(tabAdsConfig)
+    const googletag = getGoogleTag()
+    expect(googletag.enableServices).not.toHaveBeenCalled()
+  })
+
+  it('only define one ad slots when only one ad units is enabled', () => {
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The primary rectangle ad (bottom-right).
+          adId: 'div-gpt-ad-1464385742501-0',
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+        },
+      ],
+    })
+    setUpGoogleAds(tabAdsConfig)
+    const googletag = getGoogleTag()
+    expect(googletag.defineSlot).toHaveBeenCalledTimes(1)
+    expect(googletag.defineSlot).toHaveBeenCalledWith(
+      '/43865596/HBTR',
+      expect.any(Array),
+      'div-gpt-ad-1464385742501-0'
+    )
   })
 
   it('enables single request mode', () => {
