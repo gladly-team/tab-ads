@@ -25,3 +25,48 @@ In addition, the module sets `window.tabAds` with two properties useful for debu
 - `getAllWinningBids`: a function that returns information on the winning ad for each ad slot
 - `adDataStore`: storage of each bidder partner's raw and formatted bid responses, as well as Google Ad Manager's slot events
 
+## HTML Tags
+We must include the following scripts immediately after the `<body>` tag and before calling `tab-ads`:
+```
+<!--
+  Google Publisher Tag
+-->
+<script type="text/javascript">/* eslint-disable */
+  // Google Tag Manager
+  var googletag = window.googletag || {}
+  googletag.cmd = googletag.cmd || []
+  googletag.cmd.push(() => {
+    googletag.pubads().disableInitialLoad()
+    googletag.pubads().setTagForChildDirectedTreatment(0)
+  })
+
+  var gads = document.createElement('script')
+  gads.async = true
+  gads.type = 'text/javascript'
+  var useSSL = document.location.protocol === 'https:'
+  gads.src = (useSSL ? 'https:' : 'http:') +
+    '//www.googletagservices.com/tag/js/gpt.js'
+  var head = document.getElementsByTagName('head')[0]
+  head.appendChild(gads)
+</script>
+<% } %>
+
+<!--
+  Amazon apstag
+-->
+<script>/* eslint-disable */
+try {
+  !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
+} catch(e) {
+  console.error(e)
+}
+</script>
+
+<!--
+  Index Exchange. See:
+  https://kb.indexexchange.com/Wrapper/Installation/Universal_Library_Implementation.htm
+-->
+<script async src="//js-sec.indexww.com/ht/p/189508-208262485043658.js"></script>
+```
+
+We could consider adding a `getAdCodeForHTMLBody()` function to `tab-ads`, which apps could use to insert scripts into the page.
