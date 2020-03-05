@@ -70,3 +70,14 @@ try {
 ```
 
 We could consider adding a `getAdCodeForHTMLBody()` function to `tab-ads`, which apps could use to insert scripts into the page.
+
+## Building Prebid from Source
+We build Prebid.js from source and keep the built Prebid code in source control. We do this because:
+1. We can build Prebid to include only the required modules. This reduces the JS bundle size.
+2. We can patch Prebid to ensure it works as expected in the context of a new tab page. Our users may view the new tab page within an iframe that has a `chrome-extension://` or `moz-extension://` protocol, and this can break bidders that need to know the correct domain and referrer.
+
+To build a new version of Prebid, run `yarn run prebid:build`.
+
+To modify the Prebid patches, modify files as needed in `./node_modules/prebid.js/*` and run `prebid:create-patches`. Then, rebuild Prebid to put those patches into effect.
+
+
