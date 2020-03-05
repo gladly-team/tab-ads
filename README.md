@@ -76,8 +76,13 @@ We build Prebid.js from source and keep the built Prebid code in source control.
 1. We can build Prebid to include only the required modules. This reduces the JS bundle size.
 2. We can patch Prebid to ensure it works as expected in the context of a new tab page. Our users may view the new tab page within an iframe that has a `chrome-extension://` or `moz-extension://` protocol, and this can break bidders that need to know the correct domain and referrer.
 
-To build a new version of Prebid, run `yarn run prebid:build`.
+To build a new version of Prebid:
+`yarn run prebid:build`
 
-To modify the Prebid patches, modify files as needed in `./node_modules/prebid.js/*` and run `prebid:create-patches`. Then, rebuild Prebid to put those patches into effect.
+To modify the Prebid patches:
+* modify files as needed in `./node_modules/prebid.js/*`
+* add tests for the patches in `prebidPatches.test.js`
+* run `prebid:create-patches` to update the patches file
+* run `yarn run prebid:build` to put those patches into effect in the build Prebid file
 
 
