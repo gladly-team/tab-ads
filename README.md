@@ -85,4 +85,19 @@ To modify the Prebid patches:
 * run `prebid:create-patches` to update the patches file
 * run `yarn run prebid:build` to put those patches into effect in the build Prebid file
 
+## Verifying Prebid Bidder Requests
+**In the new tab page iframe context**, we need to ensure that Prebid bidders send the correct page URL and referrer info. We don't have automated tests for this yet. To verify, we need to load the page in a new tab page iframe and inspect each parter's network request.
 
+We should check this every time we upgrade Prebid.
+
+Here's what to check for each partner, assuming the iframed page is `https://example.com/newtab/`:
+
+| Partner | Request URL | What to check |
+| ------------- | ------------- | ------------- |
+| Sonobi  | `apex.go.sonobi.com/trinity.json`  | Query param `ref` is `https://example.com/newtab/` |
+| Pulsepoint  | `https://bid.contextweb.com/header/ortb`  | Payload `site.page` and `site.ref` are both `https://example.com/newtab/`  |
+| AOL  | `https://match.adsrvr.org/track/cmf/generic`  | No test needed  |
+| Sovrn  | `https://ap.lijit.com/rtb/bid`  | Payload `site.domain` is `example.com` and `site.page` is `https://example.com/newtab/`  |
+| OpenX  | `https://tabforacause-d.openx.net/w/1.0/arj`  | Query param `ju` is `https://example.com/newtab/` |
+| EMX Digital  | `hb.emxdgt.com`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |
+| RhythmOne  | `tag.1rx.io/*`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |
