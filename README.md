@@ -47,7 +47,6 @@ We must include the following scripts immediately after the `<body>` tag and bef
   var head = document.getElementsByTagName('head')[0]
   head.appendChild(gads)
 </script>
-<% } %>
 
 <!--
   Amazon apstag
