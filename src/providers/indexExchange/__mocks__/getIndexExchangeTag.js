@@ -1,12 +1,16 @@
 /* eslint-env jest */
 
+import getGlobal from 'src/utils/getGlobal'
+
+const global = getGlobal()
+
 const mockCmd = []
 mockCmd.push = f => f()
 
 export default jest.fn(() => {
-  window.headertag = window.headertag || {
+  global.headertag = global.headertag || {
     cmd: mockCmd,
     retrieveDemand: jest.fn((config, callback) => callback()),
   }
-  return window.headertag
+  return global.headertag
 })

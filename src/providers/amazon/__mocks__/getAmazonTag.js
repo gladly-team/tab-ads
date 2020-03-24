@@ -1,7 +1,9 @@
 /* eslint-env jest */
+import getGlobal from 'src/utils/getGlobal'
 
 export default () => {
-  window.apstag = window.apstag || {
+  const global = getGlobal()
+  global.apstag = global.apstag || {
     init: jest.fn(),
     fetchBids: jest.fn((config, bidsBackCallback) => {
       // By default, immediately resolve the fetched bids.
@@ -10,5 +12,5 @@ export default () => {
     renderImp: jest.fn(),
     setDisplayBids: jest.fn(),
   }
-  return window.apstag
+  return global.apstag
 }

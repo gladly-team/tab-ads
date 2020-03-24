@@ -2,6 +2,9 @@ import { find } from 'lodash/collection'
 import googleDisplayAd from 'src/google/googleDisplayAd'
 import { getConfig } from 'src/config'
 import queue from 'src/utils/queue'
+import getGlobal from 'src/utils/getGlobal'
+
+const global = getGlobal()
 
 const mockDisplayAd = (adId, config) => {
   let mockNetworkDelayMs = 0
@@ -16,7 +19,7 @@ const mockDisplayAd = (adId, config) => {
 
   // Mock returning an ad.
   setTimeout(() => {
-    const elem = window.document.getElementById(adId)
+    const elem = global.document.getElementById(adId)
     if (!elem) {
       return
     }

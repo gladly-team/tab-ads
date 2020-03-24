@@ -1,11 +1,15 @@
 /* eslint-env jest */
 
+import getGlobal from 'src/utils/getGlobal'
+
+const global = getGlobal()
+
 // By default, just execute commands in the queue.
 const mockQue = []
 mockQue.push = f => f()
 
 export default () => {
-  window.pbjs = window.pbjs || {
+  global.pbjs = global.pbjs || {
     que: mockQue,
     setConfig: jest.fn(),
     bidderSettings: {},
@@ -15,5 +19,5 @@ export default () => {
     }),
     setTargetingForGPTAsync: jest.fn(),
   }
-  return window.pbjs
+  return global.pbjs
 }

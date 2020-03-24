@@ -3,6 +3,7 @@ import getAds from 'src/fetchAds'
 import { getAllWinningBids as getAllWinningBidsForAds } from 'src/utils/getWinningBids'
 import ReactAdComponent from 'src/AdComponent'
 import getNewTabAdUnits from 'src/getAvailableAdUnits'
+import getGlobal from 'src/utils/getGlobal'
 
 export const fetchAds = async config => {
   await getAds(config)
@@ -14,5 +15,6 @@ export const getAvailableAdUnits = getNewTabAdUnits
 
 // Expose functions to the global variable that are helpful
 // for debugging in devtools.
-window.tabAds = window.tabAds || {}
-window.tabAds.getAllWinningBids = getAllWinningBidsForAds
+const global = getGlobal()
+global.tabAds = global.tabAds || {}
+global.tabAds.getAllWinningBids = getAllWinningBidsForAds

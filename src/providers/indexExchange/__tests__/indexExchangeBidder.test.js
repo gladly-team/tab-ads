@@ -2,10 +2,13 @@
 
 import { setConfig } from 'src/config'
 import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
+import getGlobal from 'src/utils/getGlobal'
 
 jest.mock('src/providers/indexExchange/getIndexExchangeTag')
 jest.mock('src/google/getGoogleTag')
 jest.mock('src/utils/logger')
+
+const global = getGlobal()
 
 beforeAll(() => {
   jest.useFakeTimers()
@@ -13,15 +16,15 @@ beforeAll(() => {
 
 beforeEach(() => {
   // Mock the IX tag
-  delete window.headertag
+  delete global.headertag
   const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
     .default
-  window.headertag = getIndexExchangeTag()
+  global.headertag = getIndexExchangeTag()
 
   // Set up googletag
-  delete window.googletag
+  delete global.googletag
   const getGoogleTag = require('src/google/getGoogleTag').default
-  window.googletag = getGoogleTag()
+  global.googletag = getGoogleTag()
 })
 
 afterEach(() => {
@@ -30,8 +33,8 @@ afterEach(() => {
 })
 
 afterAll(() => {
-  delete window.headertag
-  delete window.googletag
+  delete global.headertag
+  delete global.googletag
 })
 
 describe('indexExchangeBidder: fetchBids', () => {

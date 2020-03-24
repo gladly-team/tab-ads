@@ -1,14 +1,17 @@
 /* eslint-env jest */
+import getGlobal from 'src/utils/getGlobal'
+
+const global = getGlobal()
 
 // By default, we run functions in the queue immediately.
 // Call this to disable that.
 export const __disableAutomaticCommandQueueExecution = () => {
-  window.googletag.cmd = []
+  global.googletag.cmd = []
 }
 
 // Run all functions in googletag.cmd.
 export const __runCommandQueue = () => {
-  window.googletag.cmd.forEach(cmd => cmd())
+  global.googletag.cmd.forEach(cmd => cmd())
 }
 
 let mockPubadsRefresh = jest.fn()
@@ -60,7 +63,7 @@ const mockCmd = []
 mockCmd.push = jest.fn(f => f())
 
 export default jest.fn(() => {
-  window.googletag = window.googletag || {
+  global.googletag = global.googletag || {
     cmd: mockCmd,
     pubads: jest.fn(() => ({
       addEventListener: (eventName, callback) => {
@@ -80,5 +83,5 @@ export default jest.fn(() => {
     display: jest.fn(),
     enableServices: jest.fn(),
   }
-  return window.googletag
+  return global.googletag
 })

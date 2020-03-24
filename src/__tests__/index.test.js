@@ -4,10 +4,13 @@ import getAds from 'src/fetchAds'
 import AdComponent from 'src/AdComponent'
 import { getAllWinningBids } from 'src/utils/getWinningBids'
 import getNewTabAdUnits from 'src/getAvailableAdUnits'
+import getGlobal from 'src/utils/getGlobal'
 
 jest.mock('src/AdComponent')
 jest.mock('src/fetchAds')
 jest.mock('src/utils/logger')
+
+const global = getGlobal()
 
 describe('index.js', () => {
   it('exports fetchAds', () => {
@@ -50,6 +53,6 @@ describe('index.js', () => {
   })
 
   it('assigns getAllWinningBids to the tabAds global', () => {
-    expect(window.tabAds.getAllWinningBids).toBe(getAllWinningBids)
+    expect(global.tabAds.getAllWinningBids).toBe(getAllWinningBids)
   })
 })

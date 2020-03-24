@@ -8,18 +8,21 @@ import {
   getMockTabAdsUserConfig,
   mockPrebidBidResponses,
 } from 'src/utils/test-utils'
+import getGlobal from 'src/utils/getGlobal'
 
 jest.mock('src/providers/prebid/built/pb')
 jest.mock('src/providers/prebid/getPrebidPbjs')
 jest.mock('src/utils/logger')
 
+const global = getGlobal()
+
 beforeEach(() => {
-  delete window.pbjs
-  window.pbjs = getPrebidPbjs()
+  delete global.pbjs
+  global.pbjs = getPrebidPbjs()
 
   // Set up googletag
-  delete window.googletag
-  window.googletag = getGoogleTag()
+  delete global.googletag
+  global.googletag = getGoogleTag()
 })
 
 afterEach(() => {
@@ -27,8 +30,8 @@ afterEach(() => {
 })
 
 afterAll(() => {
-  delete window.googletag
-  delete window.pbjs
+  delete global.googletag
+  delete global.pbjs
 })
 
 describe('prebidBidder: fetchBids', () => {
