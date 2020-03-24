@@ -1,9 +1,16 @@
+/* eslint import/no-dynamic-require: 0 */
 import { get } from 'lodash/object'
-import 'src/providers/prebid/built/pb' // Run our built Prebid.js
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import Bidder from 'src/utils/Bidder'
 import BidResponse from 'src/utils/BidResponse'
 import logger from 'src/utils/logger'
+import { isClientSide } from 'src/utils/ssr'
+
+// Run our built Prebid.js if in a browser. Ignore it if on
+// the server, because it uses the window.
+if (isClientSide()) {
+  require('src/providers/prebid/built/pb')
+}
 
 /**
  * Given an ad unit object from the tab-ads config, return the
