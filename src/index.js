@@ -4,8 +4,14 @@ import { getAllWinningBids as getAllWinningBidsForAds } from 'src/utils/getWinni
 import ReactAdComponent from 'src/AdComponent'
 import getNewTabAdUnits from 'src/getAvailableAdUnits'
 import getGlobal from 'src/utils/getGlobal'
+import { isClientSide } from 'src/utils/ssr'
 
 export const fetchAds = async config => {
+  if (!isClientSide()) {
+    throw new Error(
+      'The tab-ads package can only fetch ads in the browser environment.'
+    )
+  }
   await getAds(config)
 }
 

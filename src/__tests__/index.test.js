@@ -5,12 +5,18 @@ import AdComponent from 'src/AdComponent'
 import { getAllWinningBids } from 'src/utils/getWinningBids'
 import getNewTabAdUnits from 'src/getAvailableAdUnits'
 import getGlobal from 'src/utils/getGlobal'
+import { isClientSide } from 'src/utils/ssr'
 
 jest.mock('src/AdComponent')
 jest.mock('src/fetchAds')
 jest.mock('src/utils/logger')
+jest.mock('src/utils/ssr')
 
 const global = getGlobal()
+
+beforeEach(() => {
+  isClientSide.mockReturnValue(true)
+})
 
 describe('index.js', () => {
   it('exports fetchAds', () => {
@@ -50,6 +56,15 @@ describe('index.js', () => {
     const myConfig = { foo: 'bar' }
     await fetchAds(myConfig)
     expect(getAds).toHaveBeenCalledWith(myConfig)
+  })
+
+  it('throws if fetchAds is called in a server environment', async () => {
+    expect.assertions(1)
+    isClientSide.mockReturnValue(false)
+    const { fetchAds } = require('src/index')
+    await expect(fetchAds()).rejects.toThrow(
+      'The tab-ads package can only fetch ads in the browser environment.'
+    )
   })
 
   it('assigns getAllWinningBids to the tabAds global', () => {
