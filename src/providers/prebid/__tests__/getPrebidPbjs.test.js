@@ -1,29 +1,32 @@
 /* eslint-env jest */
 
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
+import getGlobal from 'src/utils/getGlobal'
+
+const global = getGlobal()
 
 afterEach(() => {
-  delete window.pbjs
+  delete global.pbjs
 })
 
 describe('getPrebidPbjs', () => {
-  it('sets window.pbjs', () => {
-    delete window.pbjs
-    expect(window.pbjs).toBeUndefined()
+  it('sets global.pbjs', () => {
+    delete global.pbjs
+    expect(global.pbjs).toBeUndefined()
     getPrebidPbjs()
-    expect(window.pbjs).not.toBeUndefined()
+    expect(global.pbjs).not.toBeUndefined()
   })
 
-  it('uses existing window.pbjs object if one exists', () => {
+  it('uses existing global.pbjs object if one exists', () => {
     // Set a fake existing pbjs
     const fakeCmd = () => {}
     const fakeExistingPbjs = {
       que: [fakeCmd],
       foo: 'bar',
     }
-    window.pbjs = fakeExistingPbjs
+    global.pbjs = fakeExistingPbjs
 
-    expect(window.pbjs).toBe(fakeExistingPbjs)
+    expect(global.pbjs).toBe(fakeExistingPbjs)
     const pbVar = getPrebidPbjs()
     expect(pbVar).toBe(fakeExistingPbjs)
   })

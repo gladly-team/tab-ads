@@ -6,6 +6,9 @@ import { onAdRendered } from 'src/adDisplayListeners'
 
 // Suggestions on a React component using Google ads:
 // https://stackoverflow.com/q/25435066/1332513
+// This component needs to support server-side rendering,
+// which means we need to take care to not import bidder code
+// that relies on the window.
 class Ad extends React.Component {
   componentDidMount() {
     const { adId, onError } = this.props

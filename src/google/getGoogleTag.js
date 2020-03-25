@@ -1,10 +1,13 @@
+import getGlobal from 'src/utils/getGlobal'
+
 export default () => {
-  const googletag = window.googletag || {}
+  const global = getGlobal()
+  const googletag = global.googletag || {}
   googletag.cmd = googletag.cmd || []
   // We're not running in global scope, so make sure to
-  // assign to the window.
-  if (!window.googletag) {
-    window.googletag = googletag
+  // assign to the global.
+  if (!global.googletag) {
+    global.googletag = googletag
   }
   return googletag
 }

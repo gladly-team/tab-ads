@@ -1,11 +1,14 @@
 // Expects we've set up Index Exchange's JS.
+import getGlobal from 'src/utils/getGlobal'
+
 export default () => {
-  const headertag = window.headertag || {}
+  const global = getGlobal()
+  const headertag = global.headertag || {}
   headertag.cmd = headertag.cmd || []
   // We're not running in global scope, so make sure to
-  // assign to the window.
-  if (!window.headertag) {
-    window.headertag = headertag
+  // assign to the global.
+  if (!global.headertag) {
+    global.headertag = headertag
   }
-  return window.headertag
+  return global.headertag
 }

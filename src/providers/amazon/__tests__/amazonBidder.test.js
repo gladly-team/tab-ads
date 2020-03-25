@@ -6,14 +6,17 @@ import {
   getMockTabAdsUserConfig,
 } from 'src/utils/test-utils'
 import { setConfig } from 'src/config'
+import getGlobal from 'src/utils/getGlobal'
 
 jest.mock('src/providers/amazon/getAmazonTag')
 jest.mock('src/utils/logger')
 
+const global = getGlobal()
+
 beforeEach(() => {
   // Mock apstag
-  delete window.apstag
-  window.apstag = getAmazonTag()
+  delete global.apstag
+  global.apstag = getAmazonTag()
 })
 
 afterEach(() => {
@@ -21,7 +24,7 @@ afterEach(() => {
 })
 
 afterAll(() => {
-  delete window.apstag
+  delete global.apstag
 })
 
 describe('amazonBidder: fetchBids', () => {

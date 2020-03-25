@@ -2,9 +2,12 @@
 
 import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
 import queue from 'src/utils/queue'
+import getGlobal from 'src/utils/getGlobal'
 
 const mockGoogleDisplayAd = jest.fn()
 jest.mock('src/google/googleDisplayAd', () => mockGoogleDisplayAd)
+
+const global = getGlobal()
 
 beforeAll(() => {
   jest.useFakeTimers()
@@ -54,7 +57,7 @@ describe('displayAd', () => {
       setAttribute: jest.fn(),
     }
     jest
-      .spyOn(window.document, 'getElementById')
+      .spyOn(global.document, 'getElementById')
       .mockImplementation(jest.fn(() => mockDOMElem))
     const displayAd = require('src/displayAd').default
     displayAd('some-ad')
@@ -77,7 +80,7 @@ describe('displayAd', () => {
       setAttribute: jest.fn(),
     }
     jest
-      .spyOn(window.document, 'getElementById')
+      .spyOn(global.document, 'getElementById')
       .mockImplementation(jest.fn(() => mockDOMElem))
     const displayAd = require('src/displayAd').default
     displayAd('some-ad')
@@ -97,7 +100,7 @@ describe('displayAd', () => {
       setAttribute: jest.fn(),
     }
     jest
-      .spyOn(window.document, 'getElementById')
+      .spyOn(global.document, 'getElementById')
       .mockImplementation(jest.fn(() => mockDOMElem))
     const displayAd = require('src/displayAd').default
     displayAd('some-ad')

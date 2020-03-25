@@ -1,4 +1,7 @@
 /* eslint-disable import/prefer-default-export */
+import getGlobal from 'src/utils/getGlobal'
+
+const global = getGlobal()
 
 const getDefaultAdDataStore = () => ({
   // Storing data from Google's ad slot events.
@@ -45,13 +48,13 @@ const getDefaultAdDataStore = () => ({
   },
 })
 
-window.tabAds = window.tabAds || {}
-window.tabAds.adDataStore = window.tabAds.adDataStore || getDefaultAdDataStore()
+global.tabAds = global.tabAds || {}
+global.tabAds.adDataStore = global.tabAds.adDataStore || getDefaultAdDataStore()
 
 export const clearAdDataStore = () => {
-  window.tabAds.adDataStore = getDefaultAdDataStore()
+  global.tabAds.adDataStore = getDefaultAdDataStore()
 }
 
 export const getAdDataStore = () => {
-  return window.tabAds.adDataStore
+  return global.tabAds.adDataStore
 }

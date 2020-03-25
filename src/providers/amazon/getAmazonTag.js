@@ -1,4 +1,7 @@
 // Expects we've set up Amazon's apstag JS before this.
+import getGlobal from 'src/utils/getGlobal'
+
 export default () => {
-  return window.apstag
+  const global = getGlobal()
+  return global.apstag
 }

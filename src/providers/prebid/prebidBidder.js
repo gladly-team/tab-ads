@@ -1,5 +1,12 @@
+/* eslint import/no-dynamic-require: 0 */
+
+// Run our built Prebid.js. Note that using `require` to load
+// Prebid only when fetching bids appears to cause the Prebid
+// auction to end substantially later, putting it at a disadvantage
+// relative to other bidders.
+import 'src/providers/prebid/built/pb'
+
 import { get } from 'lodash/object'
-import 'src/providers/prebid/built/pb' // Run our built Prebid.js
 import getPrebidPbjs from 'src/providers/prebid/getPrebidPbjs'
 import Bidder from 'src/utils/Bidder'
 import BidResponse from 'src/utils/BidResponse'

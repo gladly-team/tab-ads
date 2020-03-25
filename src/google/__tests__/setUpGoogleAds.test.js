@@ -4,15 +4,18 @@ import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import getGoogleTag from 'src/google/getGoogleTag'
 import { setConfig } from 'src/config'
 import { getMockTabAdsUserConfig } from 'src/utils/test-utils'
+import getGlobal from 'src/utils/getGlobal'
 
 jest.mock('src/google/getGoogleTag')
+
+const global = getGlobal()
 
 afterEach(() => {
   jest.clearAllMocks()
 })
 
 afterAll(() => {
-  delete window.googletag
+  delete global.googletag
 })
 
 describe('setUpGoogleAds', () => {

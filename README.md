@@ -32,14 +32,12 @@ We must include the following scripts immediately after the `<body>` tag and bef
   Google Publisher Tag
 -->
 <script type="text/javascript">/* eslint-disable */
-  // Google Tag Manager
   var googletag = window.googletag || {}
   googletag.cmd = googletag.cmd || []
   googletag.cmd.push(() => {
     googletag.pubads().disableInitialLoad()
     googletag.pubads().setTagForChildDirectedTreatment(0)
   })
-
   var gads = document.createElement('script')
   gads.async = true
   gads.type = 'text/javascript'
@@ -49,7 +47,6 @@ We must include the following scripts immediately after the `<body>` tag and bef
   var head = document.getElementsByTagName('head')[0]
   head.appendChild(gads)
 </script>
-<% } %>
 
 <!--
   Amazon apstag
