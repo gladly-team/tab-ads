@@ -1,6 +1,4 @@
-/* eslint-disable import/prefer-default-export */
 import getAds from 'src/fetchAds'
-import { getAllWinningBids as getAllWinningBidsForAds } from 'src/utils/getWinningBids'
 import ReactAdComponent from 'src/AdComponent'
 import getNewTabAdUnits from 'src/getAvailableAdUnits'
 import getGlobal from 'src/utils/getGlobal'
@@ -23,4 +21,13 @@ export const getAvailableAdUnits = getNewTabAdUnits
 // for debugging in devtools.
 const global = getGlobal()
 global.tabAds = global.tabAds || {}
-global.tabAds.getAllWinningBids = getAllWinningBidsForAds
+
+global.tabAds.getAllWinningBids = () => {
+  if (!isClientSide()) {
+    throw new Error(
+      'The tab-ads package can only get winning bids in the browser environment.'
+    )
+  }
+  const { getAllWinningBids } = require('src/utils/getWinningBids').default
+  return getAllWinningBids()
+}

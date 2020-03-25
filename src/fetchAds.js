@@ -6,7 +6,7 @@ import setUpGoogleAds from 'src/google/setUpGoogleAds'
 import { setUpAdDisplayListeners } from 'src/adDisplayListeners'
 
 // Other helpers.
-import bidders from 'src/bidders'
+import getBidders from 'src/getBidders'
 import logger from 'src/utils/logger'
 import { setConfig } from 'src/config'
 import { getAdDataStore } from 'src/utils/storage'
@@ -37,6 +37,8 @@ function sendAdserverRequest() {
   // Set targeting and make a request to GAM.
   const googletag = getGoogleTag()
   googletag.cmd.push(() => {
+    const bidders = getBidders()
+
     // Set ad server targeting.
     bidders.forEach(bidder => {
       bidder.setTargeting()
@@ -73,6 +75,7 @@ const callBidders = async config => {
   logger.debug(`Loading all bidders in ads.js.`)
 
   try {
+    const bidders = getBidders()
     await Promise.all(
       bidders.map(async bidder => {
         try {

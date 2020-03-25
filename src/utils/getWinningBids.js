@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash/lang'
 import { get } from 'lodash/object'
-import bidders from 'src/bidders'
+import getBidders from 'src/getBidders'
 import { getConfig } from 'src/config'
 import { getAdDataStore } from 'src/utils/storage'
 import BidResponse from 'src/utils/BidResponse'
@@ -56,6 +56,7 @@ const getGAMAdUnitId = adId => {
  */
 const getTopBidForAd = adId => {
   const store = getAdDataStore()
+  const bidders = getBidders()
   const allBidsForAd = bidders.reduce((acc, bidder) => {
     // If the bidder did not respond in time to be part of the
     // ad server request, don't consider their bids.

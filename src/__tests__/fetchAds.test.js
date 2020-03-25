@@ -4,7 +4,7 @@ import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' /
 import { setConfig } from 'src/config'
 import logger from 'src/utils/logger'
 import { getAdDataStore, clearAdDataStore } from 'src/utils/storage'
-import enabledBidders from 'src/bidders'
+import getBidders from 'src/getBidders'
 
 import { flushAllPromises, getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
@@ -26,11 +26,6 @@ afterEach(() => {
   reset()
   clearAdDataStore()
 })
-
-// Return an array of active Bidder modules.
-const getBidders = () => {
-  return enabledBidders
-}
 
 describe('fetchAds: bid and ad server requests', () => {
   it('calls logger.error if something throws in fetchAds', async () => {
