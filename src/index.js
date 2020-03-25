@@ -28,6 +28,6 @@ global.tabAds.getAllWinningBids = () => {
       'The tab-ads package can only get winning bids in the browser environment.'
     )
   }
-  const { getAllWinningBids } = require('src/utils/getWinningBids').default
+  const { getAllWinningBids } = require('src/utils/getWinningBids')
   return getAllWinningBids()
 }
