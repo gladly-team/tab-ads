@@ -3,7 +3,7 @@ import { isClientSide } from 'src/utils/ssr'
 let bidders = []
 
 // Bidder code (like Prebid) can rely on the window variable,
-// so we can't include when rendering server-side.
+// so we can't load bidders when rendering server-side.
 if (isClientSide()) {
   const prebidBidder = require('src/providers/prebid/prebidBidder').default
   const amazonBidder = require('src/providers/amazon/amazonBidder').default
