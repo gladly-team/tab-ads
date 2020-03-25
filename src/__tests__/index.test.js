@@ -8,11 +8,18 @@ jest.mock('src/utils/logger')
 jest.mock('src/utils/ssr')
 
 beforeEach(() => {
+  // Default to rendering on the client side.
   const { isClientSide } = require('src/utils/ssr')
   isClientSide.mockReturnValue(true)
+
+  // Reset data set on the global.
+  const getGlobal = require('src/utils/getGlobal').default
+  const global = getGlobal()
+  delete global.tabAds
 })
 
 afterEach(() => {
+  // The module sets some state.
   jest.resetModules()
 })
 
@@ -104,6 +111,7 @@ describe('index.js: global.tabAds.getAllWinningBids', () => {
     expect.assertions(1)
     const getGlobal = require('src/utils/getGlobal').default
     const global = getGlobal()
+    require('src/index') // load
     expect(global.tabAds.getAllWinningBids).toBeDefined()
   })
 
@@ -113,6 +121,21 @@ describe('index.js: global.tabAds.getAllWinningBids', () => {
     getAllWinningBids.mockReturnValue({ some: 'data' })
     const getGlobal = require('src/utils/getGlobal').default
     const global = getGlobal()
+    require('src/index') // load
     expect(global.tabAds.getAllWinningBids()).toEqual({ some: 'data' })
+  })
+
+  it('throws if called in a server environment', async () => {
+    expect.assertions(1)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(false)
+    require('src/index')
+    const getGlobal = require('src/utils/getGlobal').default
+    const global = getGlobal()
+    expect(() => {
+      global.tabAds.getAllWinningBids()
+    }).toThrow(
+      'The tab-ads package can only get winning bids in the browser environment.'
+    )
   })
 })
