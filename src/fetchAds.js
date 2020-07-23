@@ -40,7 +40,7 @@ function sendAdserverRequest() {
     const bidders = getBidders()
 
     // Set ad server targeting.
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       bidder.setTargeting()
     })
 
@@ -51,7 +51,7 @@ function sendAdserverRequest() {
 
     // Mark which bidders returned bids in time to be included
     // in the ad server request.
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       const store = getAdDataStore()
 
       // This is true if the bidder has returned bid responses.
@@ -71,13 +71,13 @@ function sendAdserverRequest() {
  * Initialize all bidders and make bid requests.
  * @return {undefined}
  */
-const callBidders = async config => {
+const callBidders = async (config) => {
   logger.debug(`Loading all bidders in ads.js.`)
 
   try {
     const bidders = getBidders()
     await Promise.all(
-      bidders.map(async bidder => {
+      bidders.map(async (bidder) => {
         try {
           const bidResponseData = await bidder.fetchBids(config)
           const store = getAdDataStore()
@@ -103,7 +103,7 @@ const callBidders = async config => {
   }
 }
 
-const fetchAds = async userConfig => {
+const fetchAds = async (userConfig) => {
   const config = setConfig(userConfig)
   try {
     if (!config.disableAds) {

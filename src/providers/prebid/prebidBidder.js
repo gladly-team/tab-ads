@@ -218,12 +218,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
  * @param {Object} config - The tab-ads config object.
  * @return {Array} An array of Prebid ad unit config objects.
  */
-const getAdUnits = config => {
+const getAdUnits = (config) => {
   const { adUnits } = config
-  const prebidAdUnits = adUnits.map(adUnit => {
+  const prebidAdUnits = adUnits.map((adUnit) => {
     return getPrebidAdUnit(adUnit, config)
   })
-  return prebidAdUnits.filter(adUnit => !!adUnit)
+  return prebidAdUnits.filter((adUnit) => !!adUnit)
 }
 
 /**
@@ -249,7 +249,7 @@ const normalizeBidResponses = (rawBidData = {}) => {
     const rawBidsForAdId = get(rawBidData, [adId, 'bids'], [])
     return {
       ...accumulator,
-      [adId]: rawBidsForAdId.map(rawBid => normalizeBid(adId, rawBid)),
+      [adId]: rawBidsForAdId.map((rawBid) => normalizeBid(adId, rawBid)),
     }
   }, {})
   return normalizedBids
@@ -271,7 +271,7 @@ const name = 'prebid'
  *   keys equal to each adId for which there's a bid and values with
  *   the raw bid response structure (different for each bidder).
  */
-const fetchBids = async config => {
+const fetchBids = async (config) => {
   logger.debug(`Prebid: bids requested`)
   const { adUnits: tabAdUnits } = config
   if (!tabAdUnits.length) {
@@ -289,7 +289,7 @@ const fetchBids = async config => {
   } catch (e) {
     isInEU = false
   }
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     function handleAuctionEnd(rawBids) {
       logger.debug(`Prebid: auction ended`)
       resolve({

@@ -7,7 +7,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-const formatMessage = msg => `tab-ads: ${msg}`
+const formatMessage = (msg) => `tab-ads: ${msg}`
 const onErrorHandler = jest.fn()
 
 beforeEach(() => {
@@ -27,7 +27,7 @@ describe('logger', () => {
   it('contains expected methods', () => {
     const loggerMethods = ['log', 'debug', 'info', 'warn', 'error']
     const logger = require('src/utils/logger').default
-    loggerMethods.forEach(method => {
+    loggerMethods.forEach((method) => {
       expect(logger[method]).not.toBeUndefined()
     })
   })

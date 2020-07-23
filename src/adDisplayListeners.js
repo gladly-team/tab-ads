@@ -14,10 +14,10 @@ const adDisplayCallbacks = {
  * @param {String} adId - An ad ID.
  * @return {undefined}
  */
-const callAdRenderedCallbacks = adId => {
+const callAdRenderedCallbacks = (adId) => {
   const winningBid = getWinningBidForAd(adId)
   const callbacks = get(adDisplayCallbacks, [adId, 'onAdRendered'], [])
-  callbacks.forEach(cb => {
+  callbacks.forEach((cb) => {
     cb(winningBid)
   })
 }
@@ -66,7 +66,7 @@ export const setUpAdDisplayListeners = () => {
       // https://developers.google.com/doubleclick-gpt/reference#googletag.events.SlotRenderEndedEvent
 
       // Keep track of data for rendered slots
-      googletag.pubads().addEventListener('slotRenderEnded', event => {
+      googletag.pubads().addEventListener('slotRenderEnded', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
 
@@ -81,7 +81,7 @@ export const setUpAdDisplayListeners = () => {
       })
 
       // Keep track of which slots have become viewable
-      googletag.pubads().addEventListener('impressionViewable', event => {
+      googletag.pubads().addEventListener('impressionViewable', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
 
@@ -93,7 +93,7 @@ export const setUpAdDisplayListeners = () => {
       })
 
       // Keep track of which slots have actually loaded creative
-      googletag.pubads().addEventListener('slotOnload', event => {
+      googletag.pubads().addEventListener('slotOnload', (event) => {
         try {
           const slotId = event.slot.getSlotElementId()
 

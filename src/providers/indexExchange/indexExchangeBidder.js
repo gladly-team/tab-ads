@@ -16,7 +16,7 @@ const rectangleAdPrimaryIXSlotID = 'd-3-300x250-atf-bottom-right_rectangle'
 const rectangleAdSecondaryIXSlotID = 'd-2-300x250-atf-middle-right_rectangle'
 
 // GAMSlotId is the Google ad unit ID.
-const mapGAMSlotToIXSlot = GAMSlotId => {
+const mapGAMSlotToIXSlot = (GAMSlotId) => {
   const {
     leaderboard,
     rectangleAdPrimary,
@@ -36,7 +36,7 @@ const mapGAMSlotToIXSlot = GAMSlotId => {
 }
 
 // IXSlotId is the Index Exchange slot ID.
-const mapIXSlotToAdId = IXSlotId => {
+const mapIXSlotToAdId = (IXSlotId) => {
   const {
     leaderboard,
     rectangleAdPrimary,
@@ -86,7 +86,7 @@ const normalizeBidResponses = (rawBidData = []) => {
       }
       return {
         ...accumulator,
-        [adId]: IXBidsForThisSlot.map(IXBid => normalizeBid(adId, IXBid)),
+        [adId]: IXBidsForThisSlot.map((IXBid) => normalizeBid(adId, IXBid)),
       }
     },
     {}
@@ -107,7 +107,7 @@ let bidsReturned = false
  * @return {Promise<undefined>} Resolves when the bid requests return
  *   or time out.
  */
-const fetchBids = async config => {
+const fetchBids = async (config) => {
   bidsReturned = false
 
   // Note: use ixTag.cmd.push because the JS may not have
@@ -123,11 +123,11 @@ const fetchBids = async config => {
     })
   }
 
-  const IXSlots = adUnits.map(adUnit => {
+  const IXSlots = adUnits.map((adUnit) => {
     return { htSlotName: mapGAMSlotToIXSlot(adUnit.adUnitId) }
   })
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     let timeoutId
     function handleAuctionEnd(rawBidResponses) {
       logger.debug(`IndexExchange: auction ended`)
@@ -150,7 +150,7 @@ const fetchBids = async config => {
 
       // Fetch bid responses from Index Exchange.
       // Note: the current request is to a casalemedia URL.
-      ixTagAgain.retrieveDemand(IXSlots, rawBidResponses => {
+      ixTagAgain.retrieveDemand(IXSlots, (rawBidResponses) => {
         if (bidsReturned) {
           // Ignore any responses except the first.
           return
@@ -181,7 +181,7 @@ const setTargeting = () => {
         googletag
           .pubads()
           .getSlots()
-          .forEach(googleSlot => {
+          .forEach((googleSlot) => {
             const IXSlotName = mapGAMSlotToIXSlot(googleSlot.getAdUnitPath())
             if (!IXSlotName) {
               // No Index Exchange unit for this Google slot.
@@ -192,13 +192,13 @@ const setTargeting = () => {
               // No Index Exchange bid for this ad unit.
               return
             }
-            IXBidResponseArray.forEach(IXBidResponse => {
+            IXBidResponseArray.forEach((IXBidResponse) => {
               if (!IXBidResponse.targeting) {
                 // No IX targeting provided.
                 return
               }
               // Set IX targeting on this slot.
-              Object.keys(IXBidResponse.targeting).forEach(targetingKey => {
+              Object.keys(IXBidResponse.targeting).forEach((targetingKey) => {
                 // https://developers.google.com/doubleclick-gpt/reference#googletag.Slot_setTargeting
                 googleSlot.setTargeting(
                   targetingKey,

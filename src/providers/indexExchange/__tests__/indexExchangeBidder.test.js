@@ -164,7 +164,7 @@ describe('indexExchangeBidder: fetchBids', () => {
   // eslint-disable-next-line jest/expect-expect
   it('the bidder resolves when the bid response returns', () => {
     expect.assertions(0)
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
         .default
       const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
@@ -206,7 +206,7 @@ describe('indexExchangeBidder: fetchBids', () => {
           )
           resolve()
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e)
         })
       retrieveDemandCallback()
@@ -216,7 +216,7 @@ describe('indexExchangeBidder: fetchBids', () => {
   // eslint-disable-next-line jest/expect-expect
   it('the bidder resolves when we exceed the bidder timeout', () => {
     expect.assertions(0)
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
         .default
       const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
@@ -257,7 +257,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
@@ -282,7 +282,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
@@ -313,7 +313,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
@@ -357,7 +357,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
@@ -398,7 +398,7 @@ describe('indexExchangeBidder: fetchBids', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
@@ -694,7 +694,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
@@ -742,7 +742,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
@@ -795,7 +795,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })
@@ -839,7 +839,7 @@ describe('indexExchangeBidder: setTargeting', () => {
     googletag
       .pubads()
       .getSlots()
-      .forEach(slot => {
+      .forEach((slot) => {
         expect(slot.setTargeting).not.toHaveBeenCalled()
       })
   })

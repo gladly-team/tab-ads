@@ -54,19 +54,19 @@ const log = (msg, logLevel) => {
 }
 
 const logger = {
-  log: msg => {
+  log: (msg) => {
     log(msg, logLevels.LOG)
   },
-  debug: msg => {
+  debug: (msg) => {
     log(msg, logLevels.DEBUG)
   },
-  info: msg => {
+  info: (msg) => {
     log(msg, logLevels.INFO)
   },
-  warn: msg => {
+  warn: (msg) => {
     log(msg, logLevels.WARN)
   },
-  error: msg => {
+  error: (msg) => {
     log(msg, logLevels.ERROR)
   },
 }

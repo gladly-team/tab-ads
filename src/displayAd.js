@@ -41,7 +41,7 @@ const mockDisplayAd = (adId, config) => {
   }, mockNetworkDelayMs)
 }
 
-export default adId => {
+export default (adId) => {
   // `fetchAds` may not have been called yet, so queue
   // any commands that rely on the config.
   queue(() => {

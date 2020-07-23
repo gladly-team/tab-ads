@@ -54,7 +54,7 @@ const defaultConfig = {
 let config
 
 // Throw if the provided config is inadequate.
-const validateConfig = userConfig => {
+const validateConfig = (userConfig) => {
   // Validate the onError handler.
   if (isNil(get(userConfig, 'onError'))) {
     throw new Error('Config error: the onError property must be set.')
@@ -93,7 +93,7 @@ const validateConfig = userConfig => {
 
   // Validate adUnits.
   const userAdUnits = get(userConfig, 'adUnits', [])
-  userAdUnits.forEach(adUnit => {
+  userAdUnits.forEach((adUnit) => {
     if (isNil(adUnit.adId)) {
       throw new Error(
         'Config error: adUnits objects must have an "adId" property.'
@@ -132,7 +132,7 @@ const validateConfig = userConfig => {
   })
 }
 
-export const setConfig = userConfig => {
+export const setConfig = (userConfig) => {
   validateConfig(userConfig)
   const fullConfig = {
     ...defaultConfig,

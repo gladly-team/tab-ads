@@ -63,7 +63,7 @@ const normalizeBidResponses = (config, rawBidData = []) => {
     return {
       ...accumulator,
       [rawBid.slotID]: [normalizeBid(rawBid.slotID, rawBid)].filter(
-        item => !!item
+        (item) => !!item
       ), // filter any nil bids
     }
   }, {})
@@ -78,7 +78,7 @@ const normalizeBidResponses = (config, rawBidData = []) => {
  * @return {Promise<undefined>} Resolves when the Amazon
  *   bid requests return or time out.
  */
-const fetchBids = async config => {
+const fetchBids = async (config) => {
   const apstag = getAmazonTag()
   const { adUnits } = config
   if (!adUnits.length) {
@@ -88,14 +88,14 @@ const fetchBids = async config => {
     })
   }
 
-  const slots = adUnits.map(adUnit => {
+  const slots = adUnits.map((adUnit) => {
     return {
       slotID: adUnit.adId,
       sizes: adUnit.sizes,
     }
   })
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     function handleAuctionEnd(rawBids) {
       logger.debug(`Amazon: auction ended`)
       resolve({
@@ -117,7 +117,7 @@ const fetchBids = async config => {
         slots,
         timeout: config.bidderTimeout,
       },
-      bids => {
+      (bids) => {
         handleAuctionEnd(bids)
       }
     )

@@ -1,6 +1,6 @@
 import getGoogleTag from 'src/google/getGoogleTag'
 
-export default config => {
+export default (config) => {
   const { adUnits } = config
   if (!adUnits.length) {
     return
@@ -8,7 +8,7 @@ export default config => {
   const googletag = getGoogleTag()
 
   // Set up each ad unit.
-  adUnits.forEach(adUnit => {
+  adUnits.forEach((adUnit) => {
     googletag.cmd.push(() => {
       googletag
         .defineSlot(adUnit.adUnitId, adUnit.sizes, adUnit.adId)

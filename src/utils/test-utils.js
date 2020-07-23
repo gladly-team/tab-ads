@@ -287,7 +287,7 @@ export const getMockTabAdsUserConfig = () => ({
 
 // Provide a valid config for testing.
 export const flushAllPromises = async () => {
-  await new Promise(resolve => setImmediate(resolve))
+  await new Promise((resolve) => setImmediate(resolve))
 }
 
 // Return a mock BidResponse object.

@@ -4,7 +4,7 @@ import getNewTabAdUnits from 'src/getAvailableAdUnits'
 import getGlobal from 'src/utils/getGlobal'
 import { isClientSide } from 'src/utils/ssr'
 
-export const fetchAds = async config => {
+export const fetchAds = async (config) => {
   if (!isClientSide()) {
     throw new Error(
       'The tab-ads package can only fetch ads in the browser environment.'

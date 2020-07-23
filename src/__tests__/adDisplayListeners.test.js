@@ -39,7 +39,7 @@ afterAll(() => {
   clearAdDataStore()
 })
 
-const runMockSlotRenderEndedEventForAd = adId => {
+const runMockSlotRenderEndedEventForAd = (adId) => {
   // Mock GPT's pubads addEventListener so we can fake an event
   const googleEventListenerCalls = {}
   global.googletag
@@ -55,7 +55,7 @@ const runMockSlotRenderEndedEventForAd = adId => {
   setUpAdDisplayListeners()
 
   // Run the queued googletag commands
-  global.googletag.cmd.forEach(cmd => cmd())
+  global.googletag.cmd.forEach((cmd) => cmd())
 
   // Fake the event callback
   const mockSlotRenderEventData = mockGoogleTagSlotRenderEndedData(adId)
@@ -76,7 +76,7 @@ describe('adDisplayListeners: onAdRendered', () => {
 
       const { getWinningBidForAd } = require('src/utils/getWinningBids')
       const expectedMockWinningSlot = getWinningBidForAd(adId)
-      onAdRendered(adId, adData => {
+      onAdRendered(adId, (adData) => {
         try {
           expect(adData).toEqual(expectedMockWinningSlot)
           resolve()
@@ -94,7 +94,7 @@ describe('adDisplayListeners: onAdRendered', () => {
       const adId = 'xyz-987'
       const { getWinningBidForAd } = require('src/utils/getWinningBids')
       const expectedMockWinningSlot = getWinningBidForAd(adId)
-      onAdRendered(adId, adData => {
+      onAdRendered(adId, (adData) => {
         try {
           expect(adData).toEqual(expectedMockWinningSlot)
           resolve()
@@ -115,7 +115,7 @@ describe('adDisplayListeners: onAdRendered', () => {
       const { onAdRendered } = require('src/adDisplayListeners')
 
       let completedCallbacks = 0
-      const complete = err => {
+      const complete = (err) => {
         if (err) {
           reject(err)
         }
@@ -128,7 +128,7 @@ describe('adDisplayListeners: onAdRendered', () => {
       const adId = 'def-246'
       const { getWinningBidForAd } = require('src/utils/getWinningBids')
       const expectedMockWinningSlot = getWinningBidForAd(adId)
-      onAdRendered(adId, adData => {
+      onAdRendered(adId, (adData) => {
         try {
           expect(adData).toEqual(expectedMockWinningSlot)
           complete()
@@ -136,7 +136,7 @@ describe('adDisplayListeners: onAdRendered', () => {
           complete(e)
         }
       })
-      onAdRendered(adId, adData => {
+      onAdRendered(adId, (adData) => {
         try {
           expect(adData).toEqual(expectedMockWinningSlot)
           complete()
@@ -189,7 +189,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach(cmd => cmd())
+    global.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
     const slotId = 'abc-123'
@@ -242,7 +242,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach(cmd => cmd())
+    global.googletag.cmd.forEach((cmd) => cmd())
 
     // Mock bad slot event data, which will cause an error.
     const mockBrokenSlotData = { foo: 'bar' }
@@ -274,7 +274,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach(cmd => cmd())
+    global.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
     const slotId = 'abc-123'
@@ -323,7 +323,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach(cmd => cmd())
+    global.googletag.cmd.forEach((cmd) => cmd())
 
     // Mock bad slot event data, which will cause an error.
     const mockBrokenSlotData = { foo: 'bar' }
@@ -355,7 +355,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach(cmd => cmd())
+    global.googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
     const slotId = 'abc-123'
@@ -399,7 +399,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach(cmd => cmd())
+    global.googletag.cmd.forEach((cmd) => cmd())
 
     // Mock bad slot event data, which will cause an error.
     const mockBrokenSlotData = { foo: 'bar' }
