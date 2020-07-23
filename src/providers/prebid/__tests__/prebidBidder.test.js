@@ -140,7 +140,7 @@ describe('prebidBidder: fetchBids', () => {
     await prebidBidder.fetchBids(tabAdsConfig)
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 
-    expect(adUnitConfig[0].bids.map(bid => bid.bidder).sort()).toEqual([
+    expect(adUnitConfig[0].bids.map((bid) => bid.bidder).sort()).toEqual([
       'aol',
       'emx_digital',
       'openx',
@@ -149,7 +149,7 @@ describe('prebidBidder: fetchBids', () => {
       'sonobi',
       'sovrn',
     ])
-    expect(adUnitConfig[1].bids.map(bid => bid.bidder).sort()).toEqual([
+    expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
       'aol',
       'emx_digital',
       'openx',
@@ -158,7 +158,7 @@ describe('prebidBidder: fetchBids', () => {
       'sonobi',
       'sovrn',
     ])
-    expect(adUnitConfig[2].bids.map(bid => bid.bidder).sort()).toEqual([
+    expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
       'aol',
       // 'emx_digital',
       'openx',
@@ -361,7 +361,7 @@ describe('prebidBidder: fetchBids', () => {
 
     // Set the mock Prebid bid responses.
     const mockBidResponses = mockPrebidBidResponses()
-    pbjs.requestBids = jest.fn(requestBidsSettings => {
+    pbjs.requestBids = jest.fn((requestBidsSettings) => {
       requestBidsSettings.bidsBackHandler(mockBidResponses)
     })
 
@@ -377,7 +377,7 @@ describe('prebidBidder: fetchBids', () => {
 
     // Set the mock Prebid bid responses.
     const mockBidResponses = mockPrebidBidResponses()
-    pbjs.requestBids = jest.fn(requestBidsSettings => {
+    pbjs.requestBids = jest.fn((requestBidsSettings) => {
       requestBidsSettings.bidsBackHandler(mockBidResponses)
     })
 
@@ -437,7 +437,7 @@ describe('prebidBidder: fetchBids', () => {
         'div-gpt-ad-1464385677836-0'
       ],
     }
-    pbjs.requestBids = jest.fn(requestBidsSettings => {
+    pbjs.requestBids = jest.fn((requestBidsSettings) => {
       requestBidsSettings.bidsBackHandler(mockBidResponses)
     })
 

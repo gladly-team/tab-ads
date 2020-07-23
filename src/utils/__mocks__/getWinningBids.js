@@ -2,7 +2,7 @@
 
 import { getMockDisplayedAdInfo } from 'src/utils/test-utils'
 
-export const getWinningBidForAd = jest.fn(adId => {
+export const getWinningBidForAd = jest.fn((adId) => {
   return {
     adId,
     ...getMockDisplayedAdInfo(),

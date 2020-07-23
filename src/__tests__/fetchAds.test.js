@@ -72,7 +72,7 @@ describe('fetchAds: bid and ad server requests', () => {
     // Flush all promises
     await flushAllPromises()
 
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       expect(bidder.fetchBids).toHaveBeenCalledTimes(1)
     })
   })
@@ -108,7 +108,7 @@ describe('fetchAds: bid and ad server requests', () => {
     // Flush all promises
     await flushAllPromises()
 
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       expect(bidder.fetchBids).not.toHaveBeenCalled()
     })
   })
@@ -147,7 +147,7 @@ describe('fetchAds: bid and ad server requests', () => {
     // Flush all promises
     await flushAllPromises()
 
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       expect(bidder.fetchBids).not.toHaveBeenCalled()
     })
   })
@@ -181,7 +181,7 @@ describe('fetchAds: bid and ad server requests', () => {
     await fetchAds(tabAdsConfig)
     await flushAllPromises()
 
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       expect(bidder.setTargeting).toHaveBeenCalledTimes(1)
     })
   })
@@ -193,9 +193,9 @@ describe('fetchAds: bid and ad server requests', () => {
 
     // Mock that all bidders are very slow to respond.
     const bidders = getBidders()
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve()
           }, 15e3)
@@ -231,7 +231,7 @@ describe('fetchAds: bid and ad server requests', () => {
     bidders.forEach((bidder, index) => {
       bidder.fetchBids.mockImplementationOnce(() => {
         const timeoutMs = index === 0 ? 15e3 : 80
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve()
           }, timeoutMs)
@@ -263,9 +263,9 @@ describe('fetchAds: bid and ad server requests', () => {
 
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve()
           }, 40)
@@ -294,9 +294,9 @@ describe('fetchAds: bid and ad server requests', () => {
 
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve()
           }, 40)
@@ -372,9 +372,9 @@ describe('fetchAds: bid request storage', () => {
 
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve({
               bidResponses: {
@@ -441,9 +441,9 @@ describe('fetchAds: bid request storage', () => {
 
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
-    bidders.forEach(bidder => {
+    bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve({
               bidResponses: {
@@ -512,7 +512,7 @@ describe('fetchAds: bid request storage', () => {
     bidders.forEach((bidder, index) => {
       bidder.fetchBids.mockImplementationOnce(() => {
         const timeoutMs = index === 0 ? 6e3 : 80
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve({
               bidResponses: {
@@ -585,7 +585,7 @@ describe('fetchAds: bid request storage', () => {
     bidders.forEach((bidder, index) => {
       bidder.fetchBids.mockImplementationOnce(() => {
         const timeoutMs = index === 0 ? 12e3 : 80
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => {
             resolve({
               bidResponses: {

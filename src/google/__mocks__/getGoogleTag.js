@@ -11,14 +11,14 @@ export const __disableAutomaticCommandQueueExecution = () => {
 
 // Run all functions in googletag.cmd.
 export const __runCommandQueue = () => {
-  global.googletag.cmd.forEach(cmd => cmd())
+  global.googletag.cmd.forEach((cmd) => cmd())
 }
 
 let mockPubadsRefresh = jest.fn()
 const mockEnableSingleRequest = jest.fn()
 
 // Set a mock function for googletag.pubads().refresh.
-export const __setPubadsRefreshMock = mockFunction => {
+export const __setPubadsRefreshMock = (mockFunction) => {
   mockPubadsRefresh = mockFunction
 }
 
@@ -56,11 +56,11 @@ const eventListenerStore = {}
 
 // Mock an event fired.
 export const __runEventListenerCallbacks = (eventName, ...args) => {
-  eventListenerStore[eventName].forEach(f => f(...args))
+  eventListenerStore[eventName].forEach((f) => f(...args))
 }
 
 const mockCmd = []
-mockCmd.push = jest.fn(f => f())
+mockCmd.push = jest.fn((f) => f())
 
 export default jest.fn(() => {
   global.googletag = global.googletag || {

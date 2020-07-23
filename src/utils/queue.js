@@ -13,10 +13,10 @@ function queue(cmd) {
   }
 }
 
-queue.runQueue = shouldRunQueue => {
+queue.runQueue = (shouldRunQueue) => {
   runQueue = shouldRunQueue
   if (runQueue) {
-    cmdStorage.forEach(cmd => {
+    cmdStorage.forEach((cmd) => {
       cmd()
     })
     cmdStorage = []

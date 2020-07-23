@@ -72,7 +72,7 @@ describe('amazonBidder: fetchBids', () => {
     })
 
     // Flush all promises
-    await new Promise(resolve => setImmediate(resolve))
+    await new Promise((resolve) => setImmediate(resolve))
     expect(promise.done).toBe(true)
   })
 
@@ -95,7 +95,7 @@ describe('amazonBidder: fetchBids', () => {
     })
 
     // Flush all promises
-    await new Promise(resolve => setImmediate(resolve))
+    await new Promise((resolve) => setImmediate(resolve))
 
     expect(promise.done).toBe(false)
 
@@ -103,7 +103,7 @@ describe('amazonBidder: fetchBids', () => {
     bidsBackCallback([])
 
     // Flush all promises
-    await new Promise(resolve => setImmediate(resolve))
+    await new Promise((resolve) => setImmediate(resolve))
 
     expect(promise.done).toBe(true)
   })

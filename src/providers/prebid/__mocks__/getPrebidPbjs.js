@@ -6,7 +6,7 @@ const global = getGlobal()
 
 // By default, just execute commands in the queue.
 const mockQue = []
-mockQue.push = f => f()
+mockQue.push = (f) => f()
 
 export default () => {
   global.pbjs = global.pbjs || {
@@ -14,7 +14,7 @@ export default () => {
     setConfig: jest.fn(),
     bidderSettings: {},
     addAdUnits: jest.fn(),
-    requestBids: jest.fn(requestBidsSettings => {
+    requestBids: jest.fn((requestBidsSettings) => {
       requestBidsSettings.bidsBackHandler({})
     }),
     setTargetingForGPTAsync: jest.fn(),

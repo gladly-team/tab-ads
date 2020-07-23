@@ -12,7 +12,7 @@ import DisplayedAdInfo from 'src/utils/DisplayedAdInfo'
  * @param {String} adId - An ad ID.
  * @return {Number|null} The Google Ad Manager advertiser ID.
  */
-const getGAMAdvertiserIdForDisplayedAd = adId => {
+const getGAMAdvertiserIdForDisplayedAd = (adId) => {
   const store = getAdDataStore()
   const slot = get(store, ['adManager', 'slotsRendered', adId])
 
@@ -34,7 +34,7 @@ const getGAMAdvertiserIdForDisplayedAd = adId => {
  * @param {String} adId - An ad ID.
  * @return {Number|null} The Google Ad Manager ad slot ID.
  */
-const getGAMAdUnitId = adId => {
+const getGAMAdUnitId = (adId) => {
   const store = getAdDataStore()
   const renderedSlotData = get(store, ['adManager', 'slotsRendered', adId])
 
@@ -54,7 +54,7 @@ const getGAMAdUnitId = adId => {
  * @return {Object|null} A BidResponse, the winning bid for this ad,
  *   or null if there is no bid.
  */
-const getTopBidForAd = adId => {
+const getTopBidForAd = (adId) => {
   const store = getAdDataStore()
   const bidders = getBidders()
   const allBidsForAd = bidders.reduce((acc, bidder) => {
@@ -122,7 +122,7 @@ const getTopBidForAd = adId => {
  * @return {Object|null} A DisplayedAdInfo, the winning bid for this ad,
  *   or null if an ad hasn't been displayed.
  */
-export const getWinningBidForAd = adId => {
+export const getWinningBidForAd = (adId) => {
   const GAMAdvertiserId = getGAMAdvertiserIdForDisplayedAd(adId)
   if (!GAMAdvertiserId) {
     return null
