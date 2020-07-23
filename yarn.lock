@@ -1265,6 +1265,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@kiosked/ulid@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@kiosked/ulid/-/ulid-3.0.0.tgz#2c724de77f13563f26fb9e8858a9e14a84bb6b22"
+  integrity sha512-ZKt2KIgGHDaGfKt6FjYvCpDvBXZRRoE8b+wDOlAV76aXKpq6ITiSUnPYevR4y55NKDnwCvwOrjWe+aVOCAK8kQ==
+
 "@sinonjs/commons@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.7.0.tgz#f90ffc52a2e519f018b13b6c4da03cbff36ebed6"
@@ -1898,6 +1903,11 @@ braces@^3.0.1:
   dependencies:
     fill-range "^7.0.1"
 
+browser-cookies@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/browser-cookies/-/browser-cookies-1.2.0.tgz#fca3ffb9b6a63aadc4d8c0999c6b57d0fa7d29b5"
+  integrity sha1-/KP/ubamOq3E2MCZnGtX0Pp9KbU=
+
 browser-process-hrtime@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/browser-process-hrtime/-/browser-process-hrtime-1.0.0.tgz#3c9b4b7d782c8121e56f10106d84c0d0ffc94626"
@@ -2196,12 +2206,17 @@ core-js-pure@^3.0.0:
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.6.4.tgz#4bf1ba866e25814f149d4e9aaa08c36173506e3a"
   integrity sha512-epIhRLkXdgv32xIUFaaAry2wdxZYBi6bgM7cB136dzzXXa+dFyRLTZeLUJxnd8ShrmyVXBub63n2NHo2JAt8Cw==
 
-core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0:
+core-js-pure@^3.6.5:
+  version "3.6.5"
+  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.6.5.tgz#c79e75f5e38dbc85a662d91eea52b8256d53b813"
+  integrity sha512-lacdXOimsiD0QyNf9BC/mxivNJ/ybBGJXQFKzRekp1WTHoVUWsUHEn+2T8GJAzzIhyOuXA+gOxCVN3l+5PLPUA==
+
+core-js@^2.4.0, core-js@^2.5.0:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
   integrity sha512-5wjnpaT/3dV+XB4borEsnAYQchn00XSgTAWKDkEqv+K8KevjbzmofK6hfJ9TZIlpj2N0xQpazy7PiRQiWHqzWg==
 
-core-js@^3.6.5:
+core-js@^3.0.0, core-js@^3.6.5:
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
   integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
@@ -2245,7 +2260,7 @@ cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-crypto-js@^3.1.9-1:
+crypto-js@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
   integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
@@ -3200,10 +3215,10 @@ fsevents@^2.1.2:
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.1.2.tgz#4c0a1fb34bc68e543b4b82a9ec392bfbda840805"
   integrity sha512-R4wDiBwZ0KzpgOWetKDug1FZcYhqYnUYKtfZYt4mD5SBz76q0KR4Q9o7GIPamsVPGmW3EYPPJ0dOOjvx32ldZA==
 
-fun-hooks@^0.9.5:
-  version "0.9.8"
-  resolved "https://registry.yarnpkg.com/fun-hooks/-/fun-hooks-0.9.8.tgz#7103beb4a5011697343eabe7b2f92769789087ca"
-  integrity sha512-FZUHodONJBOCCETXnHTSvqnz+pLZiN2ZqbOZsjXIqJRI8AbvTqOJzDTEeMfPzFf8rPuSZnD5EPcbl7yZsEQ/NA==
+fun-hooks@^0.9.9:
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/fun-hooks/-/fun-hooks-0.9.9.tgz#225481b58d8f805db0704e06f78cd76942ae1c45"
+  integrity sha512-821UhoYfO9Sg01wAl/QsDRB088BW0aeOqzC1PXLxSlB+kaUVbK+Vp6wMDHU5huZZopYxmMmv5jDkEYqDpK3hqg==
   dependencies:
     typescript-tuple "^2.2.1"
 
@@ -4454,6 +4469,16 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
+live-connect-js@1.1.10:
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/live-connect-js/-/live-connect-js-1.1.10.tgz#8839495cd4b9c3ea6b89229795319452eb3f1830"
+  integrity sha512-G/LJKN3b21DZILCQRyataC/znLvJRyogtu7mAkKlkhP9B9UJ8bcOL7ihW/clD2PsT4hVUkeabHhUGsPCmhsjFw==
+  dependencies:
+    "@kiosked/ulid" "^3.0.0"
+    abab "^2.0.3"
+    browser-cookies "^1.2.0"
+    tiny-hashes "1.0.1"
+
 load-json-file@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-2.0.0.tgz#7947e42149af80d696cbf797bcaabcfe1fe29ca8"
@@ -5218,22 +5243,24 @@ postinstall-postinstall@^2.1.0:
   resolved "https://registry.yarnpkg.com/postinstall-postinstall/-/postinstall-postinstall-2.1.0.tgz#4f7f77441ef539d1512c40bd04c71b06a4704ca3"
   integrity sha512-7hQX6ZlZXIoRiWNrbMQaLzUUfH+sSx39u8EJ9HYuDc1kLo9IXKWjM5RSquZN1ad5GnH8CGFM78fsAAQi3OKEEQ==
 
-prebid.js@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/prebid.js/-/prebid.js-3.9.0.tgz#b0a82ee48ee6f93eaa8f87b1a38674ce723bb6bd"
-  integrity sha512-3tFMoBeOoJPgbkvkzApF9EQb0YqYqG8050HPNF/Fkh+TGD/FlbWbVgSJmHaOMs4isYIOjBfW4GVac8H81Nboig==
+prebid.js@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/prebid.js/-/prebid.js-4.0.0.tgz#441157add1e7bee9a080d7fd02302bbd249c12be"
+  integrity sha512-qCvA2mdbHUfIStAiYwLCVUEqsJMAoqKNpNH7e1B+RWNxD/n3ugaKCheTIl4HjAjh4F02cOe5vn3ZZAanlNve9A==
   dependencies:
     babel-plugin-transform-object-assign "^6.22.0"
-    core-js "^2.4.1"
+    core-js "^3.0.0"
+    core-js-pure "^3.6.5"
     criteo-direct-rsa-validate "^1.1.0"
-    crypto-js "^3.1.9-1"
+    crypto-js "^3.3.0"
     deep-equal "^1.0.1"
     dlv "1.1.3"
     dset "2.0.1"
     express "^4.15.4"
-    fun-hooks "^0.9.5"
+    fun-hooks "^0.9.9"
     jsencrypt "^3.0.0-rc.1"
     just-clone "^1.0.2"
+    live-connect-js "1.1.10"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -6279,6 +6306,11 @@ through@2, through@~2.3, through@~2.3.1:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
+
+tiny-hashes@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/tiny-hashes/-/tiny-hashes-1.0.1.tgz#ddbe9060312ddb4efe0a174bb3a27e1331c425a1"
+  integrity sha512-knIN5zj4fl7kW4EBU5sLP20DWUvi/rVouvJezV0UAym2DkQaqm365Nyc8F3QEiOvunNDMxR8UhcXd1d5g+Wg1g==
 
 tmp@^0.0.33:
   version "0.0.33"
