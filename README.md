@@ -98,3 +98,11 @@ Here's what to check for each partner, assuming the iframed page is `https://exa
 | OpenX  | `https://tabforacause-d.openx.net/w/1.0/arj`  | Query param `ju` is `https://example.com/newtab/` |
 | EMX Digital  | `hb.emxdgt.com`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |
 | RhythmOne  | `tag.1rx.io/*`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |
+
+## Testing In-Progress Builds in Local Projects
+
+It's often helpful to test development builds of `tab-ads` in other local projects.
+
+1. Install [yalc](https://github.com/whitecolor/yalc): `yarn global add yalc`
+2. In `tab-ads`: run `yarn run dev:publish`
+3. In the consuming project: run `yalc add tab-ads`
