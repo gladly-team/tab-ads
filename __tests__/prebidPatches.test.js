@@ -36,7 +36,7 @@ const getMockPrebidConfig = () => ({
 
 // Mock Prebid's config.getConfig method.
 jest.mock('../node_modules/prebid.js/src/config', () => {
-  const prebidConfigActual = require.requireActual(
+  const prebidConfigActual = jest.requireActual(
     '../node_modules/prebid.js/src/config'
   )
   return {
@@ -198,7 +198,7 @@ describe('Prebid.js patch: refererDetection.js', () => {
     const { config } = require('../node_modules/prebid.js/src/config')
 
     // Use the real Prebid config getConfig.
-    const prebidConfigActual = require.requireActual(
+    const prebidConfigActual = jest.requireActual(
       '../node_modules/prebid.js/src/config'
     )
     config.getConfig.mockImplementation(prebidConfigActual.config.getConfig)
