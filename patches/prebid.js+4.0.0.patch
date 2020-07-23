@@ -1,46 +1,44 @@
 diff --git a/node_modules/prebid.js/modules/emx_digitalBidAdapter.js b/node_modules/prebid.js/modules/emx_digitalBidAdapter.js
-index 22a7bb6..b7b6978 100644
+index 6688d15..bcc0465 100644
 --- a/node_modules/prebid.js/modules/emx_digitalBidAdapter.js
 +++ b/node_modules/prebid.js/modules/emx_digitalBidAdapter.js
-@@ -5,6 +5,9 @@ import { Renderer } from '../src/Renderer.js';
- import includes from 'core-js/library/fn/array/includes.js';
- import {parse as parseUrl} from '../src/url.js';
- 
+@@ -4,6 +4,8 @@ import { BANNER, VIDEO } from '../src/mediaTypes.js';
+ import { Renderer } from '../src/Renderer.js';
+ import includes from 'core-js-pure/features/array/includes.js';
+ import find from 'core-js-pure/features/array/find.js';
 +// @tab-ads-patch
 +import { config } from '../src/config.js';
-+
+ 
  const BIDDER_CODE = 'emx_digital';
  const ENDPOINT = 'hb.emxdgt.com';
- const RENDERER_URL = 'https://js.brealtime.com/outstream/1.30.0/bundle.js';
-@@ -123,10 +126,11 @@ export const emxAdapter = {
+@@ -126,10 +128,11 @@ export const emxAdapter = {
      }
    },
    getReferrer: () => {
 +    // @tab-ads-patch
      try {
 -      return window.top.document.referrer;
-+      return config.getConfig().pageUrl || window.location.href
++      return config.getConfig('pageUrl') || window.location.href
      } catch (err) {
 -      return document.referrer;
-+      return ''
++      return '';
      }
    },
    getSite: (refInfo) => {
 diff --git a/node_modules/prebid.js/modules/pulsepointBidAdapter.js b/node_modules/prebid.js/modules/pulsepointBidAdapter.js
-index cbe37e6..9209efd 100644
+index 7bfa868..bf402d1 100644
 --- a/node_modules/prebid.js/modules/pulsepointBidAdapter.js
 +++ b/node_modules/prebid.js/modules/pulsepointBidAdapter.js
-@@ -3,6 +3,9 @@ import * as utils from '../src/utils.js';
+@@ -2,6 +2,8 @@
+ import * as utils from '../src/utils.js';
  import { registerBidder } from '../src/adapters/bidderFactory.js';
  import { Renderer } from '../src/Renderer.js';
- 
 +// @tab-ads-patch
 +import { config } from '../src/config.js';
-+
+ 
  const NATIVE_DEFAULTS = {
    TITLE_LEN: 100,
-   DESCR_LEN: 200,
-@@ -337,10 +340,11 @@ function app(bidderRequest) {
+@@ -355,10 +357,11 @@ function app(bidderRequest) {
   * Attempts to capture the referrer url.
   */
  function referrer() {
@@ -49,14 +47,14 @@ index cbe37e6..9209efd 100644
 -    return window.top.document.referrer;
 -  } catch (e) {
 -    return document.referrer;
-+    return config.getConfig().pageUrl || window.location.href
++    return config.getConfig('pageUrl') || window.location.href
 +  } catch (err) {
-+    return ''
++    return '';
    }
  }
  
 diff --git a/node_modules/prebid.js/src/refererDetection.js b/node_modules/prebid.js/src/refererDetection.js
-index 6019867..f70f9c4 100644
+index 6019867..8574698 100644
 --- a/node_modules/prebid.js/src/refererDetection.js
 +++ b/node_modules/prebid.js/src/refererDetection.js
 @@ -8,196 +8,23 @@
@@ -217,7 +215,7 @@ index 6019867..f70f9c4 100644
 -      }
 -    } while (currentWindow != win.top);
 -    return acc;
-+  const currentPage = config.getConfig().pageUrl || window.location.href
++  const currentPage = config.getConfig('pageUrl') || window.location.href
 +  return {
 +    canonicalUrl: null,
 +    numIframes: 0,

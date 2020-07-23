@@ -36,7 +36,7 @@ const getMockPrebidConfig = () => ({
 
 // Mock Prebid's config.getConfig method.
 jest.mock('../node_modules/prebid.js/src/config', () => {
-  const prebidConfigActual = require.requireActual(
+  const prebidConfigActual = jest.requireActual(
     '../node_modules/prebid.js/src/config'
   )
   return {
@@ -137,7 +137,13 @@ let windowSpy
 beforeEach(() => {
   // Reset the mock Prebid config value.
   const { config } = require('../node_modules/prebid.js/src/config')
-  config.getConfig.mockReturnValue(getMockPrebidConfig())
+  const mockPrebidConfig = getMockPrebidConfig()
+  config.getConfig.mockImplementation((key = null) => {
+    if (key) {
+      return mockPrebidConfig[key]
+    }
+    return mockPrebidConfig
+  })
 
   // Use our mock window value.
   // https://stackoverflow.com/a/56999581
@@ -153,7 +159,12 @@ describe('Prebid.js patch: refererDetection.js', () => {
       publisherDomain: 'https://foo.com',
       pageUrl: 'https://foo.com/something/',
     }
-    config.getConfig.mockReturnValue(mockPrebidConfig)
+    config.getConfig.mockImplementation((key = null) => {
+      if (key) {
+        return mockPrebidConfig[key]
+      }
+      return mockPrebidConfig
+    })
 
     const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
 
@@ -182,7 +193,12 @@ describe('Prebid.js patch: refererDetection.js', () => {
       ...getMockPrebidConfig(),
       pageUrl: null,
     }
-    config.getConfig.mockReturnValue(mockPrebidConfig)
+    config.getConfig.mockImplementation((key = null) => {
+      if (key) {
+        return mockPrebidConfig[key]
+      }
+      return mockPrebidConfig
+    })
 
     const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
     expect(getRefererInfo()).toEqual({
@@ -198,7 +214,7 @@ describe('Prebid.js patch: refererDetection.js', () => {
     const { config } = require('../node_modules/prebid.js/src/config')
 
     // Use the real Prebid config getConfig.
-    const prebidConfigActual = require.requireActual(
+    const prebidConfigActual = jest.requireActual(
       '../node_modules/prebid.js/src/config'
     )
     config.getConfig.mockImplementation(prebidConfigActual.config.getConfig)
