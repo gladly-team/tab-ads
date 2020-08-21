@@ -37,7 +37,7 @@ const defaultConfig = {
   auctionTimeout: 1000, // Timeout for the whole auction
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
-    timeout: 50, // Time to wait for the consent management platform (CMP) to respond
+    timeout: 200, // Time to wait for the consent management platform (CMP) to respond
   },
   publisher: {
     domain: null, // required to be provided by user
