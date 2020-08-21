@@ -277,6 +277,7 @@ export const getMockTabAdsUserConfig = () => ({
   ],
   consent: {
     isEU: () => Promise.resolve(false),
+    timeout: 200,
   },
   publisher: {
     domain: 'example.com',
