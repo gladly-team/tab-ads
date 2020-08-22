@@ -281,14 +281,6 @@ const fetchBids = async (config) => {
     })
   }
 
-  // Determine if the user is in the EU, which may affect the
-  // ads we show.
-  let isInEU
-  try {
-    isInEU = await config.consent.isEU()
-  } catch (e) {
-    isInEU = false
-  }
   return new Promise((resolve) => {
     function handleAuctionEnd(rawBids) {
       logger.debug(`Prebid: auction ended`)
@@ -297,8 +289,6 @@ const fetchBids = async (config) => {
         rawBidResponses: rawBids,
       })
     }
-
-    const requiresConsentManagement = !!isInEU
 
     const adUnits = getAdUnits(config)
 
@@ -323,17 +313,20 @@ const fetchBids = async (config) => {
             },
           },
         },
-        // GDPR consent. Only enable the consentManagement module here
-        // if consent is required, to avoid the unnecessary delay of calling
-        // the CMP.
+        // GDPR consent.
         // http://prebid.org/dev-docs/modules/consentManagement.html
-        ...(requiresConsentManagement && {
-          consentManagement: {
+        consentManagement: {
+          gdpr: {
             cmpApi: 'iab',
             timeout: config.consent.timeout,
             allowAuctionWithoutConsent: true,
+            defaultGdprScope: true,
           },
-        }),
+          usp: {
+            cmpApi: 'iab',
+            timeout: config.consent.timeout,
+          },
+        },
       })
 
       pbjs.addAdUnits(adUnits)

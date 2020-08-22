@@ -87,50 +87,17 @@ describe('prebidBidder: fetchBids', () => {
     expect(adUnitConfig[0].bids).toBeDefined()
   })
 
-  it('includes the consentManagement setting when in the EU', async () => {
+  it('includes the consentManagement setting', async () => {
     expect.assertions(1)
 
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
-      consent: {
-        isEU: () => Promise.resolve(true),
-      },
     })
     await prebidBidder.fetchBids(tabAdsConfig)
     expect(
       pbjs.setConfig.mock.calls[0][0].consentManagement
     ).not.toBeUndefined()
-  })
-
-  it('does not include consentManagement setting when not in the EU', async () => {
-    expect.assertions(1)
-
-    const pbjs = getPrebidPbjs()
-    const tabAdsConfig = setConfig({
-      ...getMockTabAdsUserConfig(),
-      consent: {
-        isEU: () => Promise.resolve(false),
-      },
-    })
-    await prebidBidder.fetchBids(tabAdsConfig)
-    expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
-  })
-
-  it('does not include consentManagement setting if consent.isEU throws', async () => {
-    expect.assertions(1)
-
-    const pbjs = getPrebidPbjs()
-    const tabAdsConfig = setConfig({
-      ...getMockTabAdsUserConfig(),
-      consent: {
-        isEU: () => {
-          throw new Error('Uh oh.')
-        },
-      },
-    })
-    await prebidBidder.fetchBids(tabAdsConfig)
-    expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
   })
 
   it('includes the expected list of bidders for each ad', async () => {

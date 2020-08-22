@@ -15,7 +15,6 @@ const defaultConfigStructure = {
   auctionTimeout: expect.any(Number),
   bidderTimeout: expect.any(Number),
   consent: {
-    isEU: expect.any(Function),
     timeout: expect.any(Number),
   },
   publisher: {
@@ -44,9 +43,6 @@ const defaultConfigStructure = {
 }
 
 const getMinimalValidUserConfig = () => ({
-  consent: {
-    isEU: () => Promise.resolve(false),
-  },
   publisher: {
     domain: 'example.com',
     pageUrl: 'https://example.com/foo',
@@ -70,7 +66,6 @@ describe('config: setConfig', () => {
 
   it('allows customizing most of its properties', () => {
     const { setConfig } = require('src/config')
-    const isEUFunc = () => new Promise(true)
     const modifiedConfig = {
       ...getMinimalValidUserConfig(),
       disableAds: true,
@@ -79,8 +74,7 @@ describe('config: setConfig', () => {
       bidderTimeout: 12,
       consent: {
         ...getMinimalValidUserConfig().consent,
-        isEU: isEUFunc,
-        // timeout should use the default
+        timeout: 123,
       },
       publisher: {
         ...getMinimalValidUserConfig().publisher,
@@ -95,8 +89,7 @@ describe('config: setConfig', () => {
       auctionTimeout: 200,
       bidderTimeout: 12,
       consent: {
-        isEU: isEUFunc,
-        timeout: 50, // default value
+        timeout: 123,
       },
       publisher: {
         domain: 'example.com',
@@ -217,34 +210,6 @@ describe('config: setConfig validation', () => {
         },
       })
     }).toThrow('Config error: the publisher.pageUrl property must be a string.')
-  })
-
-  it('throws if the consent.isEU property is not provided', () => {
-    const { setConfig } = require('src/config')
-    expect(() => {
-      setConfig({
-        ...getMinimalValidUserConfig(),
-        consent: {
-          ...getMinimalValidUserConfig(),
-          isEU: undefined,
-        },
-      })
-    }).toThrow('Config error: the consent.isEU function must be set.')
-  })
-
-  it('throws if the consent.isEU property is not a function', () => {
-    const { setConfig } = require('src/config')
-    expect(() => {
-      setConfig({
-        ...getMinimalValidUserConfig(),
-        consent: {
-          ...getMinimalValidUserConfig(),
-          isEU: false,
-        },
-      })
-    }).toThrow(
-      'Config error: the consent.isEU property must be an async function.'
-    )
   })
 
   it('throws if an ad unit does not have an adId property', () => {

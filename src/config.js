@@ -37,9 +37,7 @@ const defaultConfig = {
   auctionTimeout: 1000, // Timeout for the whole auction
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
-    // An async function that resolves to true if the user is in the European Union.
-    // isEU: async () => false, // required to be provided by user
-    timeout: 50, // Time to wait for the consent management platform (CMP) to respond
+    timeout: 200, // Time to wait for the consent management platform (CMP) to respond
   },
   publisher: {
     domain: null, // required to be provided by user
@@ -78,16 +76,6 @@ const validateConfig = (userConfig) => {
   if (typeof get(userConfig, 'publisher.pageUrl') !== 'string') {
     throw new Error(
       'Config error: the publisher.pageUrl property must be a string.'
-    )
-  }
-
-  // Validate consent values.
-  if (isNil(get(userConfig, 'consent.isEU'))) {
-    throw new Error('Config error: the consent.isEU function must be set.')
-  }
-  if (typeof get(userConfig, 'consent.isEU') !== 'function') {
-    throw new Error(
-      'Config error: the consent.isEU property must be an async function.'
     )
   }
 
