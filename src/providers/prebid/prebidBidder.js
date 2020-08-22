@@ -322,6 +322,10 @@ const fetchBids = async (config) => {
             allowAuctionWithoutConsent: true,
             defaultGdprScope: true,
           },
+          usp: {
+            cmpApi: 'iab',
+            timeout: config.consent.timeout,
+          },
         },
       })
 
