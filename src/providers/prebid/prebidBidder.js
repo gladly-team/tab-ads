@@ -316,10 +316,12 @@ const fetchBids = async (config) => {
         // GDPR consent.
         // http://prebid.org/dev-docs/modules/consentManagement.html
         consentManagement: {
-          cmpApi: 'iab',
-          timeout: config.consent.timeout,
-          allowAuctionWithoutConsent: true,
-          defaultGdprScope: true,
+          gdpr: {
+            cmpApi: 'iab',
+            timeout: config.consent.timeout,
+            allowAuctionWithoutConsent: true,
+            defaultGdprScope: true,
+          },
         },
       })
 
