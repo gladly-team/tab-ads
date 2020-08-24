@@ -320,8 +320,9 @@ const fetchBids = async (config) => {
           gdpr: {
             cmpApi: 'iab',
             timeout: config.consent.timeout,
-            allowAuctionWithoutConsent: true,
-            defaultGdprScope: true,
+            // If the CMP does not respond in time, gdprApplies
+            // is false.
+            defaultGdprScope: false,
           },
           usp: {
             cmpApi: 'iab',
