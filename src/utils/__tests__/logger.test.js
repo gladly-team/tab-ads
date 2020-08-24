@@ -7,7 +7,10 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-const formatMessage = (msg) => `tab-ads: ${msg}`
+const messagePrefix = [
+  '%ctab-ads',
+  'background: #4fb6ff; color: #fff; border-radius: 2px; padding: 2px 6px',
+]
 const onErrorHandler = jest.fn()
 
 beforeEach(() => {
@@ -39,7 +42,7 @@ describe('logger', () => {
     const logger = require('src/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.log(theMsg)
-    expect(console.log).toHaveBeenCalledWith(formatMessage(theMsg))
+    expect(console.log).toHaveBeenCalledWith(...messagePrefix, theMsg)
   })
 
   test('logger.debug logs to console', () => {
@@ -49,7 +52,7 @@ describe('logger', () => {
     const logger = require('src/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.debug(theMsg)
-    expect(console.debug).toHaveBeenCalledWith(formatMessage(theMsg))
+    expect(console.debug).toHaveBeenCalledWith(...messagePrefix, theMsg)
   })
 
   test('logger.info logs to console', () => {
@@ -59,7 +62,7 @@ describe('logger', () => {
     const logger = require('src/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.info(theMsg)
-    expect(console.info).toHaveBeenCalledWith(formatMessage(theMsg))
+    expect(console.info).toHaveBeenCalledWith(...messagePrefix, theMsg)
   })
 
   test('logger.warn logs to console', () => {
@@ -69,7 +72,7 @@ describe('logger', () => {
     const logger = require('src/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.warn(theMsg)
-    expect(console.warn).toHaveBeenCalledWith(formatMessage(theMsg))
+    expect(console.warn).toHaveBeenCalledWith(...messagePrefix, theMsg)
   })
 
   test('logger.error logs to console', () => {
@@ -79,7 +82,7 @@ describe('logger', () => {
     const logger = require('src/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
-    expect(console.error).toHaveBeenCalledWith(formatMessage(theMsg))
+    expect(console.error).toHaveBeenCalledWith(...messagePrefix, theMsg)
   })
 
   test('logger.error calls config.onError with the original message', () => {
@@ -131,7 +134,7 @@ describe('logger', () => {
     const logger = require('src/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.log(theMsg)
-    expect(console.log).toHaveBeenCalledWith(formatMessage(theMsg))
+    expect(console.log).toHaveBeenCalledWith(...messagePrefix, theMsg)
   })
 
   test('logger.error logs to console when the logLevel is "error"', () => {
@@ -147,7 +150,7 @@ describe('logger', () => {
     const logger = require('src/utils/logger').default
     const theMsg = 'A thing happened, FYI'
     logger.error(theMsg)
-    expect(console.error).toHaveBeenCalledWith(formatMessage(theMsg))
+    expect(console.error).toHaveBeenCalledWith(...messagePrefix, theMsg)
   })
 
   test('logger.error calls config.onError with the original message when the logLevel is "error"', () => {
@@ -217,6 +220,6 @@ describe('logger', () => {
       ...getMockTabAdsUserConfig(),
       logLevel: 'debug',
     })
-    expect(console.log).toHaveBeenCalledWith(formatMessage(theMsg))
+    expect(console.log).toHaveBeenCalledWith(...messagePrefix, theMsg)
   })
 })

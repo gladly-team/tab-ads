@@ -29,26 +29,29 @@ const log = (msg, logLevel) => {
     if (!shouldLog(logLevel, logLevelThreshold)) {
       return
     }
-    const finalMsg = `tab-ads: ${msg}`
+    const prefix = [
+      '%ctab-ads',
+      'background: #4fb6ff; color: #fff; border-radius: 2px; padding: 2px 6px',
+    ]
     switch (logLevel) {
       case logLevels.DEBUG:
-        console.debug(finalMsg)
+        console.debug(...prefix, msg)
         break
       case logLevels.INFO:
-        console.info(finalMsg)
+        console.info(...prefix, msg)
         break
       case logLevels.LOG:
-        console.log(finalMsg)
+        console.log(...prefix, msg)
         break
       case logLevels.WARN:
-        console.warn(finalMsg)
+        console.warn(...prefix, msg)
         break
       case logLevels.ERROR:
         onError(msg)
-        console.error(finalMsg)
+        console.error(...prefix, msg)
         break
       default:
-        console.error(finalMsg)
+        console.error(...prefix, msg)
     }
   })
 }
