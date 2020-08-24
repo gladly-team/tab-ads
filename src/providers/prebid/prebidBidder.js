@@ -296,6 +296,7 @@ const fetchBids = async (config) => {
 
     pbjs.que.push(() => {
       pbjs.setConfig({
+        debug: config.logLevel === 'debug',
         // bidderTimeout: 700 // default
         publisherDomain: config.publisher.domain, // Used for SafeFrame creative
         // Overrides the page URL adapters should use. Otherwise, some adapters
