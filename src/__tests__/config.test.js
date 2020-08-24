@@ -2,7 +2,13 @@
 
 import queue from 'src/utils/queue'
 
+jest.mock('src/utils/getURL')
 jest.mock('src/utils/queue')
+
+beforeEach(() => {
+  const getURL = require('src/utils/getURL').default
+  getURL.mockReturnValue('https://example.com/foo/bar/')
+})
 
 afterEach(() => {
   jest.resetModules()
@@ -81,6 +87,7 @@ describe('config: setConfig', () => {
         domain: 'example.com',
         pageUrl: 'https://example.com/foo',
       },
+      logLevel: 'warn',
     }
     const config = setConfig(modifiedConfig)
     expect(config).toMatchObject({
@@ -97,6 +104,7 @@ describe('config: setConfig', () => {
       },
       newTabAds: expect.any(Object), // default value
       adUnits: expect.any(Array), // default value
+      logLevel: 'warn',
     })
   })
 
@@ -136,6 +144,29 @@ describe('config: setConfig', () => {
     const { setConfig } = require('src/config')
     setConfig(getMinimalValidUserConfig())
     expect(queue.runQueue).toHaveBeenCalledWith(true)
+  })
+
+  it('defaults to logLevel === error', () => {
+    const { setConfig } = require('src/config')
+    const config = setConfig(getMinimalValidUserConfig())
+    expect(config).toMatchObject({
+      logLevel: 'error',
+    })
+  })
+
+  it('sets logLevel to "debug" if the URL includes the URL param tabAdsDebug=true', () => {
+    const getURL = require('src/utils/getURL').default
+    getURL.mockReturnValue(
+      'https://example.com/foo/bar/?abc=123&tabAdsDebug=true&foo'
+    )
+    const { setConfig } = require('src/config')
+    const config = setConfig({
+      ...getMinimalValidUserConfig(),
+      logLevel: 'error',
+    })
+    expect(config).toMatchObject({
+      logLevel: 'debug',
+    })
   })
 })
 

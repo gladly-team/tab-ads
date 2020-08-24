@@ -3,6 +3,7 @@
 import { get } from 'lodash/object'
 import { isArray, isNil } from 'lodash/lang'
 import queue from 'src/utils/queue'
+import getURL from 'src/utils/getURL'
 import getAvailableAdUnits from 'src/getAvailableAdUnits'
 
 const newTabAdUnits = getAvailableAdUnits()
@@ -120,11 +121,29 @@ const validateConfig = (userConfig) => {
   })
 }
 
+const isDebugParamSet = () => {
+  let isDebug = false
+  try {
+    const urlStr = getURL()
+    const url = new URL(urlStr)
+    const tabAdsDebug = url.searchParams.get('tabAdsDebug')
+    isDebug = tabAdsDebug === 'true'
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(e)
+  }
+  return isDebug
+}
+
 export const setConfig = (userConfig) => {
   validateConfig(userConfig)
   const fullConfig = {
     ...defaultConfig,
     ...(userConfig || {}),
+    // Override the log level if ?tabAdsDebug=true
+    logLevel: isDebugParamSet()
+      ? 'debug'
+      : userConfig.logLevel || defaultConfig.logLevel,
     consent: {
       ...defaultConfig.consent,
       ...get(userConfig, 'consent', {}),
