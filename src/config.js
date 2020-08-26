@@ -38,7 +38,12 @@ const defaultConfig = {
   auctionTimeout: 1000, // Timeout for the whole auction
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
-    timeout: 500, // Time to wait for the consent management platform (CMP) to respond
+    // Time to wait for the consent management platform (CMP) to respond.
+    // If the CMP does not respond in this time, ad auctions may be cancelled.
+    // Typically, 500ms might be too short for a CMP to load and respond.
+    // However, the tab-cmp package aims to make the CMP respond much more
+    // quickly (sub-50ms) after the user's first page load.
+    timeout: 500,
   },
   publisher: {
     domain: null, // required to be provided by user
