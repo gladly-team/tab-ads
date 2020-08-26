@@ -304,24 +304,15 @@ const fetchBids = async (config) => {
         // Only some adapters use this setting as of May 2018.
         // https://github.com/prebid/Prebid.js/issues/1882
         pageUrl: config.publisher.pageUrl,
-        userSync: {
-          filterSettings: {
-            // EMX Digital requested iframe syncing on 13 Nov 2018 due to
-            // poor ad performance.
-            iframe: {
-              bidders: 'emx_digital',
-              filter: 'include',
-            },
-          },
-        },
         // GDPR consent.
         // http://prebid.org/dev-docs/modules/consentManagement.html
         consentManagement: {
           gdpr: {
             cmpApi: 'iab',
             timeout: config.consent.timeout,
-            allowAuctionWithoutConsent: true,
-            defaultGdprScope: true,
+            // If the CMP does not respond in time, gdprApplies
+            // is false.
+            defaultGdprScope: false,
           },
           usp: {
             cmpApi: 'iab',

@@ -43,7 +43,7 @@ describe('ErrorBoundary', () => {
     const { container } = render(
       <ErrorBoundary {...mockProps}>{children}</ErrorBoundary>
     )
-    expect(container).toBeEmpty()
+    expect(container).toBeEmptyDOMElement()
   })
 
   it('calls "onError" if a child throws', () => {

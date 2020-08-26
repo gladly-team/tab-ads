@@ -128,6 +128,45 @@ describe('prebidBidder: fetchBids', () => {
     ).not.toBeUndefined()
   })
 
+  it('includes the expected consentManagement GDPR settings', async () => {
+    expect.assertions(1)
+
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      consent: {
+        timeout: 161,
+      },
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    expect(
+      pbjs.setConfig.mock.calls[0][0].consentManagement.gdpr
+    ).toMatchObject({
+      cmpApi: 'iab',
+      timeout: 161,
+      defaultGdprScope: false,
+    })
+  })
+
+  it('includes the expected consentManagement USP settings', async () => {
+    expect.assertions(1)
+
+    const pbjs = getPrebidPbjs()
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      consent: {
+        timeout: 161,
+      },
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    expect(pbjs.setConfig.mock.calls[0][0].consentManagement.usp).toMatchObject(
+      {
+        cmpApi: 'iab',
+        timeout: 161,
+      }
+    )
+  })
+
   it('includes the expected list of bidders for each ad', async () => {
     expect.assertions(3)
     const pbjs = getPrebidPbjs()
