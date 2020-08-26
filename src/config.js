@@ -35,10 +35,10 @@ const defaultConfig = {
     //   sizes: [[300, 250]],
     // },
   ],
-  auctionTimeout: 1200, // Timeout for the whole auction
+  auctionTimeout: 1000, // Timeout for the whole auction
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
-    timeout: 800, // Time to wait for the consent management platform (CMP) to respond
+    timeout: 500, // Time to wait for the consent management platform (CMP) to respond
   },
   publisher: {
     domain: null, // required to be provided by user
