@@ -4,6 +4,7 @@ import getAmazonTag from 'src/providers/amazon/getAmazonTag'
 import Bidder from 'src/utils/Bidder'
 import BidResponse from 'src/utils/BidResponse'
 import logger from 'src/utils/logger'
+import getUSPString from 'src/utils/getUSPString'
 
 const amazonBidderName = 'amazon'
 
@@ -95,6 +96,9 @@ const fetchBids = async (config) => {
     }
   })
 
+  // Get the USP string from the consent management platform.
+  const uspString = await getUSPString({ timeout: config.consent.timeout })
+
   return new Promise((resolve) => {
     function handleAuctionEnd(rawBids) {
       logger.debug(`Amazon: auction ended`)
@@ -106,9 +110,16 @@ const fetchBids = async (config) => {
     apstag.init({
       pubID: 'ea374841-51b0-4335-9960-99200427f7c8',
       adServer: 'googletag',
+      // Privacy docs:
+      // https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/uam-ccpa.html
       gdpr: {
         cmpTimeout: config.consent.timeout,
       },
+      ...(uspString && {
+        params: {
+          us_privacy: uspString,
+        },
+      }),
     })
 
     logger.debug(`Amazon: bids requested`)

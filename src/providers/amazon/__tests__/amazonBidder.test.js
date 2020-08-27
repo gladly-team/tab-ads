@@ -7,9 +7,11 @@ import {
 } from 'src/utils/test-utils'
 import { setConfig } from 'src/config'
 import getGlobal from 'src/utils/getGlobal'
+import getUSPString from 'src/utils/getUSPString'
 
 jest.mock('src/providers/amazon/getAmazonTag')
 jest.mock('src/utils/logger')
+jest.mock('src/utils/getUSPString')
 
 const global = getGlobal()
 
@@ -17,6 +19,8 @@ beforeEach(() => {
   // Mock apstag
   delete global.apstag
   global.apstag = getAmazonTag()
+
+  getUSPString.mockResolvedValue('1YNN')
 })
 
 afterEach(() => {
@@ -48,6 +52,30 @@ describe('amazonBidder: fetchBids', () => {
       pubID: 'ea374841-51b0-4335-9960-99200427f7c8',
       adServer: 'googletag',
     })
+  })
+
+  it('provides the "us_privacy" param to apstag.init when possible', async () => {
+    expect.assertions(1)
+    const apstag = getAmazonTag()
+    getUSPString.mockResolvedValue('1YYN')
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.init.mock.calls[0][0]).toMatchObject({
+      params: {
+        us_privacy: '1YYN',
+      },
+    })
+  })
+
+  it('does not include the "us_privacy" param in apstag.init when the CMP times out', async () => {
+    expect.assertions(1)
+    const apstag = getAmazonTag()
+    getUSPString.mockResolvedValue(null) // null when times out
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.init.mock.calls[0][0].params).toBeUndefined()
   })
 
   it('calls apstag.fetchBids', async () => {
