@@ -35,42 +35,42 @@ const log = (msg, logLevel) => {
     ]
     switch (logLevel) {
       case logLevels.DEBUG:
-        console.debug(...prefix, msg)
+        console.debug(...prefix, ...msg)
         break
       case logLevels.INFO:
-        console.info(...prefix, msg)
+        console.info(...prefix, ...msg)
         break
       case logLevels.LOG:
-        console.log(...prefix, msg)
+        console.log(...prefix, ...msg)
         break
       case logLevels.WARN:
-        console.warn(...prefix, msg)
+        console.warn(...prefix, ...msg)
         break
       case logLevels.ERROR:
-        onError(msg)
-        console.error(...prefix, msg)
+        onError(...msg)
+        console.error(...prefix, ...msg)
         break
       default:
-        console.error(...prefix, msg)
+        console.error(...prefix, ...msg)
     }
   })
 }
 
 const logger = {
-  log: (msg) => {
-    log(msg, logLevels.LOG)
+  log: (...args) => {
+    log(args, logLevels.LOG)
   },
-  debug: (msg) => {
-    log(msg, logLevels.DEBUG)
+  debug: (...args) => {
+    log(args, logLevels.DEBUG)
   },
-  info: (msg) => {
-    log(msg, logLevels.INFO)
+  info: (...args) => {
+    log(args, logLevels.INFO)
   },
-  warn: (msg) => {
-    log(msg, logLevels.WARN)
+  warn: (...args) => {
+    log(args, logLevels.WARN)
   },
-  error: (msg) => {
-    log(msg, logLevels.ERROR)
+  error: (...args) => {
+    log(args, logLevels.ERROR)
   },
 }
 
