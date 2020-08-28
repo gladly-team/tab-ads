@@ -80,7 +80,6 @@ const normalizeBidResponses = (config, rawBidData = []) => {
  *   bid requests return or time out.
  */
 const fetchBids = async (config) => {
-  const apstag = getAmazonTag()
   const { adUnits } = config
   if (!adUnits.length) {
     return Promise.resolve({
@@ -107,6 +106,7 @@ const fetchBids = async (config) => {
         rawBidResponses: rawBids,
       })
     }
+    const apstag = getAmazonTag()
     apstag.init({
       pubID: 'ea374841-51b0-4335-9960-99200427f7c8',
       adServer: 'googletag',
