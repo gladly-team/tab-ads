@@ -27,7 +27,7 @@ In addition, the module sets `window.tabAds` with two properties useful for debu
 
 ## HTML Tags
 We must include the following scripts immediately after the `<body>` tag and before calling `tab-ads`:
-```
+```HTML
 <!--
   Google Publisher Tag
 -->
