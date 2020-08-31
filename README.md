@@ -99,6 +99,8 @@ Here's what to check for each partner, assuming the iframed page is `https://exa
 | EMX Digital  | `hb.emxdgt.com`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |
 | RhythmOne  | `tag.1rx.io/*`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |
 
+**GDPR and CCPA:** We should manually ensure that data privacy preferences are passed to ad partners. We use [`tab-cmp`](https://github.com/gladly-team/tab-cmp) as our consent management platform. See `tab-cmp`'s "Ad Partners" sections of its [test checklist](https://github.com/gladly-team/tab-cmp#test-checklist) for what to verify in ad partner requests.
+
 ## Testing In-Progress Builds in Local Projects
 
 It's often helpful to test development builds of `tab-ads` in other local projects.
