@@ -96,7 +96,7 @@ describe('amazonBidder: fetchBids', () => {
     expect(apstag.init.mock.calls[0][0].params).toBeUndefined()
   })
 
-  it('does not include the "gdpr" property to apstag.init config.consent.enabled is false', async () => {
+  it('sets the the "gdpr.consentTimeout" property to zero when config.consent.enabled is false', async () => {
     expect.assertions(1)
     const apstag = getAmazonTag()
     getUSPString.mockResolvedValue('1YYN')
@@ -106,11 +106,16 @@ describe('amazonBidder: fetchBids', () => {
       ...mockConfig,
       consent: {
         ...mockConfig.consent,
+        timeout: 485, // this should not be used
         enabled: false,
       },
     })
     await amazonBidder.fetchBids(tabAdsConfig)
-    expect(apstag.init.mock.calls[0][0].gdpr).toBeUndefined()
+    expect(apstag.init.mock.calls[0][0]).toMatchObject({
+      gdpr: {
+        cmpTimeout: 0,
+      },
+    })
   })
 
   it('calls apstag.fetchBids', async () => {

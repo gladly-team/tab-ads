@@ -118,11 +118,9 @@ const fetchBids = async (config) => {
       adServer: 'googletag',
       // Privacy docs:
       // https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/uam-ccpa.html
-      ...(consentEnabled && {
-        gdpr: {
-          cmpTimeout: config.consent.timeout,
-        },
-      }),
+      gdpr: {
+        cmpTimeout: consentEnabled ? config.consent.timeout : 0,
+      },
       ...(consentEnabled &&
         uspString && {
           params: {
