@@ -167,6 +167,22 @@ describe('prebidBidder: fetchBids', () => {
     )
   })
 
+  it('does not include the consentManagement setting if config.consent.enabled is false', async () => {
+    expect.assertions(1)
+
+    const pbjs = getPrebidPbjs()
+    const mockConfig = getMockTabAdsUserConfig()
+    const tabAdsConfig = setConfig({
+      ...mockConfig,
+      consent: {
+        ...mockConfig.consent,
+        enabled: false,
+      },
+    })
+    await prebidBidder.fetchBids(tabAdsConfig)
+    expect(pbjs.setConfig.mock.calls[0][0].consentManagement).toBeUndefined()
+  })
+
   it('includes the expected list of bidders for each ad', async () => {
     expect.assertions(3)
     const pbjs = getPrebidPbjs()
