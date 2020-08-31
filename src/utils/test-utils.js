@@ -276,6 +276,7 @@ export const getMockTabAdsUserConfig = () => ({
     },
   ],
   consent: {
+    enabled: true,
     timeout: 200,
   },
   publisher: {
