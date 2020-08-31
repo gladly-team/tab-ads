@@ -38,6 +38,9 @@ const defaultConfig = {
   auctionTimeout: 1000, // Timeout for the whole auction
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
+    // If false, most bidders won't include TCF/USP data or wait for
+    // the CMP to respond.
+    enabled: true,
     // Time to wait for the consent management platform (CMP) to respond.
     // If the CMP does not respond in this time, ad auctions may be cancelled.
     // Typically, 500ms might be too short for a CMP to load and respond.
@@ -124,6 +127,16 @@ const validateConfig = (userConfig) => {
       )
     }
   })
+
+  // Validate consent values.
+  if (
+    get(userConfig, 'consent.enabled') &&
+    !(typeof get(userConfig, 'consent.enabled') === 'boolean')
+  ) {
+    throw new Error(
+      'Config error: the consent.enabled property must be a boolean.'
+    )
+  }
 }
 
 const isDebugParamSet = () => {
