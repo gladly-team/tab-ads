@@ -78,6 +78,46 @@ describe('amazonBidder: fetchBids', () => {
     expect(apstag.init.mock.calls[0][0].params).toBeUndefined()
   })
 
+  it('does not include the "us_privacy" property to apstag.init or call getUSPString when config.consent.enabled is false', async () => {
+    expect.assertions(2)
+    const apstag = getAmazonTag()
+    getUSPString.mockResolvedValue('1YYN')
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const mockConfig = getMockTabAdsUserConfig()
+    const tabAdsConfig = setConfig({
+      ...mockConfig,
+      consent: {
+        ...mockConfig.consent,
+        enabled: false,
+      },
+    })
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(getUSPString).not.toHaveBeenCalled()
+    expect(apstag.init.mock.calls[0][0].params).toBeUndefined()
+  })
+
+  it('sets the the "gdpr.consentTimeout" property to zero when config.consent.enabled is false', async () => {
+    expect.assertions(1)
+    const apstag = getAmazonTag()
+    getUSPString.mockResolvedValue('1YYN')
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const mockConfig = getMockTabAdsUserConfig()
+    const tabAdsConfig = setConfig({
+      ...mockConfig,
+      consent: {
+        ...mockConfig.consent,
+        timeout: 485, // this should not be used
+        enabled: false,
+      },
+    })
+    await amazonBidder.fetchBids(tabAdsConfig)
+    expect(apstag.init.mock.calls[0][0]).toMatchObject({
+      gdpr: {
+        cmpTimeout: 0,
+      },
+    })
+  })
+
   it('calls apstag.fetchBids', async () => {
     const apstag = getAmazonTag()
 

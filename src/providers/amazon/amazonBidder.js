@@ -80,7 +80,10 @@ const normalizeBidResponses = (config, rawBidData = []) => {
  *   bid requests return or time out.
  */
 const fetchBids = async (config) => {
-  const { adUnits } = config
+  const {
+    adUnits,
+    consent: { enabled: consentEnabled },
+  } = config
   if (!adUnits.length) {
     return Promise.resolve({
       bidResponses: {},
@@ -96,7 +99,10 @@ const fetchBids = async (config) => {
   })
 
   // Get the USP string from the consent management platform.
-  const uspString = await getUSPString({ timeout: config.consent.timeout })
+  let uspString
+  if (consentEnabled) {
+    uspString = await getUSPString({ timeout: config.consent.timeout })
+  }
 
   return new Promise((resolve) => {
     function handleAuctionEnd(rawBids) {
@@ -113,13 +119,14 @@ const fetchBids = async (config) => {
       // Privacy docs:
       // https://ams.amazon.com/webpublisher/uam/docs/web-integration-documentation/integration-guide/uam-ccpa.html
       gdpr: {
-        cmpTimeout: config.consent.timeout,
+        cmpTimeout: consentEnabled ? config.consent.timeout : 0,
       },
-      ...(uspString && {
-        params: {
-          us_privacy: uspString,
-        },
-      }),
+      ...(consentEnabled &&
+        uspString && {
+          params: {
+            us_privacy: uspString,
+          },
+        }),
     })
 
     logger.debug(`Amazon: bids requested`)

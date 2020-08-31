@@ -21,6 +21,7 @@ const defaultConfigStructure = {
   auctionTimeout: expect.any(Number),
   bidderTimeout: expect.any(Number),
   consent: {
+    enabled: expect.any(Boolean),
     timeout: expect.any(Number),
   },
   publisher: {
@@ -357,6 +358,28 @@ describe('config: setConfig validation', () => {
     }).toThrow(
       'Config error: adUnits\' "sizes" property must have at least one size specified.'
     )
+  })
+
+  it('does not throw if the consent property is undefined', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        consent: undefined,
+      })
+    }).not.toThrow()
+  })
+
+  it('throws if the consent.enabled property is set but is not a Boolean', () => {
+    const { setConfig } = require('src/config')
+    expect(() => {
+      setConfig({
+        ...getMinimalValidUserConfig(),
+        consent: {
+          enabled: 'yes',
+        },
+      })
+    }).toThrow('Config error: the consent.enabled property must be a boolean.')
   })
 })
 
