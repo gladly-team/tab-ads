@@ -9,6 +9,8 @@ import { getConfig, setConfig } from 'src/config'
 import BidResponse from 'src/utils/BidResponse'
 import { storeA } from 'src/utils/test-fixtures'
 
+jest.mock('src/getBidders')
+
 const getMockBidderStoredData = () => {
   const { newTabAds } = getConfig()
   return {
