@@ -1,3 +1,5 @@
+// TODO: write mocks.
+
 import { isClientSide } from 'src/utils/ssr'
 
 let bidders = []
@@ -6,14 +8,10 @@ let bidders = []
 // so we can't load bidders when rendering server-side.
 if (isClientSide()) {
   const prebidBidder = require('src/providers/prebid/prebidBidder').default
-  // const amazonBidder = require('src/providers/amazon/amazonBidder').default
+  const amazonBidder = require('src/providers/amazon/amazonBidder').default
   const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
     .default
-  bidders = [
-    prebidBidder,
-    // amazonBidder,
-    indexExchangeBidder,
-  ]
+  bidders = [prebidBidder, amazonBidder, indexExchangeBidder]
 }
 
 /**
