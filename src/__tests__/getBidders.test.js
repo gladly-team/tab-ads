@@ -20,13 +20,13 @@ describe('bidders', () => {
     const { isClientSide } = require('src/utils/ssr')
     isClientSide.mockReturnValue(true)
     const prebidBidder = require('src/providers/prebid/prebidBidder').default
-    // const amazonBidder = require('src/providers/amazon/amazonBidder').default
+    const amazonBidder = require('src/providers/amazon/amazonBidder').default
     const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
       .default
     const getBidders = require('src/getBidders').default
     expect(getBidders()).toEqual([
       prebidBidder,
-      // amazonBidder,
+      amazonBidder,
       indexExchangeBidder,
     ])
   })
