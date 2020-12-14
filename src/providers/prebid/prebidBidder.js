@@ -54,9 +54,10 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           {
             bidder: 'aol',
             params: {
-              network: '10559.1',
-              placement: '4117691',
-              sizeId: '225',
+              // 'aol' is a built-in alias for One Mobile (Verizon SSP).
+              // https://docs.prebid.org/dev-docs/bidders.html#onemobile
+              dcn: '8a96954f01747430358b35f958c502f0',
+              pos: '8a96954f01747430358b35fa26a402f4',
             },
           },
           {
@@ -116,9 +117,8 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           {
             bidder: 'aol',
             params: {
-              network: '10559.1',
-              placement: '4117692',
-              sizeId: '170',
+              dcn: '8a96954f01747430358b35f958c502f0',
+              pos: '8a96954f01747430358b35fab61202f5',
             },
           },
           {
@@ -176,9 +176,8 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           {
             bidder: 'aol',
             params: {
-              network: '10559.1',
-              placement: '4997858',
-              sizeId: '170',
+              dcn: '8a96954f01747430358b35f958c502f0',
+              pos: '8a9690620174743031d835fb5fa90049',
             },
           },
           {
