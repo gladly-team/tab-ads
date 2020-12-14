@@ -93,7 +93,7 @@ Here's what to check for each partner, assuming the iframed page is `https://exa
 | ------------- | ------------- | ------------- |
 | Sonobi  | `apex.go.sonobi.com/trinity.json`  | Query param `ref` is `https://example.com/newtab/` |
 | Pulsepoint  | `https://bid.contextweb.com/header/ortb`  | Payload `site.page` and `site.ref` are both `https://example.com/newtab/`  |
-| AOL  | `https://match.adsrvr.org/track/cmf/generic`  | No test needed  |
+| AOL  | `https://c2shb.ssp.yahoo.com/bidRequest`  | No test needed  |
 | Sovrn  | `https://ap.lijit.com/rtb/bid`  | Payload `site.domain` is `example.com` and `site.page` is `https://example.com/newtab/`  |
 | OpenX  | `https://tabforacause-d.openx.net/w/1.0/arj`  | Query param `ju` is `https://example.com/newtab/` |
 | EMX Digital  | `hb.emxdgt.com`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |
