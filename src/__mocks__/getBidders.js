@@ -19,8 +19,6 @@ if (isClientSide()) {
  * In a server environment, return an empty array.
  * @return {Bidder[]}
  */
-const getBidders = () => {
-  return bidders
-}
+const getBidders = () => bidders
 
 export default getBidders

@@ -55,6 +55,4 @@ export const clearAdDataStore = () => {
   global.tabAds.adDataStore = getDefaultAdDataStore()
 }
 
-export const getAdDataStore = () => {
-  return global.tabAds.adDataStore
-}
+export const getAdDataStore = () => global.tabAds.adDataStore

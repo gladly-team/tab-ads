@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const configMock = jest.genMockFromModule('src/config')
+const configMock = jest.createMockFromModule('src/config')
 const configActual = jest.requireActual('src/config')
 
 module.exports = {

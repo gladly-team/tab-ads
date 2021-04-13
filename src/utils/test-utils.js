@@ -15,26 +15,24 @@ export const mockGoogleTagSlotRenderEndedData = (
   slotId = 'abc-123',
   adUnitCode = '/123456/some-ad/',
   properties = {}
-) => {
-  return {
-    // https://developers.google.com/doubleclick-gpt/reference#googletagslot
-    slot: {
-      getSlotElementId: () => slotId,
-      getAdUnitPath: () => adUnitCode,
-      // ... other methods here
-    },
-    advertiserId: 1234,
-    campaignId: 99887766,
-    creativeId: 111222333444555,
-    isEmpty: false,
-    lineItemId: 123456,
-    serviceName: 'something',
-    size: '728x90',
-    sourceAgnosticCreativeId: null,
-    sourceAgnosticLineItemId: null,
-    ...properties,
-  }
-}
+) => ({
+  // https://developers.google.com/doubleclick-gpt/reference#googletagslot
+  slot: {
+    getSlotElementId: () => slotId,
+    getAdUnitPath: () => adUnitCode,
+    // ... other methods here
+  },
+  advertiserId: 1234,
+  campaignId: 99887766,
+  creativeId: 111222333444555,
+  isEmpty: false,
+  lineItemId: 123456,
+  serviceName: 'something',
+  size: '728x90',
+  sourceAgnosticCreativeId: null,
+  sourceAgnosticLineItemId: null,
+  ...properties,
+})
 
 /**
  * Create a mock object of the googletag 'ImpressionViewable' event. See:
@@ -46,17 +44,15 @@ export const mockGoogleTagSlotRenderEndedData = (
 export const mockGoogleTagImpressionViewableData = (
   slotId = 'abc-123',
   properties = {}
-) => {
-  return {
-    // https://developers.google.com/doubleclick-gpt/reference#googletagslot
-    slot: {
-      getSlotElementId: () => slotId,
-      // ... other methods here
-    },
-    serviceName: 'something',
-    ...properties,
-  }
-}
+) => ({
+  // https://developers.google.com/doubleclick-gpt/reference#googletagslot
+  slot: {
+    getSlotElementId: () => slotId,
+    // ... other methods here
+  },
+  serviceName: 'something',
+  ...properties,
+})
 
 /**
  * Create a mock object of the googletag 'SlotOnload' event. See:
@@ -68,110 +64,104 @@ export const mockGoogleTagImpressionViewableData = (
 export const mockGoogleTagSlotOnloadData = (
   slotId = 'abc-123',
   properties = {}
-) => {
-  return {
-    // https://developers.google.com/doubleclick-gpt/reference#googletagslot
-    slot: {
-      getSlotElementId: () => slotId,
-      // ... other methods here
-    },
-    serviceName: 'something',
-    ...properties,
-  }
-}
+) => ({
+  // https://developers.google.com/doubleclick-gpt/reference#googletagslot
+  slot: {
+    getSlotElementId: () => slotId,
+    // ... other methods here
+  },
+  serviceName: 'something',
+  ...properties,
+})
 
 /**
  * Create a mock bid response from Amazon's apstag.
  * @param {Object} properties - Values to override the default properties in the mock
  * @return {Object}
  */
-export const mockAmazonBidResponse = (properties = {}) => {
-  return {
-    amznbid: '1',
-    amzniid: 'some-id',
-    amznp: '1',
-    amznsz: '0x0',
-    size: '0x0',
-    slotID: 'div-gpt-ad-123456789-0',
-    ...properties,
-  }
-}
+export const mockAmazonBidResponse = (properties = {}) => ({
+  amznbid: '1',
+  amzniid: 'some-id',
+  amznp: '1',
+  amznsz: '0x0',
+  size: '0x0',
+  slotID: 'div-gpt-ad-123456789-0',
+  ...properties,
+})
 
 /**
  * Create a mock bid response from Index Exchange.
  * @return {Object}
  */
-export const mockIndexExchangeBidResponse = () => {
-  return {
-    slot: {
-      'd-1-728x90-atf-bottom-leaderboard': [
-        {
-          targeting: {
-            IOM: ['728x90_5000'],
-            ix_id: ['_mBnLnF5V'],
-          },
-          price: 120,
-          adm: '',
-          size: [728, 90],
-          partnerId: 'IndexExchangeHtb',
+export const mockIndexExchangeBidResponse = () => ({
+  slot: {
+    'd-1-728x90-atf-bottom-leaderboard': [
+      {
+        targeting: {
+          IOM: ['728x90_5000'],
+          ix_id: ['_mBnLnF5V'],
         },
-      ],
-      'd-2-300x250-atf-middle-right_rectangle': [
-        {
-          targeting: {
-            // Apparently, targeting values might be arrays or just keys
-            some_key: 'my-cool-value123',
-            ad_thing: 'thingy_abc',
-          },
-          price: 5324,
-          adm: '_admcodehere_',
-          size: [300, 250],
-          partnerId: 'SomePartner',
+        price: 120,
+        adm: '',
+        size: [728, 90],
+        partnerId: 'IndexExchangeHtb',
+      },
+    ],
+    'd-2-300x250-atf-middle-right_rectangle': [
+      {
+        targeting: {
+          // Apparently, targeting values might be arrays or just keys
+          some_key: 'my-cool-value123',
+          ad_thing: 'thingy_abc',
         },
-      ],
-      'd-3-300x250-atf-bottom-right_rectangle': [
-        {
-          targeting: {
-            IOM: ['300x250_5000'],
-            ix_id: ['_C7VB5HUd'],
-          },
-          price: 3500,
-          adm: '_admcodehere_',
-          size: [300, 250],
-          partnerId: 'IndexExchangeHtb',
+        price: 5324,
+        adm: '_admcodehere_',
+        size: [300, 250],
+        partnerId: 'SomePartner',
+      },
+    ],
+    'd-3-300x250-atf-bottom-right_rectangle': [
+      {
+        targeting: {
+          IOM: ['300x250_5000'],
+          ix_id: ['_C7VB5HUd'],
         },
-      ],
-    },
-    page: [],
-    identity: {
-      AdserverOrgIp: {
-        data: {
-          source: 'adserver.org',
-          uids: [
-            {
-              id: '233aed36-ea6a-4a2d-aac0-d948e2a7db65',
-              ext: {
-                rtiPartner: 'TDID',
-              },
+        price: 3500,
+        adm: '_admcodehere_',
+        size: [300, 250],
+        partnerId: 'IndexExchangeHtb',
+      },
+    ],
+  },
+  page: [],
+  identity: {
+    AdserverOrgIp: {
+      data: {
+        source: 'adserver.org',
+        uids: [
+          {
+            id: '233aed36-ea6a-4a2d-aac0-d948e2a7db65',
+            ext: {
+              rtiPartner: 'TDID',
             },
-            {
-              id: 'TRUE',
-              ext: {
-                rtiPartner: 'TDID_LOOKUP',
-              },
+          },
+          {
+            id: 'TRUE',
+            ext: {
+              rtiPartner: 'TDID_LOOKUP',
             },
-            {
-              id: '2019-02-28T04:53:55',
-              ext: {
-                rtiPartner: 'TDID_CREATED_AT',
-              },
+          },
+          {
+            id: '2019-02-28T04:53:55',
+            ext: {
+              rtiPartner: 'TDID_CREATED_AT',
             },
-          ],
-        },
+          },
+        ],
       },
     },
-  }
-}
+  },
+})
 
 const mockPrebidBid = ({
   bidder = 'openx',
@@ -220,38 +210,36 @@ const mockPrebidBid = ({
   }
 }
 
-export const mockPrebidBidResponses = () => {
-  return {
-    // The long leaderboard ad.
-    'div-gpt-ad-1464385677836-0': {
-      bids: [
-        mockPrebidBid({ bidder: 'openx', cpm: 0.582, width: 728, height: 90 }),
-        mockPrebidBid({
-          bidder: 'appnexus',
-          cpm: 4.21,
-          width: 728,
-          height: 90,
-        }),
-        mockPrebidBid({
-          bidder: 'emxdigital',
-          cpm: 0.19,
-          width: 728,
-          height: 90,
-        }),
-      ],
-    },
-    // The primary rectangle ad (bottom-right).
-    'div-gpt-ad-1464385742501-0': {
-      bids: [],
-    },
-    // The second rectangle ad (right side, above the first).
-    'div-gpt-ad-1539903223131-0': {
-      bids: [
-        mockPrebidBid({ bidder: 'openx', cpm: 1.01, width: 300, height: 250 }),
-      ],
-    },
-  }
-}
+export const mockPrebidBidResponses = () => ({
+  // The long leaderboard ad.
+  'div-gpt-ad-1464385677836-0': {
+    bids: [
+      mockPrebidBid({ bidder: 'openx', cpm: 0.582, width: 728, height: 90 }),
+      mockPrebidBid({
+        bidder: 'appnexus',
+        cpm: 4.21,
+        width: 728,
+        height: 90,
+      }),
+      mockPrebidBid({
+        bidder: 'emxdigital',
+        cpm: 0.19,
+        width: 728,
+        height: 90,
+      }),
+    ],
+  },
+  // The primary rectangle ad (bottom-right).
+  'div-gpt-ad-1464385742501-0': {
+    bids: [],
+  },
+  // The second rectangle ad (right side, above the first).
+  'div-gpt-ad-1539903223131-0': {
+    bids: [
+      mockPrebidBid({ bidder: 'openx', cpm: 1.01, width: 300, height: 250 }),
+    ],
+  },
+})
 
 // Provide a valid config for testing.
 export const getMockTabAdsUserConfig = () => ({
@@ -292,22 +280,20 @@ export const flushAllPromises = async () => {
 }
 
 // Return a mock BidResponse object.
-export const getMockBidResponse = () => {
-  return BidResponse({
+export const getMockBidResponse = () =>
+  BidResponse({
     adId: 'my-ad-id',
     revenue: 0.12,
     advertiserName: 'SomeAdvertiser',
     adSize: '300x250',
   })
-}
 
 // Return a mock BidResponse object.
-export const getMockDisplayedAdInfo = () => {
-  return DisplayedAdInfo({
+export const getMockDisplayedAdInfo = () =>
+  DisplayedAdInfo({
     adId: 'my-ad-id',
     revenue: 0.12,
     adSize: '300x250',
     GAMAdvertiserId: 24681357,
     GAMAdUnitId: '/123456789/MyAdSlot',
   })
-}

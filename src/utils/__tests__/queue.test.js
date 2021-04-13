@@ -67,7 +67,7 @@ describe('queue', () => {
     expect(mockCmdB).toHaveBeenCalled()
   })
 
-  it('it does not re-run commands if runQueue is set to true more than once', () => {
+  it('does not re-run commands if runQueue is set to true more than once', () => {
     expect.assertions(2)
     const queue = require('src/utils/queue').default
     const mockCmdA = jest.fn()

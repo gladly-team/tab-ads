@@ -219,9 +219,7 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
  */
 const getAdUnits = (config) => {
   const { adUnits } = config
-  const prebidAdUnits = adUnits.map((adUnit) => {
-    return getPrebidAdUnit(adUnit, config)
-  })
+  const prebidAdUnits = adUnits.map((adUnit) => getPrebidAdUnit(adUnit, config))
   return prebidAdUnits.filter((adUnit) => !!adUnit)
 }
 
@@ -236,14 +234,13 @@ const getAdUnits = (config) => {
  *   bidder's normalized bids for that ad.
  */
 const normalizeBidResponses = (rawBidData = {}) => {
-  const normalizeBid = (adId, rawBid) => {
-    return BidResponse({
+  const normalizeBid = (adId, rawBid) =>
+    BidResponse({
       adId,
       revenue: rawBid.cpm / 1000 || 0,
       advertiserName: rawBid.bidderCode,
       adSize: rawBid.size,
     })
-  }
   const normalizedBids = Object.keys(rawBidData).reduce((accumulator, adId) => {
     const rawBidsForAdId = get(rawBidData, [adId, 'bids'], [])
     return {

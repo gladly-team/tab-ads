@@ -149,8 +149,12 @@ export const getWinningBidForAd = (adId) => {
 export const getAllWinningBids = () => {
   const tabConfig = getConfig()
   const adUnits = get(tabConfig, 'adUnits', [])
-  const winningBidsByAd = adUnits.reduce((acc, adUnit) => {
-    return { ...acc, [adUnit.adId]: getWinningBidForAd(adUnit.adId) }
-  }, {})
+  const winningBidsByAd = adUnits.reduce(
+    (acc, adUnit) => ({
+      ...acc,
+      [adUnit.adId]: getWinningBidForAd(adUnit.adId),
+    }),
+    {}
+  )
   return winningBidsByAd
 }
