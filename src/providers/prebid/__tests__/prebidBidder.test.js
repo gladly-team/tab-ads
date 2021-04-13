@@ -385,13 +385,12 @@ describe('prebidBidder: fetchBids', () => {
     })
   })
 
-  it('sets pbjs.bidderSettings to include the AOL 80% bidCpmAdjustment', async () => {
-    expect.assertions(2)
+  it('does not sets pbjs.bidderSettings (the AOL 80% bidCpmAdjustment is no longer needed)', async () => {
+    expect.assertions(1)
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await prebidBidder.fetchBids(tabAdsConfig)
-    expect(pbjs.bidderSettings.aol).toBeDefined()
-    expect(pbjs.bidderSettings.aol.bidCpmAdjustment(2)).toEqual(1.6)
+    expect(pbjs.bidderSettings.aol).not.toBeDefined()
   })
 
   it('returns the expected BidResponseData structure', async () => {

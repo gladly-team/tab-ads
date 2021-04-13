@@ -320,15 +320,6 @@ const fetchBids = async (config) => {
       })
 
       pbjs.addAdUnits(adUnits)
-      pbjs.bidderSettings = {
-        aol: {
-          // AOL sends gross CPM.
-          bidCpmAdjustment(bidCpm) {
-            return bidCpm * 0.8
-          },
-        },
-      }
-
       pbjs.requestBids({
         bidsBackHandler: handleAuctionEnd,
       })
