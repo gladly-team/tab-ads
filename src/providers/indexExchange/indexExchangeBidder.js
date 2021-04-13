@@ -64,8 +64,8 @@ const mapIXSlotToAdId = (IXSlotId) => {
  *   bidder's normalized bids for that ad.
  */
 const normalizeBidResponses = (rawBidData = []) => {
-  const normalizeBid = (adId, rawBid) => {
-    return BidResponse({
+  const normalizeBid = (adId, rawBid) =>
+    BidResponse({
       adId,
       // Index Exchange’s returned "price" field is a CPM in cents, so
       // 265 = $2.65 CPM. Convert to impression revenue.
@@ -73,7 +73,6 @@ const normalizeBidResponses = (rawBidData = []) => {
       advertiserName: indexExchangeBidderName,
       adSize: `${rawBid.size[0]}x${rawBid.size[1]}`,
     })
-  }
   const IXBidsBySlot = get(rawBidData, 'slot', {})
   const normalizedBids = Object.keys(IXBidsBySlot).reduce(
     (accumulator, IXSlotId) => {
@@ -123,9 +122,9 @@ const fetchBids = async (config) => {
     })
   }
 
-  const IXSlots = adUnits.map((adUnit) => {
-    return { htSlotName: mapGAMSlotToIXSlot(adUnit.adUnitId) }
-  })
+  const IXSlots = adUnits.map((adUnit) => ({
+    htSlotName: mapGAMSlotToIXSlot(adUnit.adUnitId),
+  }))
 
   return new Promise((resolve) => {
     let timeoutId

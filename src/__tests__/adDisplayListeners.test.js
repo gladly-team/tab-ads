@@ -65,8 +65,8 @@ const runMockSlotRenderEndedEventForAd = (adId) => {
 }
 
 describe('adDisplayListeners: onAdRendered', () => {
-  it('immediately calls the callback if the ad has already rendered', () => {
-    return new Promise((resolve, reject) => {
+  it('immediately calls the callback if the ad has already rendered', () =>
+    new Promise((resolve, reject) => {
       const { onAdRendered } = require('src/adDisplayListeners')
 
       // Simulate that the "slot render ended" event has already occurred
@@ -84,11 +84,10 @@ describe('adDisplayListeners: onAdRendered', () => {
           reject(e)
         }
       })
-    })
-  })
+    }))
 
-  it('calls the callback when the ad renders later', () => {
-    return new Promise((resolve, reject) => {
+  it('calls the callback when the ad renders later', () =>
+    new Promise((resolve, reject) => {
       const { onAdRendered } = require('src/adDisplayListeners')
 
       const adId = 'xyz-987'
@@ -105,8 +104,7 @@ describe('adDisplayListeners: onAdRendered', () => {
 
       // The ad renders after the callback is registered.
       runMockSlotRenderEndedEventForAd(adId)
-    })
-  })
+    }))
 
   it('calls multiple callbacks when the ad renders', () => {
     const numCallbacks = 2
@@ -150,8 +148,8 @@ describe('adDisplayListeners: onAdRendered', () => {
     })
   })
 
-  it('calls getWinningBidForAd with the expected ad ID', () => {
-    return new Promise((resolve, reject) => {
+  it('calls getWinningBidForAd with the expected ad ID', () =>
+    new Promise((resolve, reject) => {
       const { onAdRendered } = require('src/adDisplayListeners')
 
       const adId = 'my-special-ad'
@@ -166,8 +164,7 @@ describe('adDisplayListeners: onAdRendered', () => {
         }
       })
       runMockSlotRenderEndedEventForAd(adId)
-    })
-  })
+    }))
 })
 
 describe('adDisplayListeners: setUpAdDisplayListeners', () => {

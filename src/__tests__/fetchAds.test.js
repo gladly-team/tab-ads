@@ -195,13 +195,14 @@ describe('fetchAds: bid and ad server requests', () => {
     // Mock that all bidders are very slow to respond.
     const bidders = getBidders()
     bidders.forEach((bidder) => {
-      bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve()
-          }, 15e3)
-        })
-      })
+      bidder.fetchBids.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve()
+            }, 15e3)
+          })
+      )
     })
 
     const googletagMockRefresh = jest.fn()
@@ -265,13 +266,14 @@ describe('fetchAds: bid and ad server requests', () => {
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
     bidders.forEach((bidder) => {
-      bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve()
-          }, 40)
-        })
-      })
+      bidder.fetchBids.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve()
+            }, 40)
+          })
+      )
     })
 
     const googletagMockRefresh = jest.fn()
@@ -296,13 +298,14 @@ describe('fetchAds: bid and ad server requests', () => {
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
     bidders.forEach((bidder) => {
-      bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve()
-          }, 40)
-        })
-      })
+      bidder.fetchBids.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve()
+            }, 40)
+          })
+      )
     })
 
     const googletagMockRefresh = jest.fn()
@@ -374,20 +377,21 @@ describe('fetchAds: bid request storage', () => {
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
     bidders.forEach((bidder) => {
-      bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({
-              bidResponses: {
-                example: `Bid responses for ${bidder.name}`,
-              },
-              rawBidResponses: {
-                example: `Raw bid responses for ${bidder.name}`,
-              },
-            })
-          }, 40)
-        })
-      })
+      bidder.fetchBids.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve({
+                bidResponses: {
+                  example: `Bid responses for ${bidder.name}`,
+                },
+                rawBidResponses: {
+                  example: `Raw bid responses for ${bidder.name}`,
+                },
+              })
+            }, 40)
+          })
+      )
     })
 
     const tabAdsConfig = setConfig({
@@ -443,20 +447,21 @@ describe('fetchAds: bid request storage', () => {
     // Mock that all bidders respond quickly.
     const bidders = getBidders()
     bidders.forEach((bidder) => {
-      bidder.fetchBids.mockImplementationOnce(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve({
-              bidResponses: {
-                example: `Bid responses for ${bidder.name}`,
-              },
-              rawBidResponses: {
-                example: `Raw bid responses for ${bidder.name}`,
-              },
-            })
-          }, 15e3) // returns after the ad server request is sent
-        })
-      })
+      bidder.fetchBids.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve({
+                bidResponses: {
+                  example: `Bid responses for ${bidder.name}`,
+                },
+                rawBidResponses: {
+                  example: `Raw bid responses for ${bidder.name}`,
+                },
+              })
+            }, 15e3) // returns after the ad server request is sent
+          })
+      )
     })
 
     const tabAdsConfig = setConfig({

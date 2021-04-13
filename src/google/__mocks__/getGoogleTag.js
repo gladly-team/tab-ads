@@ -47,9 +47,7 @@ const mockSlots = [
   }),
 ]
 
-const mockGetSlots = jest.fn(() => {
-  return mockSlots
-})
+const mockGetSlots = jest.fn(() => mockSlots)
 const mockSetTargeting = jest.fn()
 
 const eventListenerStore = {}

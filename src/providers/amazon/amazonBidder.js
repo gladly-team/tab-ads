@@ -60,14 +60,15 @@ const normalizeBidResponses = (config, rawBidData = []) => {
     })
   }
 
-  const normalizedBids = rawBidData.reduce((accumulator, rawBid) => {
-    return {
+  const normalizedBids = rawBidData.reduce(
+    (accumulator, rawBid) => ({
       ...accumulator,
       [rawBid.slotID]: [normalizeBid(rawBid.slotID, rawBid)].filter(
         (item) => !!item
       ), // filter any nil bids
-    }
-  }, {})
+    }),
+    {}
+  )
 
   return normalizedBids
 }
@@ -91,12 +92,10 @@ const fetchBids = async (config) => {
     })
   }
 
-  const slots = adUnits.map((adUnit) => {
-    return {
-      slotID: adUnit.adId,
-      sizes: adUnit.sizes,
-    }
-  })
+  const slots = adUnits.map((adUnit) => ({
+    slotID: adUnit.adId,
+    sizes: adUnit.sizes,
+  }))
 
   // Get the USP string from the consent management platform.
   let uspString

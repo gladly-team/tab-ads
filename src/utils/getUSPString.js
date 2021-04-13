@@ -10,8 +10,8 @@ import logger from 'src/utils/logger'
  * @return {String|null} the USP string value, or null if
  *   the CMP times out.
  */
-const getUSPString = async ({ timeout = 500 } = {}) => {
-  return new Promise((resolve) => {
+const getUSPString = async ({ timeout = 500 } = {}) =>
+  new Promise((resolve) => {
     try {
       let timedOut = false
       logger.debug(`Fetching USP string with timeout ${timeout}ms.`)
@@ -40,6 +40,5 @@ const getUSPString = async ({ timeout = 500 } = {}) => {
       logger.error(e)
     }
   })
-}
 
 export default getUSPString
