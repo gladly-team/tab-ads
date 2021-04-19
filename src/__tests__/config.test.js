@@ -18,7 +18,7 @@ const defaultConfigStructure = {
   disableAds: expect.any(Boolean),
   useMockAds: expect.any(Boolean),
   adUnits: [],
-  pageLevelKeyValueArray: [],
+  pageLevelKeyValues: {},
   auctionTimeout: expect.any(Number),
   bidderTimeout: expect.any(Number),
   consent: {
@@ -142,23 +142,23 @@ describe('config: setConfig', () => {
     })
   })
 
-  it('defaults to an empty array of pageLevelKeyValueArray', () => {
+  it('defaults to an empty object of pageLevelKeyValues', () => {
     const { setConfig } = require('src/config')
     const config = setConfig(getMinimalValidUserConfig())
     expect(config).toMatchObject({
-      pageLevelKeyValueArray: [],
+      pageLevelKeyValues: {},
     })
   })
 
-  it('allows customizing the pageLevelKeyValueArray property', () => {
+  it('allows customizing the pageLevelKeyValues property', () => {
     const { setConfig } = require('src/config')
     const modifiedConfig = {
       ...getMinimalValidUserConfig(),
-      pageLevelKeyValueArray: [['v4', 'true']],
+      pageLevelKeyValues: { v4: 'true' },
     }
     const config = setConfig(modifiedConfig)
     expect(config).toMatchObject({
-      pageLevelKeyValueArray: [['v4', 'true']],
+      pageLevelKeyValues: { v4: 'true' },
     })
   })
 
@@ -381,50 +381,24 @@ describe('config: setConfig validation', () => {
     )
   })
 
-  it('throws if a page level key value array is not an array', () => {
+  it('throws if a page level key value is not an object', () => {
     const { setConfig } = require('src/config')
     expect(() => {
       setConfig({
         ...getMinimalValidUserConfig(),
-        pageLevelKeyValueArray: { key: 'value' },
+        pageLevelKeyValues: 'key,value',
       })
-    }).toThrow('Config error: Key Values must be in a two dimensional array')
+    }).toThrow('Config error: Key Values must be in an object')
   })
 
-  it('throws if the key value pairs in the  page level key value array are not arrays', () => {
+  it('throws if the value in the key value pairs is not a string', () => {
     const { setConfig } = require('src/config')
     expect(() => {
       setConfig({
         ...getMinimalValidUserConfig(),
-        pageLevelKeyValueArray: [{ key: 'value' }],
-      })
-    }).toThrow('Config error: Key Values must be in a two dimensional array')
-  })
-
-  it('throws if the key value pairs in the  page level key value array are not two dimensional array', () => {
-    const { setConfig } = require('src/config')
-    expect(() => {
-      setConfig({
-        ...getMinimalValidUserConfig(),
-        pageLevelKeyValueArray: [['key', 'value', 'error']],
-      })
-    }).toThrow('Config error: Key Value pair must have a length of 2')
-  })
-
-  it('throws if the key value pairs in the  page level key value array are not both strings', () => {
-    const { setConfig } = require('src/config')
-    expect(() => {
-      setConfig({
-        ...getMinimalValidUserConfig(),
-        pageLevelKeyValueArray: [['key', 123]],
+        pageLevelKeyValues: { key: 123 },
       })
     }).toThrow('Config error: values in key value pair must be strings')
-    expect(() => {
-      setConfig({
-        ...getMinimalValidUserConfig(),
-        pageLevelKeyValueArray: [[123, '123']],
-      })
-    }).toThrow('Config error: keys in key value pair must be strings')
   })
 
   it('does not throw if the consent property is undefined', () => {

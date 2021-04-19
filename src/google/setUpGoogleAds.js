@@ -1,7 +1,7 @@
 import getGoogleTag from 'src/google/getGoogleTag'
 
 export default (config) => {
-  const { adUnits, pageLevelKeyValueArray = [] } = config
+  const { adUnits, pageLevelKeyValues = {} } = config
   if (!adUnits.length) {
     return
   }
@@ -15,9 +15,9 @@ export default (config) => {
         .addService(googletag.pubads())
     })
   })
-
+  const keyValuePairs = Object.entries(pageLevelKeyValues)
   googletag.cmd.push(() => {
-    pageLevelKeyValueArray.forEach(([key, value]) =>
+    keyValuePairs.forEach(([key, value]) =>
       googletag.pubads().setTargeting(key, value)
     )
     googletag.pubads().enableSingleRequest()
