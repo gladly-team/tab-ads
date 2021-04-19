@@ -102,4 +102,42 @@ describe('setUpGoogleAds', () => {
     const googletag = getGoogleTag()
     expect(googletag.enableServices).toHaveBeenCalled()
   })
+
+  it('only define one page level key value pair when only one one page level key value pair is enabled', () => {
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      pageLevelKeyValueArray: [['v4', 'true']],
+    })
+    setUpGoogleAds(tabAdsConfig)
+    const googletag = getGoogleTag()
+    expect(googletag.pubads().setTargeting).toHaveBeenCalledTimes(1)
+    expect(googletag.pubads().setTargeting).toHaveBeenCalledWith('v4', 'true')
+  })
+
+  it('only defines page level key value pair for every key value entry in the array', () => {
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      pageLevelKeyValueArray: [
+        ['v4', 'true'],
+        ['trees', 'true'],
+      ],
+    })
+    setUpGoogleAds(tabAdsConfig)
+    const googletag = getGoogleTag()
+    expect(googletag.pubads().setTargeting).toHaveBeenCalledTimes(2)
+    expect(googletag.pubads().setTargeting).toHaveBeenCalledWith('v4', 'true')
+    expect(googletag.pubads().setTargeting).toHaveBeenCalledWith(
+      'trees',
+      'true'
+    )
+  })
+
+  it('does not defines page level key value pair when there are no key value entry in the array', () => {
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+    })
+    setUpGoogleAds(tabAdsConfig)
+    const googletag = getGoogleTag()
+    expect(googletag.pubads().setTargeting).not.toHaveBeenCalled()
+  })
 })
