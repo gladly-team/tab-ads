@@ -106,7 +106,7 @@ describe('setUpGoogleAds', () => {
   it('only define one page level key value pair when only one one page level key value pair is enabled', () => {
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
-      pageLevelKeyValueArray: [['v4', 'true']],
+      pageLevelKeyValues: { v4: 'true' },
     })
     setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
@@ -117,10 +117,7 @@ describe('setUpGoogleAds', () => {
   it('only defines page level key value pair for every key value entry in the array', () => {
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
-      pageLevelKeyValueArray: [
-        ['v4', 'true'],
-        ['trees', 'true'],
-      ],
+      pageLevelKeyValues: { v4: 'true', trees: 'true' },
     })
     setUpGoogleAds(tabAdsConfig)
     const googletag = getGoogleTag()
@@ -132,7 +129,7 @@ describe('setUpGoogleAds', () => {
     )
   })
 
-  it('does not defines page level key value pair when there are no key value entry in the array', () => {
+  it('does not defines page level key value pair when there are no key value entry in the object', () => {
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
     })

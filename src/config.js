@@ -35,7 +35,7 @@ const defaultConfig = {
     //   sizes: [[300, 250]],
     // },
   ],
-  pageLevelKeyValueArray: [],
+  pageLevelKeyValues: {},
   auctionTimeout: 1000, // Timeout for the whole auction
   bidderTimeout: 700, // Timeout of the individual bidders
   consent: {
@@ -129,28 +129,15 @@ const validateConfig = (userConfig) => {
     }
   })
 
-  // Validate pageLevelKeyValueArray.
+  // Validate pageLevelKeyValues.
   if (
-    userConfig.pageLevelKeyValueArray !== undefined &&
-    !Array.isArray(userConfig.pageLevelKeyValueArray)
+    userConfig.pageLevelKeyValues !== undefined &&
+    typeof userConfig.pageLevelKeyValues !== 'object'
   ) {
-    throw new Error(
-      'Config error: Key Values must be in a two dimensional array'
-    )
+    throw new Error('Config error: Key Values must be in an object')
   }
-  const pageLevelKeyValueArray = get(userConfig, 'pageLevelKeyValueArray', [])
-  pageLevelKeyValueArray.forEach((keyValuePair) => {
-    if (!Array.isArray(keyValuePair)) {
-      throw new Error(
-        'Config error: Key Values must be in a two dimensional array'
-      )
-    }
-    if (keyValuePair.length !== 2) {
-      throw new Error('Config error: Key Value pair must have a length of 2')
-    }
-    if (typeof keyValuePair[0] !== 'string') {
-      throw new Error('Config error: keys in key value pair must be strings')
-    }
+  const pageLevelKeyValues = get(userConfig, 'pageLevelKeyValues', {})
+  Object.entries(pageLevelKeyValues).forEach((keyValuePair) => {
     if (typeof keyValuePair[1] !== 'string') {
       throw new Error('Config error: values in key value pair must be strings')
     }
