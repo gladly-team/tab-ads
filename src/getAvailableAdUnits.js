@@ -6,7 +6,7 @@ export default () => ({
     // Sizes sent to bidders.
     sizes: [[728, 90]],
     // Sizes allowed to be served from the ad server. This
-    // cab include more options so that, e.g., custom in-house
+    // can include more options so that, e.g., custom in-house
     // ad campaigns can have unique sizes but programmatic
     // bidders do not.
     allowedAdSlotSizes: [[728, 90]],

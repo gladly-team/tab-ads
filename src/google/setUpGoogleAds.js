@@ -9,9 +9,10 @@ export default (config) => {
 
   // Set up each ad unit.
   adUnits.forEach((adUnit) => {
+    const sizes = adUnit.allowedAdSlotSizes || adUnit.sizes
     googletag.cmd.push(() => {
       googletag
-        .defineSlot(adUnit.adUnitId, adUnit.sizes, adUnit.adId)
+        .defineSlot(adUnit.adUnitId, sizes, adUnit.adId)
         .addService(googletag.pubads())
     })
   })
