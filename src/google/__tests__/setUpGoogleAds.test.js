@@ -67,7 +67,7 @@ describe('setUpGoogleAds', () => {
     expect(googletag.enableServices).not.toHaveBeenCalled()
   })
 
-  it('only define one ad slots when only one ad units is enabled', () => {
+  it('only defines one ad slots when only one ad unit is enabled', () => {
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
       adUnits: [
@@ -76,6 +76,7 @@ describe('setUpGoogleAds', () => {
           adId: 'div-gpt-ad-1464385742501-0',
           adUnitId: '/43865596/HBTR',
           sizes: [[300, 250]],
+          allowedAdSlotSizes: [[300, 250]],
         },
       ],
     })
@@ -86,6 +87,58 @@ describe('setUpGoogleAds', () => {
       '/43865596/HBTR',
       expect.any(Array),
       'div-gpt-ad-1464385742501-0'
+    )
+  })
+
+  it('uses the ad unit\'s "sizes" property if "allowedAdSlotSizes" is not defined', () => {
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The primary rectangle ad (bottom-right).
+          adId: 'div-gpt-ad-1464385742501-0',
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+          allowedAdSlotSizes: undefined,
+        },
+      ],
+    })
+    setUpGoogleAds(tabAdsConfig)
+    const googletag = getGoogleTag()
+    expect(googletag.defineSlot).toHaveBeenCalledTimes(1)
+    expect(googletag.defineSlot).toHaveBeenCalledWith(
+      expect.any(String),
+      [[300, 250]],
+      expect.any(String)
+    )
+  })
+
+  it('uses the ad unit\'s "allowedAdSlotSizes" property if it is defined', () => {
+    const tabAdsConfig = setConfig({
+      ...getMockTabAdsUserConfig(),
+      adUnits: [
+        {
+          // The primary rectangle ad (bottom-right).
+          adId: 'div-gpt-ad-1464385742501-0',
+          adUnitId: '/43865596/HBTR',
+          sizes: [[300, 250]],
+          allowedAdSlotSizes: [
+            [300, 250],
+            [300, 600],
+          ],
+        },
+      ],
+    })
+    setUpGoogleAds(tabAdsConfig)
+    const googletag = getGoogleTag()
+    expect(googletag.defineSlot).toHaveBeenCalledTimes(1)
+    expect(googletag.defineSlot).toHaveBeenCalledWith(
+      expect.any(String),
+      [
+        [300, 250],
+        [300, 600],
+      ],
+      expect.any(String)
     )
   })
 
@@ -103,7 +156,7 @@ describe('setUpGoogleAds', () => {
     expect(googletag.enableServices).toHaveBeenCalled()
   })
 
-  it('only define one page level key value pair when only one one page level key value pair is enabled', () => {
+  it('only defines one page level key value pair when only one one page level key value pair is enabled', () => {
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
       pageLevelKeyValues: { v4: 'true' },
