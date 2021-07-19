@@ -21,15 +21,6 @@ describe('getAvailableAdUnits', () => {
           [468, 60],
           [728, 210],
           [720, 300],
-          [970, 250], // billboard
-          [728, 250], // internal custom
-          [728, 300], // internal custom
-          [728, 350], // internal custom
-          [728, 400], // internal custom
-          [970, 250], // internal custom
-          [970, 300], // internal custom
-          [970, 350], // internal custom
-          [970, 400], // internal custom
         ],
       },
       rectangleAdPrimary: {
@@ -53,6 +44,15 @@ describe('getAvailableAdUnits', () => {
           [120, 30],
           [230, 33],
           [300, 600],
+          [970, 250],
+          [728, 250],
+          [728, 300],
+          [728, 350],
+          [728, 400],
+          [970, 250],
+          [970, 300],
+          [970, 350],
+          [970, 400],
         ],
       },
       rectangleAdSecondary: {

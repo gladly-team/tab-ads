@@ -39,7 +39,6 @@ export default () => ({
       [230, 33],
       [300, 600],
       /* Begin custom sizes for in-house campaign */
-      [720, 300],
       [970, 250], // billboard
       [728, 250], // non-standard
       [728, 300], // non-standard
