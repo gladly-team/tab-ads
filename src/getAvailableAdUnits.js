@@ -1,21 +1,3 @@
-const rectangleAllowedAdSizes = [
-  [300, 250],
-  [1, 1],
-  [250, 250],
-  [160, 600],
-  [120, 600],
-  [120, 240],
-  [240, 400],
-  [234, 60],
-  [180, 150],
-  [125, 125],
-  [120, 90],
-  [120, 60],
-  [120, 30],
-  [230, 33],
-  [300, 600],
-]
-
 export default () => ({
   leaderboard: {
     // The long leaderboard ad.
@@ -33,15 +15,6 @@ export default () => ({
       [468, 60],
       [728, 210],
       [720, 300],
-      [970, 250], // billboard
-      [728, 250], // internal custom
-      [728, 300], // internal custom
-      [728, 350], // internal custom
-      [728, 400], // internal custom
-      [970, 250], // internal custom
-      [970, 300], // internal custom
-      [970, 350], // internal custom
-      [970, 400], // internal custom
     ],
   },
   rectangleAdPrimary: {
@@ -49,13 +22,57 @@ export default () => ({
     adId: 'div-gpt-ad-1464385742501-0',
     adUnitId: '/43865596/HBTR',
     sizes: [[300, 250]],
-    allowedAdSlotSizes: rectangleAllowedAdSizes,
+    allowedAdSlotSizes: [
+      [300, 250],
+      [1, 1],
+      [250, 250],
+      [160, 600],
+      [120, 600],
+      [120, 240],
+      [240, 400],
+      [234, 60],
+      [180, 150],
+      [125, 125],
+      [120, 90],
+      [120, 60],
+      [120, 30],
+      [230, 33],
+      [300, 600],
+      /* Begin custom sizes for in-house campaign */
+      [720, 300],
+      [970, 250], // billboard
+      [728, 250], // non-standard
+      [728, 300], // non-standard
+      [728, 350], // non-standard
+      [728, 400], // non-standard
+      [970, 250], // non-standard
+      [970, 300], // non-standard
+      [970, 350], // non-standard
+      [970, 400], // non-standard
+      /* End custom sizes for in-house campaign */
+    ],
   },
   rectangleAdSecondary: {
     // The second rectangle ad (right side, above the first).
     adId: 'div-gpt-ad-1539903223131-0',
     adUnitId: '/43865596/HBTR2',
     sizes: [[300, 250]],
-    allowedAdSlotSizes: rectangleAllowedAdSizes,
+    allowedAdSlotSizes: [
+      [300, 250],
+      [1, 1],
+      [250, 250],
+      [160, 600],
+      [120, 600],
+      [120, 240],
+      [240, 400],
+      [234, 60],
+      [180, 150],
+      [125, 125],
+      [120, 90],
+      [120, 60],
+      [120, 30],
+      [230, 33],
+      [300, 600],
+    ],
   },
 })
