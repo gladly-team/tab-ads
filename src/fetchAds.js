@@ -14,12 +14,6 @@ import { getAdDataStore } from 'src/utils/storage'
 // Set to true if we send a request to the ad server.
 let adserverRequestSent = false
 
-// If we ever make more than one fetch for ads on any page load,
-// either make this more functional or remove module state entirely.
-export const reset = () => {
-  adserverRequestSent = false
-}
-
 /**
  * Add bidder targeting to googletag and send a request
  * to Google Ad Manager to fetch ads.

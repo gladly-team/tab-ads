@@ -1,11 +1,3 @@
-/* eslint-env jest */
-import fetchAds, { reset } from 'src/fetchAds'
-import getGoogleTag, { __setPubadsRefreshMock } from 'src/google/getGoogleTag' // eslint-disable-line import/named
-import { setConfig } from 'src/config'
-import logger from 'src/utils/logger'
-import { getAdDataStore, clearAdDataStore } from 'src/utils/storage'
-import getBidders from 'src/getBidders'
-
 import { flushAllPromises, getMockTabAdsUserConfig } from 'src/utils/test-utils'
 
 jest.mock('src/google/getGoogleTag')
@@ -23,14 +15,16 @@ beforeAll(() => {
 })
 
 afterEach(() => {
-  jest.clearAllMocks()
-  reset()
-  clearAdDataStore()
+  jest.resetModules()
+  jest.resetAllMocks()
 })
 
 describe('fetchAds: bid and ad server requests', () => {
   it('calls logger.error if something throws in fetchAds', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const logger = require('src/utils/logger').default
 
     // Mock some error.
     const mockErr = new Error('Sorry, fetching ads will fail.')
@@ -46,6 +40,8 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('sets up the Google ad slots', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
@@ -54,6 +50,8 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('passes the config when setting up the Google ad slots', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
     const setUpGoogleAds = require('src/google/setUpGoogleAds').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
@@ -61,8 +59,12 @@ describe('fetchAds: bid and ad server requests', () => {
   })
 
   it('calls the expected bidders', async () => {
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     expect.assertions(bidders.length)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -78,8 +80,11 @@ describe('fetchAds: bid and ad server requests', () => {
     })
   })
 
-  it('calls the ad server', async () => {
+  it.only('calls the ad server', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -94,8 +99,12 @@ describe('fetchAds: bid and ad server requests', () => {
   })
 
   it('does not call the expected bidders when no ad units are provided', async () => {
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     expect.assertions(bidders.length)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -116,6 +125,9 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('does not call the ad server when no ad units are provided', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -133,8 +145,12 @@ describe('fetchAds: bid and ad server requests', () => {
   })
 
   it('does not call the expected bidders when ads are not enabled', async () => {
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     expect.assertions(bidders.length)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -155,6 +171,9 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('does not call the ad server when ads are not enabled', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -172,8 +191,12 @@ describe('fetchAds: bid and ad server requests', () => {
   })
 
   it('sets ad server targeting on all bidders', async () => {
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     expect.assertions(bidders.length)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const googletagMockRefresh = jest.fn()
     __setPubadsRefreshMock(googletagMockRefresh)
@@ -189,10 +212,14 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('calls the ad server even when all bidders time out', async () => {
     expect.assertions(2)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const AUCTION_TIMEOUT = 2000
 
     // Mock that all bidders are very slow to respond.
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(
@@ -225,10 +252,14 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('calls the ad server when one bidder times out', async () => {
     expect.assertions(2)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const AUCTION_TIMEOUT = 2000
 
     // Mock that the first bidder is slow to respond.
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     bidders.forEach((bidder, index) => {
       bidder.fetchBids.mockImplementationOnce(() => {
@@ -260,10 +291,14 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('calls the ad server immediately when all bidders respond before the timeout', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const AUCTION_TIMEOUT = 2000
 
     // Mock that all bidders respond quickly.
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(
@@ -292,10 +327,14 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('only calls the ad server once when all bidders respond before the timeout', async () => {
     expect.assertions(2)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { __setPubadsRefreshMock } = require('src/google/getGoogleTag')
 
     const AUCTION_TIMEOUT = 2000
 
     // Mock that all bidders respond quickly.
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(
@@ -329,6 +368,8 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('calls setUpAdDisplayListeners', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
     const { setUpAdDisplayListeners } = require('src/adDisplayListeners')
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await fetchAds(tabAdsConfig)
@@ -337,8 +378,12 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it("calls logger.error when something goes wrong when calling bidders' fetchBids", async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const logger = require('src/utils/logger').default
 
     // Mock that the first bidder throws an error
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     const mockErr = new Error('Yikes.')
     bidders[0].fetchBids.mockImplementationOnce(() => {
@@ -352,6 +397,10 @@ describe('fetchAds: bid and ad server requests', () => {
 
   it('calls logger.error when something goes wrong when attempting to call the ad server', async () => {
     expect.assertions(1)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const getGoogleTag = require('src/google/getGoogleTag')
+    const logger = require('src/utils/logger').default
 
     const mockErr = new Error('The Google tag messed up.')
     getGoogleTag.mockImplementationOnce(() => {
@@ -368,13 +417,17 @@ describe('fetchAds: bid and ad server requests', () => {
 describe('fetchAds: bid request storage', () => {
   it("stores every bidder's bid response data in storage when they respond quickly", async () => {
     expect.assertions(2)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
 
+    const { getAdDataStore } = require('src/utils/storage')
     const store = getAdDataStore()
 
     // No bids stored yet.
     expect(store.bidResponses).toEqual({})
 
     // Mock that all bidders respond quickly.
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(
@@ -438,13 +491,17 @@ describe('fetchAds: bid request storage', () => {
 
   it("stores every bidder's bid response data in storage even when they respond slowly, but includedInAdRequest should be false", async () => {
     expect.assertions(2)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
 
+    const { getAdDataStore } = require('src/utils/storage')
     const store = getAdDataStore()
 
     // No bids stored yet.
     expect(store.bidResponses).toEqual({})
 
     // Mock that all bidders respond quickly.
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     bidders.forEach((bidder) => {
       bidder.fetchBids.mockImplementationOnce(
@@ -508,12 +565,16 @@ describe('fetchAds: bid request storage', () => {
 
   it('marks only the bidders that respond before the ad server request with includedInAdRequest === true', async () => {
     expect.assertions(2)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
+    const { getAdDataStore } = require('src/utils/storage')
 
     // No bids stored yet.
     expect(getAdDataStore().bidResponses).toEqual({})
 
     // Mock that the first bidder (Prebid) is slow to respond but the
     // other bidders respond quickly.
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     bidders.forEach((bidder, index) => {
       bidder.fetchBids.mockImplementationOnce(() => {
@@ -581,12 +642,16 @@ describe('fetchAds: bid request storage', () => {
 
   it('does not include bid responses for bidders that have not yet responded', async () => {
     expect.assertions(3)
+    const fetchAds = require('../fetchAds').default
+    const { setConfig } = require('src/config')
 
     // No bids stored yet.
+    const { getAdDataStore } = require('src/utils/storage')
     expect(getAdDataStore().bidResponses).toEqual({})
 
     // Mock that the first bidder (Prebid) is slow to respond but the
     // other bidders respond quickly.
+    const getBidders = require('src/getBidders').default
     const bidders = getBidders()
     bidders.forEach((bidder, index) => {
       bidder.fetchBids.mockImplementationOnce(() => {
