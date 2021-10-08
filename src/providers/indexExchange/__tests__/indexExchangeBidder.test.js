@@ -200,14 +200,14 @@ describe('indexExchangeBidder: fetchBids', () => {
       const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
       indexExchangeBidder
         .fetchBids(tabAdsConfig)
-        .then(() => {
+        .catch((e) => {
+          reject(e)
+        })
+        .finally(() => {
           expect(logger.debug).toHaveBeenLastCalledWith(
             'IndexExchange: auction ended'
           )
           resolve()
-        })
-        .catch((e) => {
-          reject(e)
         })
       retrieveDemandCallback()
     })

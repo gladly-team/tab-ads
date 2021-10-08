@@ -289,10 +289,14 @@ export const getMockTabAdsUserConfig = () => ({
   onError: () => {},
 })
 
-// Provide a valid config for testing.
-export const flushAllPromises = async () => {
-  await new Promise((resolve) => setImmediate(resolve))
-}
+/**
+ * Flush the Promise resolution queue. See:
+ * https://github.com/facebook/jest/issues/2157
+ * @return {Promise<undefined>}
+ */
+export const flushAllPromises = async () =>
+  // https://github.com/facebook/jest/issues/2157#issuecomment-897935688
+  new Promise(jest.requireActual('timers').setImmediate)
 
 // Return a mock BidResponse object.
 export const getMockBidResponse = () =>
