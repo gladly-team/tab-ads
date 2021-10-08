@@ -590,20 +590,18 @@ describe('getWinningBids: getAllWinningBids', () => {
     )
 
     // Set that the leaderboard ad was displayed.
-    store.adManager.slotsRendered[
-      newTabAds.leaderboard.adId
-    ] = mockGoogleTagSlotRenderEndedData(
-      newTabAds.leaderboard,
-      '/123456/ThisIsMyAdUnitName/',
-      {
-        advertiserId: 112233,
-      }
-    )
+    store.adManager.slotsRendered[newTabAds.leaderboard.adId] =
+      mockGoogleTagSlotRenderEndedData(
+        newTabAds.leaderboard,
+        '/123456/ThisIsMyAdUnitName/',
+        {
+          advertiserId: 112233,
+        }
+      )
 
     // Set up stored bids for the first rectangle ad.
-    store.bidResponses.amazon.bidResponses[
-      newTabAds.rectangleAdPrimary.adId
-    ] = undefined
+    store.bidResponses.amazon.bidResponses[newTabAds.rectangleAdPrimary.adId] =
+      undefined
     store.bidResponses.indexExchange.bidResponses[
       newTabAds.rectangleAdPrimary.adId
     ].push(
@@ -638,15 +636,14 @@ describe('getWinningBids: getAllWinningBids', () => {
     )
 
     // Set that the second rectangle ad was displayed.
-    store.adManager.slotsRendered[
-      newTabAds.rectangleAdPrimary.adId
-    ] = mockGoogleTagSlotRenderEndedData(
-      newTabAds.rectangleAdPrimary.adId,
-      '/123456/ThisIsMyAdUnitName/',
-      {
-        advertiserId: 445566,
-      }
-    )
+    store.adManager.slotsRendered[newTabAds.rectangleAdPrimary.adId] =
+      mockGoogleTagSlotRenderEndedData(
+        newTabAds.rectangleAdPrimary.adId,
+        '/123456/ThisIsMyAdUnitName/',
+        {
+          advertiserId: 445566,
+        }
+      )
 
     // Set up stored bids for the second rectangle ad.
     store.bidResponses.amazon.bidResponses[
@@ -693,15 +690,14 @@ describe('getWinningBids: getAllWinningBids', () => {
     )
 
     // Set that the second rectangle ad was displayed.
-    store.adManager.slotsRendered[
-      newTabAds.rectangleAdSecondary.adId
-    ] = mockGoogleTagSlotRenderEndedData(
-      newTabAds.rectangleAdSecondary.adId,
-      '/123456/ThisIsMyAdUnitName/',
-      {
-        advertiserId: 778899,
-      }
-    )
+    store.adManager.slotsRendered[newTabAds.rectangleAdSecondary.adId] =
+      mockGoogleTagSlotRenderEndedData(
+        newTabAds.rectangleAdSecondary.adId,
+        '/123456/ThisIsMyAdUnitName/',
+        {
+          advertiserId: 778899,
+        }
+      )
 
     const { getAllWinningBids } = require('src/utils/getWinningBids')
     const allWinningBids = getAllWinningBids()

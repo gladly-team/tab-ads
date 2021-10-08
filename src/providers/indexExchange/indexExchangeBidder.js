@@ -17,11 +17,8 @@ const rectangleAdSecondaryIXSlotID = 'd-2-300x250-atf-middle-right_rectangle'
 
 // GAMSlotId is the Google ad unit ID.
 const mapGAMSlotToIXSlot = (GAMSlotId) => {
-  const {
-    leaderboard,
-    rectangleAdPrimary,
-    rectangleAdSecondary,
-  } = tabConfig.newTabAds
+  const { leaderboard, rectangleAdPrimary, rectangleAdSecondary } =
+    tabConfig.newTabAds
 
   // Key = the GAM ad unit; value = the Index Exchange ID
   const map = {
@@ -37,11 +34,8 @@ const mapGAMSlotToIXSlot = (GAMSlotId) => {
 
 // IXSlotId is the Index Exchange slot ID.
 const mapIXSlotToAdId = (IXSlotId) => {
-  const {
-    leaderboard,
-    rectangleAdPrimary,
-    rectangleAdSecondary,
-  } = tabConfig.newTabAds
+  const { leaderboard, rectangleAdPrimary, rectangleAdSecondary } =
+    tabConfig.newTabAds
 
   // Key = the Index Exchange ID; value = the GAM ad ID
   const map = {

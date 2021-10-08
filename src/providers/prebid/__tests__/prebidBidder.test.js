@@ -482,9 +482,8 @@ describe('prebidBidder: fetchBids', () => {
     // Set the mock Prebid bid responses.
     const mockBidResponses = {
       // Only one ad response. This will happen if we only request for one ad unit.
-      'div-gpt-ad-1464385677836-0': mockPrebidBidResponses()[
-        'div-gpt-ad-1464385677836-0'
-      ],
+      'div-gpt-ad-1464385677836-0':
+        mockPrebidBidResponses()['div-gpt-ad-1464385677836-0'],
     }
     pbjs.requestBids = jest.fn((requestBidsSettings) => {
       requestBidsSettings.bidsBackHandler(mockBidResponses)
