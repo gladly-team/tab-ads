@@ -30,6 +30,8 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
         mediaTypes: {
           banner: {
             sizes: tabAdUnit.sizes,
+            // OpenRTB page position value: 1=above-the-fold
+            pos: 1,
           },
         },
         bids: [
@@ -93,6 +95,8 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
         mediaTypes: {
           banner: {
             sizes: tabAdUnit.sizes,
+            // OpenRTB page position value: 1=above-the-fold
+            pos: 1,
           },
         },
         bids: [
@@ -152,6 +156,8 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
         mediaTypes: {
           banner: {
             sizes: tabAdUnit.sizes,
+            // OpenRTB page position value: 1=above-the-fold
+            pos: 1,
           },
         },
         bids: [
