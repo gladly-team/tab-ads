@@ -115,8 +115,7 @@ export const storeA = {
                 ix_id: ['_AKNHrZZ6'],
               },
               price: 9,
-              adm:
-                '<iframe src="example.com/foo" /><script>var thing=123</script>',
+              adm: '<iframe src="example.com/foo" /><script>var thing=123</script>',
               size: [728, 90],
               partnerId: 'IndexExchangeHtb',
             },
@@ -128,8 +127,7 @@ export const storeA = {
                 ix_id: ['_plK6chz4'],
               },
               price: 11,
-              adm:
-                '<iframe src="example.com/foo" /><script>var thing=123</script>',
+              adm: '<iframe src="example.com/foo" /><script>var thing=123</script>',
               size: [300, 250],
               partnerId: 'IndexExchangeHtb',
             },
@@ -141,8 +139,7 @@ export const storeA = {
                 ix_id: ['_Ue4eILz5'],
               },
               price: 20,
-              adm:
-                '<iframe src="example.com/foo" /><script>var thing=123</script>',
+              adm: '<iframe src="example.com/foo" /><script>var thing=123</script>',
               size: [300, 250],
               partnerId: 'IndexExchangeHtb',
             },

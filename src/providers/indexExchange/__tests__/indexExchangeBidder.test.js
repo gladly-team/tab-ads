@@ -17,8 +17,8 @@ beforeAll(() => {
 beforeEach(() => {
   // Mock the IX tag
   delete global.headertag
-  const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-    .default
+  const getIndexExchangeTag =
+    require('src/providers/indexExchange/getIndexExchangeTag').default
   global.headertag = getIndexExchangeTag()
 
   // Set up googletag
@@ -41,18 +41,18 @@ describe('indexExchangeBidder: fetchBids', () => {
   // eslint-disable-next-line jest/expect-expect
   it('runs without error', async () => {
     expect.assertions(0)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
   })
 
   it('gets bids for three ads when all ad units are enabled', async () => {
     expect.assertions(2)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
@@ -66,10 +66,10 @@ describe('indexExchangeBidder: fetchBids', () => {
 
   it('does not fetch bids when no ad units are enabled', async () => {
     expect.assertions(1)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
@@ -81,8 +81,8 @@ describe('indexExchangeBidder: fetchBids', () => {
 
   it('returns a Promise that resolves to empty bid response info when no ads are enabled', async () => {
     expect.assertions(1)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
       adUnits: [],
@@ -96,10 +96,10 @@ describe('indexExchangeBidder: fetchBids', () => {
 
   it('gets bids for one ad when one ad unit is enabled', async () => {
     expect.assertions(2)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
@@ -121,10 +121,10 @@ describe('indexExchangeBidder: fetchBids', () => {
 
   it('gets bids for two ads when two ad units are enabled', async () => {
     expect.assertions(2)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const tabAdsConfig = setConfig({
       ...getMockTabAdsUserConfig(),
@@ -153,8 +153,8 @@ describe('indexExchangeBidder: fetchBids', () => {
 
   it('calls logger.debug with info when fetching bids', async () => {
     expect.assertions(1)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
     await indexExchangeBidder.fetchBids(tabAdsConfig)
     const logger = require('src/utils/logger').default
@@ -165,10 +165,10 @@ describe('indexExchangeBidder: fetchBids', () => {
   it('the bidder resolves when the bid response returns', () => {
     expect.assertions(0)
     return new Promise((resolve) => {
-      const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-        .default
-      const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-        .default
+      const indexExchangeBidder =
+        require('src/providers/indexExchange/indexExchangeBidder').default
+      const getIndexExchangeTag =
+        require('src/providers/indexExchange/getIndexExchangeTag').default
       const ixTag = getIndexExchangeTag()
 
       let retrieveDemandCallback
@@ -186,10 +186,10 @@ describe('indexExchangeBidder: fetchBids', () => {
   it('calls logger.debug with info when the auction ends', () => {
     expect.assertions(1)
     return new Promise((resolve, reject) => {
-      const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-        .default
-      const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-        .default
+      const indexExchangeBidder =
+        require('src/providers/indexExchange/indexExchangeBidder').default
+      const getIndexExchangeTag =
+        require('src/providers/indexExchange/getIndexExchangeTag').default
       const ixTag = getIndexExchangeTag()
       const logger = require('src/utils/logger').default
 
@@ -217,10 +217,10 @@ describe('indexExchangeBidder: fetchBids', () => {
   it('the bidder resolves when we exceed the bidder timeout', () => {
     expect.assertions(0)
     return new Promise((resolve) => {
-      const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-        .default
-      const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-        .default
+      const indexExchangeBidder =
+        require('src/providers/indexExchange/indexExchangeBidder').default
+      const getIndexExchangeTag =
+        require('src/providers/indexExchange/getIndexExchangeTag').default
       const ixTag = getIndexExchangeTag()
 
       // Mock that retrieveDemand never calls the callback.
@@ -241,10 +241,10 @@ describe('indexExchangeBidder: fetchBids', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback(undefined)
@@ -268,10 +268,10 @@ describe('indexExchangeBidder: fetchBids', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) => callback({}))
     const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
@@ -293,10 +293,10 @@ describe('indexExchangeBidder: fetchBids', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback({
@@ -324,10 +324,10 @@ describe('indexExchangeBidder: fetchBids', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback({
@@ -368,10 +368,10 @@ describe('indexExchangeBidder: fetchBids', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback({
@@ -407,10 +407,10 @@ describe('indexExchangeBidder: fetchBids', () => {
     expect.assertions(1)
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
     const mockBidResponse = mockIndexExchangeBidResponse()
@@ -428,10 +428,10 @@ describe('indexExchangeBidder: fetchBids', () => {
     expect.assertions(1)
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
     const mockBidResponse = mockIndexExchangeBidResponse()
@@ -479,10 +479,10 @@ describe('indexExchangeBidder: fetchBids', () => {
     expect.assertions(1)
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
 
@@ -525,10 +525,10 @@ describe('indexExchangeBidder: setTargeting', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
     const mockBidResponse = mockIndexExchangeBidResponse()
@@ -573,10 +573,10 @@ describe('indexExchangeBidder: setTargeting', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback({
@@ -633,10 +633,10 @@ describe('indexExchangeBidder: setTargeting', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
     const mockBidResponse = mockIndexExchangeBidResponse()
@@ -669,10 +669,10 @@ describe('indexExchangeBidder: setTargeting', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback({
@@ -705,10 +705,10 @@ describe('indexExchangeBidder: setTargeting', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback({
@@ -760,10 +760,10 @@ describe('indexExchangeBidder: setTargeting', () => {
     ])
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback({
@@ -806,10 +806,10 @@ describe('indexExchangeBidder: setTargeting', () => {
     const googletag = getGoogleTag()
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     ixTag.retrieveDemand.mockImplementation((config, callback) =>
       callback({
@@ -854,10 +854,10 @@ describe('indexExchangeBidder: setTargeting', () => {
     })
 
     // Mock the bid response.
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
-    const getIndexExchangeTag = require('src/providers/indexExchange/getIndexExchangeTag')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
+    const getIndexExchangeTag =
+      require('src/providers/indexExchange/getIndexExchangeTag').default
     const ixTag = getIndexExchangeTag()
     const { mockIndexExchangeBidResponse } = require('src/utils/test-utils')
     const mockBidResponse = mockIndexExchangeBidResponse()
@@ -880,8 +880,8 @@ describe('indexExchangeBidder: setTargeting', () => {
 describe('indexExchangeBidder: name', () => {
   it('has the expected bidder name', () => {
     expect.assertions(1)
-    const indexExchangeBidder = require('src/providers/indexExchange/indexExchangeBidder')
-      .default
+    const indexExchangeBidder =
+      require('src/providers/indexExchange/indexExchangeBidder').default
     expect(indexExchangeBidder.name).toEqual('indexExchange')
   })
 })

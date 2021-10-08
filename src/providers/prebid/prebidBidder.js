@@ -20,11 +20,8 @@ import logger from 'src/utils/logger'
  * @return {Object} A Prebid ad unit config object.
  */
 const getPrebidAdUnit = (tabAdUnit, config) => {
-  const {
-    leaderboard,
-    rectangleAdPrimary,
-    rectangleAdSecondary,
-  } = config.newTabAds
+  const { leaderboard, rectangleAdPrimary, rectangleAdSecondary } =
+    config.newTabAds
   switch (tabAdUnit.adId) {
     case leaderboard.adId:
       // Leaderboard-style ad

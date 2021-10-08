@@ -206,9 +206,8 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
-    const otherMockSlotRenderEventData = mockGoogleTagSlotRenderEndedData(
-      otherSlotId
-    )
+    const otherMockSlotRenderEventData =
+      mockGoogleTagSlotRenderEndedData(otherSlotId)
     expect(adDataStore.adManager.slotsRendered[otherSlotId]).toBeUndefined()
     slotRenderEndedEventCallback(otherMockSlotRenderEventData)
     expect(adDataStore.adManager.slotsRendered[otherSlotId]).toBe(
@@ -293,9 +292,8 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
 
     // Make sure it works multiple times
     const otherSlotId = 'xyz-987'
-    const otherMockSlotLoadEventData = mockGoogleTagImpressionViewableData(
-      otherSlotId
-    )
+    const otherMockSlotLoadEventData =
+      mockGoogleTagImpressionViewableData(otherSlotId)
     expect(adDataStore.adManager.slotsViewable[otherSlotId]).toBeUndefined()
     impressionViewableCallback(otherMockSlotLoadEventData)
     expect(adDataStore.adManager.slotsViewable[otherSlotId]).toBe(true)
