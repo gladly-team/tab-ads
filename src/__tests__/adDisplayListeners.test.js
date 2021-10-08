@@ -6,26 +6,21 @@ import {
   mockGoogleTagSlotOnloadData,
   mockGoogleTagSlotRenderEndedData,
 } from 'src/utils/test-utils'
-import getGlobal from 'src/utils/getGlobal'
 
 jest.mock('src/utils/logger')
 jest.mock('src/google/getGoogleTag')
 jest.mock('src/utils/getWinningBids')
 
-const global = getGlobal()
-
 beforeEach(() => {
-  delete global.googletag
   clearAdDataStore()
 
   // Mock googletag
   const mockAddEventListener = jest.fn()
-  global.googletag = {
-    cmd: [],
-    pubads: () => ({
-      addEventListener: mockAddEventListener,
-    }),
-  }
+  const getGoogleTag = require('src/google/getGoogleTag').default
+  const googletag = getGoogleTag()
+  googletag.pubads = () => ({
+    addEventListener: mockAddEventListener,
+  })
 
   jest.clearAllMocks()
 })
@@ -35,14 +30,15 @@ afterEach(() => {
 })
 
 afterAll(() => {
-  delete global.googletag
   clearAdDataStore()
 })
 
 const runMockSlotRenderEndedEventForAd = (adId) => {
   // Mock GPT's pubads addEventListener so we can fake an event
+  const getGoogleTag = require('src/google/getGoogleTag').default
+  const googletag = getGoogleTag()
   const googleEventListenerCalls = {}
-  global.googletag
+  googletag
     .pubads()
     .addEventListener.mockImplementation((eventName, callback) => {
       if (!googleEventListenerCalls[eventName]) {
@@ -55,7 +51,7 @@ const runMockSlotRenderEndedEventForAd = (adId) => {
   setUpAdDisplayListeners()
 
   // Run the queued googletag commands
-  global.googletag.cmd.forEach((cmd) => cmd())
+  googletag.cmd.forEach((cmd) => cmd())
 
   // Fake the event callback
   const mockSlotRenderEventData = mockGoogleTagSlotRenderEndedData(adId)
@@ -170,10 +166,12 @@ describe('adDisplayListeners: onAdRendered', () => {
 describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   it('adds a slot ID to the ad data storage\'s "rendered slots" object when GPT\'s "slotRenderEnded" event is fired', () => {
     const logger = require('src/utils/logger').default
+    const getGoogleTag = require('src/google/getGoogleTag').default
+    const googletag = getGoogleTag()
 
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
-    global.googletag
+    googletag
       .pubads()
       .addEventListener.mockImplementation((eventName, callback) => {
         if (!googleEventListenerCalls[eventName]) {
@@ -186,7 +184,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach((cmd) => cmd())
+    googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
     const slotId = 'abc-123'
@@ -223,10 +221,12 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
 
   it('logs an error when we fail to store GPT\'s "slotRenderEnded" event', () => {
     const logger = require('src/utils/logger').default
+    const getGoogleTag = require('src/google/getGoogleTag').default
+    const googletag = getGoogleTag()
 
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
-    global.googletag
+    googletag
       .pubads()
       .addEventListener.mockImplementation((eventName, callback) => {
         if (!googleEventListenerCalls[eventName]) {
@@ -239,7 +239,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach((cmd) => cmd())
+    googletag.cmd.forEach((cmd) => cmd())
 
     // Mock bad slot event data, which will cause an error.
     const mockBrokenSlotData = { foo: 'bar' }
@@ -255,10 +255,12 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
 
   it('marks a slot as loaded on the ad data storage\'s "viewable slots" object when GPT\'s "impressionViewable" event is fired', () => {
     const logger = require('src/utils/logger').default
+    const getGoogleTag = require('src/google/getGoogleTag').default
+    const googletag = getGoogleTag()
 
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
-    global.googletag
+    googletag
       .pubads()
       .addEventListener.mockImplementation((eventName, callback) => {
         if (!googleEventListenerCalls[eventName]) {
@@ -271,7 +273,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach((cmd) => cmd())
+    googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
     const slotId = 'abc-123'
@@ -304,10 +306,12 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
 
   it('logs an error when we fail to store GPT\'s "impressionViewable" event', () => {
     const logger = require('src/utils/logger').default
+    const getGoogleTag = require('src/google/getGoogleTag').default
+    const googletag = getGoogleTag()
 
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
-    global.googletag
+    googletag
       .pubads()
       .addEventListener.mockImplementation((eventName, callback) => {
         if (!googleEventListenerCalls[eventName]) {
@@ -320,7 +324,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach((cmd) => cmd())
+    googletag.cmd.forEach((cmd) => cmd())
 
     // Mock bad slot event data, which will cause an error.
     const mockBrokenSlotData = { foo: 'bar' }
@@ -336,10 +340,12 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
 
   it('marks a slot as loaded on the ad data storage\'s "loaded slots" object when GPT\'s "slotOnload" event is fired', () => {
     const logger = require('src/utils/logger').default
+    const getGoogleTag = require('src/google/getGoogleTag').default
+    const googletag = getGoogleTag()
 
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
-    global.googletag
+    googletag
       .pubads()
       .addEventListener.mockImplementation((eventName, callback) => {
         if (!googleEventListenerCalls[eventName]) {
@@ -352,7 +358,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach((cmd) => cmd())
+    googletag.cmd.forEach((cmd) => cmd())
 
     // Fake the event callback
     const slotId = 'abc-123'
@@ -380,10 +386,12 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
 
   it('logs an error when we fail to store GPT\'s "slotOnload" event', () => {
     const logger = require('src/utils/logger').default
+    const getGoogleTag = require('src/google/getGoogleTag').default
+    const googletag = getGoogleTag()
 
     // Mock GPT's pubads addEventListener so we can fake an event
     const googleEventListenerCalls = {}
-    global.googletag
+    googletag
       .pubads()
       .addEventListener.mockImplementation((eventName, callback) => {
         if (!googleEventListenerCalls[eventName]) {
@@ -396,7 +404,7 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
     setUpAdDisplayListeners()
 
     // Run the queued googletag commands
-    global.googletag.cmd.forEach((cmd) => cmd())
+    googletag.cmd.forEach((cmd) => cmd())
 
     // Mock bad slot event data, which will cause an error.
     const mockBrokenSlotData = { foo: 'bar' }
@@ -412,7 +420,6 @@ describe('adDisplayListeners: setUpAdDisplayListeners', () => {
   it('logs an error if googletag throws', () => {
     const logger = require('src/utils/logger').default
     const getGoogleTag = require('src/google/getGoogleTag').default
-
     getGoogleTag.mockReturnValueOnce({})
 
     const { setUpAdDisplayListeners } = require('src/adDisplayListeners')

@@ -12,6 +12,8 @@ import { setConfig } from 'src/config'
 import { getAdDataStore } from 'src/utils/storage'
 
 // Set to true if we send a request to the ad server.
+// If we ever make more than one fetch for ads on any page load,
+// either make this more functional or remove module state entirely.
 let adserverRequestSent = false
 
 /**

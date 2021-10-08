@@ -2,24 +2,20 @@
 
 import getGoogleTag, {
   __runCommandQueue, // eslint-disable-line import/named
+  __reset, // eslint-disable-line import/named
 } from 'src/google/getGoogleTag'
 import googleDisplayAd from 'src/google/googleDisplayAd'
-import getGlobal from 'src/utils/getGlobal'
 
 jest.mock('src/google/getGoogleTag')
 
-const global = getGlobal()
-
 beforeEach(() => {
-  delete global.googletag
-
   // Set up googletag
-  global.googletag = getGoogleTag()
-  global.googletag.cmd = []
+  const googletag = getGoogleTag()
+  googletag.cmd = []
 })
 
-afterAll(() => {
-  delete global.googletag
+afterEach(() => {
+  __reset()
 })
 
 describe('googleDisplayAd', () => {
@@ -29,15 +25,17 @@ describe('googleDisplayAd', () => {
   })
 
   it('pushes commands to googletag.cmd', () => {
+    const googletag = getGoogleTag()
     googleDisplayAd('some-ad')
-    expect(global.googletag.cmd.length).toBe(1)
+    expect(googletag.cmd.length).toBe(1)
     googleDisplayAd('another-ad')
-    expect(global.googletag.cmd.length).toBe(2)
+    expect(googletag.cmd.length).toBe(2)
   })
 
   it('calls the expected ad ID when the googletag commands run', () => {
+    const googletag = getGoogleTag()
     googleDisplayAd('this-is-my-ad')
     __runCommandQueue()
-    expect(global.googletag.display).toHaveBeenCalledWith('this-is-my-ad')
+    expect(googletag.display).toHaveBeenCalledWith('this-is-my-ad')
   })
 })
