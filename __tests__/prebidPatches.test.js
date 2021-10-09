@@ -179,6 +179,7 @@ describe('Prebid.js patch: refererDetection.js', () => {
     //   ]
     // }
     expect(getRefererInfo()).toEqual({
+      isAmp: false,
       canonicalUrl: null,
       numIframes: 0,
       reachedTop: true,
@@ -202,6 +203,7 @@ describe('Prebid.js patch: refererDetection.js', () => {
 
     const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
     expect(getRefererInfo()).toEqual({
+      isAmp: false,
       canonicalUrl: null,
       numIframes: 0,
       reachedTop: true,
@@ -226,6 +228,7 @@ describe('Prebid.js patch: refererDetection.js', () => {
 
     const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
     expect(getRefererInfo()).toEqual({
+      isAmp: false,
       canonicalUrl: null,
       numIframes: 0,
       reachedTop: true,
