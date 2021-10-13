@@ -195,27 +195,27 @@ describe('prebidBidder: fetchBids', () => {
       'emx_digital',
       'openx',
       'pulsepoint',
-      'rhythmone',
       'sonobi',
       'sovrn',
+      'unruly',
     ])
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
       'aol',
       'emx_digital',
       'openx',
       'pulsepoint',
-      'rhythmone',
       'sonobi',
       'sovrn',
+      'unruly',
     ])
     expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
       'aol',
       // 'emx_digital',
       'openx',
       'pulsepoint',
-      'rhythmone',
       'sonobi',
       'sovrn',
+      'unruly',
     ])
   })
 
