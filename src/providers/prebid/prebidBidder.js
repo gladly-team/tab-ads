@@ -81,9 +81,9 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             },
           },
           {
-            bidder: 'rhythmone',
+            bidder: 'unruly',
             params: {
-              placementId: '73423',
+              siteId: '73423',
             },
           },
         ],
@@ -142,9 +142,9 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             },
           },
           {
-            bidder: 'rhythmone',
+            bidder: 'unruly',
             params: {
-              placementId: '73423',
+              siteId: '73423',
             },
           },
         ],
@@ -203,9 +203,9 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           //   }
           // },
           {
-            bidder: 'rhythmone',
+            bidder: 'unruly',
             params: {
-              placementId: '73423',
+              siteId: '73423',
             },
           },
         ],
