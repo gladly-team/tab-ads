@@ -13,6 +13,10 @@ jest.mock('src/providers/amazon/getAmazonTag')
 jest.mock('src/utils/logger')
 jest.mock('src/utils/getUSPString')
 
+// https://github.com/facebook/jest/issues/2157#issuecomment-897935688
+const flushAllPromises = async () =>
+  new Promise(jest.requireActual('timers').setImmediate)
+
 const global = getGlobal()
 
 beforeEach(() => {
@@ -138,9 +142,7 @@ describe('amazonBidder: fetchBids', () => {
     promise.then(() => {
       promise.done = true
     })
-
-    // Flush all promises
-    await new Promise((resolve) => setImmediate(resolve))
+    await flushAllPromises()
     expect(promise.done).toBe(true)
   })
 
@@ -162,17 +164,13 @@ describe('amazonBidder: fetchBids', () => {
       promise.done = true
     })
 
-    // Flush all promises
-    await new Promise((resolve) => setImmediate(resolve))
-
+    await flushAllPromises()
     expect(promise.done).toBe(false)
 
     // Pretend the Amazon bids return.
     bidsBackCallback([])
 
-    // Flush all promises
-    await new Promise((resolve) => setImmediate(resolve))
-
+    await flushAllPromises()
     expect(promise.done).toBe(true)
   })
 
