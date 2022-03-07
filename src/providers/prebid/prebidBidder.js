@@ -50,6 +50,9 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               ct: '460981',
             },
           },
+          // TODO: migrate to new Yahoo bid adapter
+          // Previously 'aol' bid adapter:
+          // https://adtechb2b.yahooinc.com/ssp-prebid-migration-guide
           {
             bidder: 'aol',
             params: {
