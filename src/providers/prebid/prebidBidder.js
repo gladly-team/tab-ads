@@ -96,6 +96,13 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               position: 'atf',
             },
           },
+          {
+            bidder: 'medianet',
+            params: {
+              cid: '8CU5J4251',
+              crid: '781289418',
+            },
+          },
         ],
       }
     case rectangleAdPrimary.adId:
@@ -166,6 +173,13 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               position: 'atf',
             },
           },
+          {
+            bidder: 'medianet',
+            params: {
+              cid: '8CU5J4251',
+              crid: '772477452',
+            },
+          },
         ],
       }
     case rectangleAdSecondary.adId:
@@ -234,6 +248,13 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               siteId: '410940',
               zoneId: '2322802',
               position: 'atf',
+            },
+          },
+          {
+            bidder: 'medianet',
+            params: {
+              cid: '8CU5J4251',
+              crid: '483938328',
             },
           },
         ],
