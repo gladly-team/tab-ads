@@ -2,6 +2,7 @@
   "consentManagement",
   "consentManagementUsp",
   "emx_digitalBidAdapter",
+  "rubiconBidAdapter",
   "openxBidAdapter",
   "unrulyBidAdapter",
   "pulsepointBidAdapter",

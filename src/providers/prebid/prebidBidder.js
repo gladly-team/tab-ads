@@ -86,6 +86,16 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               siteId: '73423',
             },
           },
+          // AKA Magnite
+          {
+            bidder: 'rubicon',
+            params: {
+              accountId: '24314',
+              siteId: '410940',
+              zoneId: '2322798',
+              position: 'atf',
+            },
+          },
         ],
       }
     case rectangleAdPrimary.adId:
@@ -147,6 +157,15 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               siteId: '73423',
             },
           },
+          {
+            bidder: 'rubicon',
+            params: {
+              accountId: '24314',
+              siteId: '410940',
+              zoneId: '2322800',
+              position: 'atf',
+            },
+          },
         ],
       }
     case rectangleAdSecondary.adId:
@@ -206,6 +225,15 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             bidder: 'unruly',
             params: {
               siteId: '73423',
+            },
+          },
+          {
+            bidder: 'rubicon',
+            params: {
+              accountId: '24314',
+              siteId: '410940',
+              zoneId: '2322802',
+              position: 'atf',
             },
           },
         ],
