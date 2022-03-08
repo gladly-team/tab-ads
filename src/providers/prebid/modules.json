@@ -1,11 +1,11 @@
 [
   "consentManagement",
   "consentManagementUsp",
-  "aolBidAdapter",
   "emx_digitalBidAdapter",
   "openxBidAdapter",
   "unrulyBidAdapter",
   "pulsepointBidAdapter",
   "sonobiBidAdapter",
-  "sovrnBidAdapter"
+  "sovrnBidAdapter",
+  "yahoosspBidAdapter"
 ]
