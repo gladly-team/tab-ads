@@ -50,14 +50,11 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               ct: '460981',
             },
           },
-          // TODO: migrate to new Yahoo bid adapter
-          // Previously 'aol' bid adapter:
+          // 'yahoossp' was previously the 'aol' bid adapter:
           // https://adtechb2b.yahooinc.com/ssp-prebid-migration-guide
           {
-            bidder: 'aol',
+            bidder: 'yahoossp',
             params: {
-              // 'aol' is a built-in alias for One Mobile (Verizon SSP).
-              // https://docs.prebid.org/dev-docs/bidders.html#onemobile
               dcn: '8a96954f01747430358b35f958c502f0',
               pos: '8a96954f01747430358b35fa26a402f4',
             },
@@ -119,7 +116,7 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             },
           },
           {
-            bidder: 'aol',
+            bidder: 'yahoossp',
             params: {
               dcn: '8a96954f01747430358b35f958c502f0',
               pos: '8a96954f01747430358b35fab61202f5',
@@ -180,7 +177,7 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             },
           },
           {
-            bidder: 'aol',
+            bidder: 'yahoossp',
             params: {
               dcn: '8a96954f01747430358b35f958c502f0',
               pos: '8a9690620174743031d835fb5fa90049',
