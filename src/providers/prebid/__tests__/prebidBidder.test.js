@@ -191,31 +191,31 @@ describe('prebidBidder: fetchBids', () => {
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 
     expect(adUnitConfig[0].bids.map((bid) => bid.bidder).sort()).toEqual([
-      'aol',
       'emx_digital',
       'openx',
       'pulsepoint',
       'sonobi',
       'sovrn',
       'unruly',
+      'yahoossp',
     ])
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
-      'aol',
       'emx_digital',
       'openx',
       'pulsepoint',
       'sonobi',
       'sovrn',
       'unruly',
+      'yahoossp',
     ])
     expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
-      'aol',
       // 'emx_digital',
       'openx',
       'pulsepoint',
       'sonobi',
       'sovrn',
       'unruly',
+      'yahoossp',
     ])
   })
 
@@ -383,14 +383,6 @@ describe('prebidBidder: fetchBids', () => {
     expect(pbjs.requestBids).toHaveBeenCalledWith({
       bidsBackHandler: expect.any(Function),
     })
-  })
-
-  it('does not sets pbjs.bidderSettings (the AOL 80% bidCpmAdjustment is no longer needed)', async () => {
-    expect.assertions(1)
-    const pbjs = getPrebidPbjs()
-    const tabAdsConfig = setConfig(getMockTabAdsUserConfig())
-    await prebidBidder.fetchBids(tabAdsConfig)
-    expect(pbjs.bidderSettings.aol).not.toBeDefined()
   })
 
   it('returns the expected BidResponseData structure', async () => {
