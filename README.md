@@ -92,14 +92,14 @@ Here's what to check for each partner, assuming the iframed page is `https://exa
 | Partner | Request URL | What to check |
 | ------------- | ------------- | ------------- |
 | EMX Digital  | `hb.emxdgt.com`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |
-| Magnite  | [TODO: info needed]  | [TODO: info needed]  |
-| Media.net  | [TODO: info needed]  | [TODO: info needed]  |
+| Magnite  | `https://fastlane.rubiconproject.com/a/api/fastlane.json`  | Query param `rf` is `https://example.com/newtab/` |
+| Media.net  | `https://prebid.media.net/rtb/prebid`  | Payload `site.domain` is `example.com` and `site.page` is `https://example.com/newtab/`  |
 | OpenX  | `https://tabforacause-d.openx.net/w/1.0/arj`  | Query param `ju` is `https://example.com/newtab/` |
 | Pulsepoint  | `https://bid.contextweb.com/header/ortb`  | Payload `site.page` and `site.ref` are both `https://example.com/newtab/`  |
 | Sonobi  | `apex.go.sonobi.com/trinity.json`  | Query param `ref` is `https://example.com/newtab/` |
 | Sovrn  | `https://ap.lijit.com/rtb/bid`  | Payload `site.domain` is `example.com` and `site.page` is `https://example.com/newtab/`  |
 | Unruly  | `https://targeting.unrulymedia.com/unruly_prebid`  | Payload `refererInfo.referer` is `https://example.com/newtab/`  |
-| Yahoo SSP  | [TODO: info needed]  | [TODO: info needed]  |
+| Yahoo SSP  | `https://c2shb.pubgw.yahoo.com/bidRequest`  | Payload `site.page` is `https://example.com/newtab/`  |
 
 **GDPR and CCPA:** We should manually ensure that data privacy preferences are passed to ad partners. We use [`tab-cmp`](https://github.com/gladly-team/tab-cmp) as our consent management platform. See `tab-cmp`'s "Ad Partners" sections of its [test checklist](https://github.com/gladly-team/tab-cmp#test-checklist) for what to verify in ad partner requests.
 
