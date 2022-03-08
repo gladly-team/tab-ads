@@ -192,6 +192,7 @@ describe('prebidBidder: fetchBids', () => {
 
     expect(adUnitConfig[0].bids.map((bid) => bid.bidder).sort()).toEqual([
       'emx_digital',
+      'medianet',
       'openx',
       'pulsepoint',
       'rubicon',
@@ -202,6 +203,7 @@ describe('prebidBidder: fetchBids', () => {
     ])
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
       'emx_digital',
+      'medianet',
       'openx',
       'pulsepoint',
       'rubicon',
@@ -212,6 +214,7 @@ describe('prebidBidder: fetchBids', () => {
     ])
     expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
       // 'emx_digital',
+      'medianet',
       'openx',
       'pulsepoint',
       'rubicon',
