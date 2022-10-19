@@ -72,14 +72,16 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               delDomain: 'tabforacause-d.openx.net',
             },
           },
+          // Disabled EMX Oct 19, 2022, for unpaid receivables.
+          // If reenabling, be sure to add their adapter back in.
           // EMX Digital was formerly brealtime.
           // http://prebid.org/dev-docs/bidders.html#emx_digital
-          {
-            bidder: 'emx_digital',
-            params: {
-              tagid: '29672',
-            },
-          },
+          // {
+          //   bidder: 'emx_digital',
+          //   params: {
+          //     tagid: '29672',
+          //   },
+          // },
           {
             bidder: 'unruly',
             params: {
@@ -152,12 +154,14 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               delDomain: 'tabforacause-d.openx.net',
             },
           },
-          {
-            bidder: 'emx_digital',
-            params: {
-              tagid: '29673',
-            },
-          },
+          // Disabled EMX Oct 19, 2022, for unpaid receivables.
+          // If reenabling, be sure to add their adapter back in.
+          // {
+          //   bidder: 'emx_digital',
+          //   params: {
+          //     tagid: '29673',
+          //   },
+          // },
           {
             bidder: 'unruly',
             params: {

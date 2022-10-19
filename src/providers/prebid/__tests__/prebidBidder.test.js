@@ -191,7 +191,6 @@ describe('prebidBidder: fetchBids', () => {
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 
     expect(adUnitConfig[0].bids.map((bid) => bid.bidder).sort()).toEqual([
-      'emx_digital',
       'medianet',
       'openx',
       'pulsepoint',
@@ -202,7 +201,6 @@ describe('prebidBidder: fetchBids', () => {
       'yahoossp',
     ])
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
-      'emx_digital',
       'medianet',
       'openx',
       'pulsepoint',
@@ -213,7 +211,6 @@ describe('prebidBidder: fetchBids', () => {
       'yahoossp',
     ])
     expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
-      // 'emx_digital',
       'medianet',
       'openx',
       'pulsepoint',
@@ -451,7 +448,7 @@ describe('prebidBidder: fetchBids', () => {
         {
           adId: 'div-gpt-ad-1464385677836-0',
           revenue: 0.19 / 1000,
-          advertiserName: 'emxdigital',
+          advertiserName: 'unruly',
           adSize: '728x90',
           encodedRevenue: null,
         },
@@ -510,7 +507,7 @@ describe('prebidBidder: fetchBids', () => {
         {
           adId: 'div-gpt-ad-1464385677836-0',
           revenue: 0.19 / 1000,
-          advertiserName: 'emxdigital',
+          advertiserName: 'unruly',
           adSize: '728x90',
           encodedRevenue: null,
         },

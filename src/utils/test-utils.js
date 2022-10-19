@@ -222,7 +222,7 @@ export const mockPrebidBidResponses = () => ({
         height: 90,
       }),
       mockPrebidBid({
-        bidder: 'emxdigital',
+        bidder: 'unruly',
         cpm: 0.19,
         width: 728,
         height: 90,

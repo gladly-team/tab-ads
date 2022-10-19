@@ -1,7 +1,6 @@
 [
   "consentManagement",
   "consentManagementUsp",
-  "emx_digitalBidAdapter",
   "medianetBidAdapter",
   "openxBidAdapter",
   "rubiconBidAdapter",
