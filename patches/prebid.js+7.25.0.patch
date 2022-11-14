@@ -1,0 +1,53 @@
+diff --git a/node_modules/prebid.js/src/refererDetection.js b/node_modules/prebid.js/src/refererDetection.js
+index 15c080f..6bdc7bb 100644
+--- a/node_modules/prebid.js/src/refererDetection.js
++++ b/node_modules/prebid.js/src/refererDetection.js
+@@ -228,26 +228,35 @@ export function detectReferer(win) {
+     const canonicalUrl = config.getConfig('pageUrl') || bestCanonicalUrl || null;
+     const page = ensureProtocol(canonicalUrl, win) || location;
+ 
++    // TODO: remove
++    console.log('location', location)
++    console.log('location', location)
++
++    // @tab-ads-patch
++    // We modify this to use the referer info from the Prebid config
++    // because our page may be loaded in a new tab page iframe, which
++    // can break referer collection. We can stop modifying this if all
++    // browsers support non-iframe implementations.
+     return {
+-      reachedTop,
+-      isAmp: valuesFromAmp,
+-      numIframes: level - 1,
+-      stack,
+-      topmostLocation: bestLocation || null,
+-      location,
++      reachedTop: true,
++      isAmp: false,
++      numIframes: 0,
++      stack: [canonicalUrl],
++      topmostLocation: canonicalUrl,
++      location: canonicalUrl,
+       canonicalUrl,
+       page,
+       domain: parseDomain(page) || null,
+-      ref: ref || null,
++      ref: canonicalUrl,
+       // TODO: the "legacy" refererInfo object is provided here, for now, to accomodate
+       // adapters that decided to just send it verbatim to their backend.
+       legacy: {
+-        reachedTop,
+-        isAmp: valuesFromAmp,
+-        numIframes: level - 1,
+-        stack,
+-        referer: bestLocation || null,
+-        canonicalUrl
++        reachedTop: true,
++        isAmp: false,
++        numIframes: 0,
++        stack: [canonicalUrl],
++        referer: canonicalUrl,
++        canonicalUrl: null,
+       }
+     };
+   }
