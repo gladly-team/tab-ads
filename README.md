@@ -91,8 +91,6 @@ Here's what to check for each partner, assuming the iframed page is `https://exa
 
 | Partner | Request URL | What to check |
 | ------------- | ------------- | ------------- |
-[//]: # Disabled EMX Oct 19, 2022, for unpaid receivables.
-[//]: # (| EMX Digital  | `hb.emxdgt.com`  | Payload `site.domain` is `example.com`; `site.page` and `site.ref` are both `https://example.com/newtab/`  |)
 | Magnite  | `https://fastlane.rubiconproject.com/a/api/fastlane.json`  | Query param `rf` is `https://example.com/newtab/` |
 | Media.net  | `https://prebid.media.net/rtb/prebid`  | Payload `site.domain` is `example.com` and `site.page` is `https://example.com/newtab/`  |
 | OpenX  | `https://tabforacause-d.openx.net/w/1.0/arj`  | Query param `ju` is `https://example.com/newtab/` |
