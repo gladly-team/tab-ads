@@ -83,7 +83,7 @@ To modify the Prebid patches:
 * run `yarn run prebid:build` to put those patches into effect in the build Prebid file
 
 ## Verifying Prebid Bidder Requests
-**In the new tab page iframe context**, we need to ensure that Prebid bidders send the correct page URL and referrer info. We don't have automated tests for this yet. To verify, we need to load the page in a new tab page iframe and inspect each parter's network request.
+**In the new tab page iframe context**, we need to ensure that Prebid bidders send the correct page URL and referrer info. We don't have automated tests for this yet. To verify, we need to load the page in a new tab page iframe and inspect each partner's network request.
 
 We should check this every time we upgrade Prebid.
 
