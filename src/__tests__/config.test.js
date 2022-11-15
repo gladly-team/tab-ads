@@ -26,7 +26,6 @@ const defaultConfigStructure = {
     timeout: expect.any(Number),
   },
   publisher: {
-    domain: expect.any(String),
     pageUrl: expect.any(String),
   },
   newTabAds: {
@@ -55,7 +54,6 @@ const defaultConfigStructure = {
 
 const getMinimalValidUserConfig = () => ({
   publisher: {
-    domain: 'example.com',
     pageUrl: 'https://example.com/foo',
   },
   onError: () => {},
@@ -89,7 +87,6 @@ describe('config: setConfig', () => {
       },
       publisher: {
         ...getMinimalValidUserConfig().publisher,
-        domain: 'example.com',
         pageUrl: 'https://example.com/foo',
       },
       logLevel: 'warn',
@@ -104,7 +101,6 @@ describe('config: setConfig', () => {
         timeout: 123,
       },
       publisher: {
-        domain: 'example.com',
         pageUrl: 'https://example.com/foo',
       },
       newTabAds: expect.any(Object), // default value
@@ -216,7 +212,7 @@ describe('config: setConfig validation', () => {
     }).toThrow('Config error: the onError property must be a function.')
   })
 
-  it('throws if the publisher domain is not provided', () => {
+  it('does not throw if the publisher domain is not provided', () => {
     const { setConfig } = require('src/config')
     expect(() => {
       setConfig({
@@ -226,20 +222,7 @@ describe('config: setConfig validation', () => {
           pageUrl: 'https://example.com/something/',
         },
       })
-    }).toThrow('Config error: the publisher.domain property must be set.')
-  })
-
-  it('throws if the publisher domain is not a string', () => {
-    const { setConfig } = require('src/config')
-    expect(() => {
-      setConfig({
-        ...getMinimalValidUserConfig(),
-        publisher: {
-          domain: 123,
-          pageUrl: 'https://example.com/something/',
-        },
-      })
-    }).toThrow('Config error: the publisher.domain property must be a string.')
+    }).not.toThrow()
   })
 
   it('throws if the publisher page URL is not provided', () => {
@@ -248,7 +231,6 @@ describe('config: setConfig validation', () => {
       setConfig({
         ...getMinimalValidUserConfig(),
         publisher: {
-          domain: 'example.com',
           pageUrl: undefined,
         },
       })
@@ -261,7 +243,6 @@ describe('config: setConfig validation', () => {
       setConfig({
         ...getMinimalValidUserConfig(),
         publisher: {
-          domain: 'example.com',
           pageUrl: () => {},
         },
       })
@@ -441,7 +422,6 @@ describe('config: getConfig', () => {
       ...getMinimalValidUserConfig(),
       publisher: {
         ...getMinimalValidUserConfig().publisher,
-        domain: 'example.com',
         pageUrl: 'https://example.com/foo',
       },
       disableAds: true,

@@ -53,7 +53,6 @@ const defaultConfig = {
     timeout: 500,
   },
   publisher: {
-    domain: null, // required to be provided by user
     pageUrl: null, // required to be provided by user
   },
   // Convenience to distinguish between the ads.
@@ -75,14 +74,6 @@ const validateConfig = (userConfig) => {
   }
 
   // Validate publisher values.
-  if (isNil(get(userConfig, 'publisher.domain'))) {
-    throw new Error('Config error: the publisher.domain property must be set.')
-  }
-  if (typeof get(userConfig, 'publisher.domain') !== 'string') {
-    throw new Error(
-      'Config error: the publisher.domain property must be a string.'
-    )
-  }
   if (isNil(get(userConfig, 'publisher.pageUrl'))) {
     throw new Error('Config error: the publisher.pageUrl property must be set.')
   }
