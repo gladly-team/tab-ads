@@ -1,20 +1,26 @@
 diff --git a/node_modules/prebid.js/src/refererDetection.js b/node_modules/prebid.js/src/refererDetection.js
-index 15c080f..6bdc7bb 100644
+index 15c080f..ebe8d2f 100644
 --- a/node_modules/prebid.js/src/refererDetection.js
 +++ b/node_modules/prebid.js/src/refererDetection.js
-@@ -228,26 +228,35 @@ export function detectReferer(win) {
-     const canonicalUrl = config.getConfig('pageUrl') || bestCanonicalUrl || null;
-     const page = ensureProtocol(canonicalUrl, win) || location;
+@@ -224,30 +224,38 @@ export function detectReferer(win) {
+       ref = win.top.document.referrer;
+     } catch (e) {}
  
-+    // TODO: remove
-+    console.log('location', location)
-+    console.log('location', location)
-+
+-    const location = reachedTop || hasTopLocation ? bestLocation : null;
+-    const canonicalUrl = config.getConfig('pageUrl') || bestCanonicalUrl || null;
+-    const page = ensureProtocol(canonicalUrl, win) || location;
+ 
 +    // @tab-ads-patch
 +    // We modify this to use the referer info from the Prebid config
 +    // because our page may be loaded in a new tab page iframe, which
 +    // can break referer collection. We can stop modifying this if all
 +    // browsers support non-iframe implementations.
++    
++    // const location = reachedTop || hasTopLocation ? bestLocation : null;
++    // const canonicalUrl = config.getConfig('pageUrl') || bestCanonicalUrl || null;
++    const location =  bestLocation;
++    const canonicalUrl = config.getConfig('pageUrl') || bestCanonicalUrl || location || null;
++    const page = ensureProtocol(canonicalUrl, win) || location;
      return {
 -      reachedTop,
 -      isAmp: valuesFromAmp,

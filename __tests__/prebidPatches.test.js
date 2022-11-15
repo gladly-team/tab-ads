@@ -168,23 +168,28 @@ describe('Prebid.js patch: refererDetection.js', () => {
 
     const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
 
-    // Without our patch to Prebid, the referrer info would look like:
-    // {
-    //   numIframes: 1,
-    //   reachedTop: false,
-    //   referer: 'chrome-extension://abcdefghijklmnopqrs',
-    //   stack: [
-    //     'chrome-extension://abcdefghijklmnopqrs',
-    //     'https://tab.gladly.io/newtab/'
-    //   ]
-    // }
+    // Without our patch to Prebid, the topmostLocation would be
+    // 'chrome-extension://abcdefghijklmnopqrs' and numIframes would be 1.
+    const pageUrl = 'https://foo.com/something/'
     expect(getRefererInfo()).toEqual({
-      isAmp: false,
-      canonicalUrl: null,
-      numIframes: 0,
       reachedTop: true,
-      referer: 'https://foo.com/something/',
-      stack: ['https://foo.com/something/'],
+      isAmp: false,
+      numIframes: 0,
+      stack: [pageUrl],
+      topmostLocation: pageUrl,
+      location: pageUrl,
+      canonicalUrl: pageUrl,
+      page: pageUrl,
+      domain: 'foo.com',
+      ref: pageUrl,
+      legacy: {
+        isAmp: false,
+        canonicalUrl: null,
+        numIframes: 0,
+        reachedTop: true,
+        referer: pageUrl,
+        stack: [pageUrl],
+      },
     })
   })
 
@@ -202,42 +207,26 @@ describe('Prebid.js patch: refererDetection.js', () => {
     })
 
     const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
+    const pageUrl = 'https://tab.gladly.io/newtab/' // set in mock window
     expect(getRefererInfo()).toEqual({
-      isAmp: false,
-      canonicalUrl: null,
-      numIframes: 0,
       reachedTop: true,
-      referer: 'https://tab.gladly.io/newtab/', // set in mock window
-      stack: ['https://tab.gladly.io/newtab/'],
-    })
-  })
-
-  test('getRefererInfo works as expected with an unmocked Prebid config (tests our assumptions of the Prebid config API)', () => {
-    const { config } = require('../node_modules/prebid.js/src/config')
-
-    // Use the real Prebid config getConfig.
-    const prebidConfigActual = jest.requireActual(
-      '../node_modules/prebid.js/src/config'
-    )
-    config.getConfig.mockImplementation(prebidConfigActual.config.getConfig)
-
-    // Set the config.
-    config.setConfig({
-      pageUrl: 'https://this-should-work.xyz/right?hope=so',
-    })
-
-    const { getRefererInfo } = require(`${prebidSrcPath}/refererDetection`)
-    expect(getRefererInfo()).toEqual({
       isAmp: false,
-      canonicalUrl: null,
       numIframes: 0,
-      reachedTop: true,
-      referer: 'https://this-should-work.xyz/right?hope=so',
-      stack: ['https://this-should-work.xyz/right?hope=so'],
+      stack: [pageUrl],
+      topmostLocation: pageUrl,
+      location: pageUrl,
+      canonicalUrl: pageUrl,
+      page: pageUrl,
+      domain: 'tab.gladly.io',
+      ref: pageUrl,
+      legacy: {
+        isAmp: false,
+        canonicalUrl: null,
+        numIframes: 0,
+        reachedTop: true,
+        referer: pageUrl,
+        stack: [pageUrl],
+      },
     })
   })
 })
-
-// Note: there are other untested patches for:
-// - emx_digitalBidAdapter.js's "site.ref" value
-// - pulsepointBidAdapter.js's "site.ref" value

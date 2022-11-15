@@ -350,7 +350,6 @@ const fetchBids = async (config) => {
       pbjs.setConfig({
         debug: config.logLevel === 'debug',
         // bidderTimeout: 700 // default
-        publisherDomain: config.publisher.domain, // Used for SafeFrame creative
         // Overrides the page URL adapters should use. Otherwise, some adapters
         // will use the current frame's URL while others use the top frame URL.
         // Only some adapters use this setting as of May 2018.
