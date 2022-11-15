@@ -52,7 +52,7 @@ describe('prebidBidder: fetchBids', () => {
     const config = pbjs.setConfig.mock.calls[0][0]
 
     expect(config.pageUrl).toBeDefined()
-    expect(config.publisherDomain).toBeDefined()
+    expect(config.publisherDomain).not.toBeDefined() // deprecated in Prebid v7
   })
 
   it('sets debug === false when the tab-ads logLevel is "error"', async () => {
@@ -83,8 +83,8 @@ describe('prebidBidder: fetchBids', () => {
     expect(config.debug).toBe(true)
   })
 
-  it('sets the publisherDomain and pageUrl using the tab-config values', async () => {
-    expect.assertions(2)
+  it('sets pageUrl using the tab-config values', async () => {
+    expect.assertions(1)
 
     const pbjs = getPrebidPbjs()
     const tabAdsConfig = setConfig({
@@ -99,7 +99,6 @@ describe('prebidBidder: fetchBids', () => {
     const config = pbjs.setConfig.mock.calls[0][0]
 
     expect(config.pageUrl).toEqual('https://foo.com/something/')
-    expect(config.publisherDomain).toEqual('https://foo.com')
   })
 
   it('sets up ad units', async () => {
