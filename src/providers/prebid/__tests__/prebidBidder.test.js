@@ -197,7 +197,6 @@ describe('prebidBidder: fetchBids', () => {
       'sonobi',
       'sovrn',
       'unruly',
-      'yahoossp',
     ])
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
       'medianet',
@@ -207,7 +206,6 @@ describe('prebidBidder: fetchBids', () => {
       'sonobi',
       'sovrn',
       'unruly',
-      'yahoossp',
     ])
     expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
       'medianet',
@@ -217,7 +215,6 @@ describe('prebidBidder: fetchBids', () => {
       'sonobi',
       'sovrn',
       'unruly',
-      'yahoossp',
     ])
   })
 

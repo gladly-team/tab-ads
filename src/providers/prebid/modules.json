@@ -7,6 +7,5 @@
   "unrulyBidAdapter",
   "pulsepointBidAdapter",
   "sonobiBidAdapter",
-  "sovrnBidAdapter",
-  "yahoosspBidAdapter"
+  "sovrnBidAdapter"
 ]
