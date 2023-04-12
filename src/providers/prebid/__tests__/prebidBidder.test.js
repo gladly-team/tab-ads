@@ -196,6 +196,7 @@ describe('prebidBidder: fetchBids', () => {
       'rubicon',
       'sonobi',
       'sovrn',
+      'triplelift',
       'unruly',
     ])
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
@@ -205,6 +206,7 @@ describe('prebidBidder: fetchBids', () => {
       'rubicon',
       'sonobi',
       'sovrn',
+      'triplelift',
       'unruly',
     ])
     expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
@@ -214,6 +216,7 @@ describe('prebidBidder: fetchBids', () => {
       'rubicon',
       'sonobi',
       'sovrn',
+      'triplelift',
       'unruly',
     ])
   })
