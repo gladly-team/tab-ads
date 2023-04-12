@@ -98,7 +98,6 @@ Here's what to check for each partner, assuming the iframed page is `https://exa
 | Sonobi  | `apex.go.sonobi.com/trinity.json`  | Query param `ref` is `https://example.com/newtab/` |
 | Sovrn  | `https://ap.lijit.com/rtb/bid`  | Payload `site.domain` is `example.com` and `site.page` is `https://example.com/newtab/`  |
 | Unruly  | `https://targeting.unrulymedia.com/unruly_prebid`  | Payload `refererInfo.referer` is `https://example.com/newtab/`  |
-| Yahoo SSP  | `https://c2shb.pubgw.yahoo.com/bidRequest`  | Payload `site.page` is `https://example.com/newtab/`  |
 
 **GDPR and CCPA:** We should manually ensure that data privacy preferences are passed to ad partners. We use [`tab-cmp`](https://github.com/gladly-team/tab-cmp) as our consent management platform. See `tab-cmp`'s "Ad Partners" sections of its [test checklist](https://github.com/gladly-team/tab-cmp#test-checklist) for what to verify in ad partner requests.
 

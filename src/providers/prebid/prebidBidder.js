@@ -50,15 +50,6 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               ct: '460981',
             },
           },
-          // 'yahoossp' was previously the 'aol' bid adapter:
-          // https://adtechb2b.yahooinc.com/ssp-prebid-migration-guide
-          {
-            bidder: 'yahoossp',
-            params: {
-              dcn: '8a96954f01747430358b35f958c502f0',
-              pos: '8a96954f01747430358b35fa26a402f4',
-            },
-          },
           {
             bidder: 'sovrn',
             params: {
@@ -135,13 +126,6 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             },
           },
           {
-            bidder: 'yahoossp',
-            params: {
-              dcn: '8a96954f01747430358b35f958c502f0',
-              pos: '8a96954f01747430358b35fab61202f5',
-            },
-          },
-          {
             bidder: 'sovrn',
             params: {
               tagid: '438916',
@@ -211,13 +195,6 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               cf: '300X250',
               cp: '560174',
               ct: '665497',
-            },
-          },
-          {
-            bidder: 'yahoossp',
-            params: {
-              dcn: '8a96954f01747430358b35f958c502f0',
-              pos: '8a9690620174743031d835fb5fa90049',
             },
           },
           {
