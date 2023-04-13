@@ -102,6 +102,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               inventoryCode: 'gladly-io_Leaderboard_Desktop_728x90',
             },
           },
+          {
+            bidder: 'grid',
+            params: {
+              uid: '390256',
+            },
+          },
         ],
       }
     case rectangleAdPrimary.adId:
@@ -180,6 +186,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               inventoryCode: 'gladly-io_Medium_Rectangle_Desktop_300x250',
             },
           },
+          {
+            bidder: 'grid',
+            params: {
+              uid: '390255',
+            },
+          },
         ],
       }
     case rectangleAdSecondary.adId:
@@ -254,6 +266,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             bidder: 'triplelift',
             params: {
               inventoryCode: 'gladly-io_Medium_Rectangle2_Desktop_300x250',
+            },
+          },
+          {
+            bidder: 'grid',
+            params: {
+              uid: '390257',
             },
           },
         ],
