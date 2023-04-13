@@ -190,6 +190,7 @@ describe('prebidBidder: fetchBids', () => {
     const adUnitConfig = pbjs.addAdUnits.mock.calls[0][0]
 
     expect(adUnitConfig[0].bids.map((bid) => bid.bidder).sort()).toEqual([
+      'grid',
       'medianet',
       'openx',
       'pulsepoint',
@@ -200,6 +201,7 @@ describe('prebidBidder: fetchBids', () => {
       'unruly',
     ])
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
+      'grid',
       'medianet',
       'openx',
       'pulsepoint',
@@ -210,6 +212,7 @@ describe('prebidBidder: fetchBids', () => {
       'unruly',
     ])
     expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
+      'grid',
       'medianet',
       'openx',
       'pulsepoint',

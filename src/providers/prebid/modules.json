@@ -1,6 +1,7 @@
 [
   "consentManagement",
   "consentManagementUsp",
+  "gridBidAdapter",
   "medianetBidAdapter",
   "openxBidAdapter",
   "rubiconBidAdapter",
