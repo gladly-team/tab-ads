@@ -9,9 +9,7 @@ let bidders = []
 if (isClientSide()) {
   const prebidBidder = require('src/providers/prebid/prebidBidder').default
   const amazonBidder = require('src/providers/amazon/amazonBidder').default
-  const indexExchangeBidder =
-    require('src/providers/indexExchange/indexExchangeBidder').default
-  bidders = [prebidBidder, amazonBidder, indexExchangeBidder]
+  bidders = [prebidBidder, amazonBidder]
 }
 
 /**

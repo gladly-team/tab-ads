@@ -29,7 +29,6 @@ const setUpStoreWithBidders = () => {
   const store = getAdDataStore()
   store.bidResponses = {
     amazon: getMockBidderStoredData(),
-    indexExchange: getMockBidderStoredData(),
     prebid: getMockBidderStoredData(),
   }
 }
@@ -59,14 +58,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
         adId,
         encodedRevenue: 'some-encoded-revenue-0101',
         advertiserName: 'amazon',
-        adSize: '728x90',
-      })
-    )
-    store.bidResponses.indexExchange.bidResponses[adId].push(
-      BidResponse({
-        adId,
-        revenue: 0.0031,
-        advertiserName: 'indexExchange',
         adSize: '728x90',
       })
     )
@@ -126,7 +117,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set up stored bids for the leaderboard ad.
     setUpStoreWithBidders()
     store.bidResponses.amazon.bidResponses[adId] = []
-    store.bidResponses.indexExchange.bidResponses[adId] = []
     store.bidResponses.prebid.bidResponses[adId] = []
 
     const { getWinningBidForAd } = require('src/utils/getWinningBids')
@@ -152,7 +142,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
         adSize: '728x90',
       })
     )
-    store.bidResponses.indexExchange = undefined // no bids
     store.bidResponses.prebid.bidResponses[adId].push(
       BidResponse({
         adId,
@@ -200,14 +189,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
     // Set up stored bids for the leaderboard ad.
     setUpStoreWithBidders()
     store.bidResponses.amazon.bidResponses = undefined // no encodedRevenue values
-    store.bidResponses.indexExchange.bidResponses[adId].push(
-      BidResponse({
-        adId,
-        revenue: 0.0031,
-        advertiserName: 'indexExchange',
-        adSize: '728x90',
-      })
-    )
     store.bidResponses.prebid.bidResponses[adId].push(
       BidResponse({
         adId,
@@ -262,7 +243,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
         adSize: '728x90',
       })
     )
-    store.bidResponses.indexExchange.bidResponses = undefined
     store.bidResponses.prebid.bidResponses = undefined
 
     // Set that the leaderboard ad was displayed.
@@ -301,17 +281,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
         adId,
         encodedRevenue: 'some-encoded-revenue-0101',
         advertiserName: 'amazon',
-        adSize: '728x90',
-      })
-    )
-
-    // This bid would normally win, but it did not respond in time.
-    store.bidResponses.indexExchange.includedInAdRequest = false // did not respond in time
-    store.bidResponses.indexExchange.bidResponses[adId].push(
-      BidResponse({
-        adId,
-        revenue: 0.831,
-        advertiserName: 'indexExchange',
         adSize: '728x90',
       })
     )
@@ -368,16 +337,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
         adId,
         encodedRevenue: 'some-encoded-revenue-0101',
         advertiserName: 'amazon',
-        adSize: '728x90',
-      })
-    )
-
-    store.bidResponses.indexExchange.includedInAdRequest = false // did not respond in time
-    store.bidResponses.indexExchange.bidResponses[adId].push(
-      BidResponse({
-        adId,
-        revenue: 0.831,
-        advertiserName: 'indexExchange',
         adSize: '728x90',
       })
     )
@@ -441,14 +400,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
         adSize: '728x90',
       })
     )
-    store.bidResponses.indexExchange.bidResponses[adId].push(
-      BidResponse({
-        adId,
-        revenue: 0.0031,
-        advertiserName: 'indexExchange',
-        adSize: '728x90',
-      })
-    )
     store.bidResponses.prebid.bidResponses[adId].push(
       BidResponse({
         adId,
@@ -499,14 +450,6 @@ describe('getWinningBids: getWinningBidForAd', () => {
         adId,
         encodedRevenue: 'some-encoded-revenue-0101',
         advertiserName: 'amazon',
-        adSize: '728x90',
-      })
-    )
-    store.bidResponses.indexExchange.bidResponses[adId].push(
-      BidResponse({
-        adId,
-        revenue: 0.0031,
-        advertiserName: 'indexExchange',
         adSize: '728x90',
       })
     )
@@ -564,16 +507,6 @@ describe('getWinningBids: getAllWinningBids', () => {
         adSize: '728x90',
       })
     )
-    store.bidResponses.indexExchange.bidResponses[
-      newTabAds.leaderboard.adId
-    ].push(
-      BidResponse({
-        adId: newTabAds.leaderboard.adId,
-        revenue: 0.0131,
-        advertiserName: 'indexExchange',
-        adSize: '728x90',
-      })
-    )
     store.bidResponses.prebid.bidResponses[newTabAds.leaderboard.adId].push(
       BidResponse({
         adId: newTabAds.leaderboard.adId,
@@ -602,16 +535,6 @@ describe('getWinningBids: getAllWinningBids', () => {
     // Set up stored bids for the first rectangle ad.
     store.bidResponses.amazon.bidResponses[newTabAds.rectangleAdPrimary.adId] =
       undefined
-    store.bidResponses.indexExchange.bidResponses[
-      newTabAds.rectangleAdPrimary.adId
-    ].push(
-      BidResponse({
-        adId: newTabAds.rectangleAdPrimary.adId,
-        revenue: 0.00842,
-        advertiserName: 'indexExchange',
-        adSize: '300x250',
-      })
-    )
     store.bidResponses.prebid.bidResponses[
       newTabAds.rectangleAdPrimary.adId
     ].push(
@@ -656,16 +579,6 @@ describe('getWinningBids: getAllWinningBids', () => {
         adSize: '300x250',
       })
     )
-    store.bidResponses.indexExchange.bidResponses[
-      newTabAds.rectangleAdSecondary.adId
-    ].push(
-      BidResponse({
-        adId: newTabAds.rectangleAdSecondary.adId,
-        revenue: 0.007,
-        advertiserName: 'indexExchange',
-        adSize: '300x250',
-      })
-    )
     store.bidResponses.prebid.bidResponses[
       newTabAds.rectangleAdSecondary.adId
     ].push(
@@ -704,7 +617,7 @@ describe('getWinningBids: getAllWinningBids', () => {
     expect(allWinningBids).toEqual({
       [newTabAds.leaderboard.adId]: {
         adId: newTabAds.leaderboard.adId,
-        revenue: 0.0131,
+        revenue: 0.00998,
         GAMAdvertiserId: 112233,
         GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',
         encodedRevenue: 'some-encoded-revenue-0101',
@@ -720,7 +633,7 @@ describe('getWinningBids: getAllWinningBids', () => {
       },
       [newTabAds.rectangleAdSecondary.adId]: {
         adId: newTabAds.rectangleAdSecondary.adId,
-        revenue: 0.007,
+        revenue: 0.0018,
         encodedRevenue: 'some-encoded-revenue-9292',
         GAMAdvertiserId: 778899,
         GAMAdUnitId: '/123456/ThisIsMyAdUnitName/',

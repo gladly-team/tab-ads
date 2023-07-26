@@ -21,14 +21,8 @@ describe('bidders', () => {
     isClientSide.mockReturnValue(true)
     const prebidBidder = require('src/providers/prebid/prebidBidder').default
     const amazonBidder = require('src/providers/amazon/amazonBidder').default
-    const indexExchangeBidder =
-      require('src/providers/indexExchange/indexExchangeBidder').default
     const getBidders = require('src/getBidders').default
-    expect(getBidders()).toEqual([
-      prebidBidder,
-      amazonBidder,
-      indexExchangeBidder,
-    ])
+    expect(getBidders()).toEqual([prebidBidder, amazonBidder])
   })
 
   it('returns an empty array when not on the client side', () => {

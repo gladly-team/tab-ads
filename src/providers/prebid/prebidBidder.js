@@ -108,6 +108,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               uid: '390256',
             },
           },
+          {
+            bidder: 'ix',
+            params: {
+              siteId: '995529',
+            },
+          },
         ],
       }
     case rectangleAdPrimary.adId:
@@ -192,6 +198,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               uid: '390255',
             },
           },
+          {
+            bidder: 'ix',
+            params: {
+              siteId: '995530',
+            },
+          },
         ],
       }
     case rectangleAdSecondary.adId:
@@ -272,6 +284,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             bidder: 'grid',
             params: {
               uid: '390257',
+            },
+          },
+          {
+            bidder: 'ix',
+            params: {
+              siteId: '995531',
             },
           },
         ],
