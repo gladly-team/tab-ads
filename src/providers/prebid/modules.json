@@ -9,5 +9,6 @@
   "pulsepointBidAdapter",
   "sonobiBidAdapter",
   "sovrnBidAdapter",
-  "tripleliftBidAdapter"
+  "tripleliftBidAdapter",
+  "ixBidAdapter"
 ]
