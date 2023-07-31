@@ -2,7 +2,6 @@ jest.mock('src/google/getGoogleTag')
 jest.mock('src/providers/amazon/getAmazonTag')
 jest.mock('src/providers/prebid/prebidBidder')
 jest.mock('src/providers/amazon/amazonBidder')
-jest.mock('src/providers/indexExchange/indexExchangeBidder')
 jest.mock('src/adDisplayListeners')
 jest.mock('src/google/setUpGoogleAds')
 jest.mock('src/utils/logger')
@@ -526,15 +525,6 @@ describe('fetchAds: bid request storage', () => {
           example: 'Raw bid responses for amazon',
         },
       },
-      indexExchange: {
-        bidResponses: {
-          example: 'Bid responses for indexExchange',
-        },
-        includedInAdRequest: true,
-        rawBidResponses: {
-          example: 'Raw bid responses for indexExchange',
-        },
-      },
       prebid: {
         bidResponses: {
           example: 'Bid responses for prebid',
@@ -602,15 +592,6 @@ describe('fetchAds: bid request storage', () => {
         includedInAdRequest: false,
         rawBidResponses: {
           example: 'Raw bid responses for amazon',
-        },
-      },
-      indexExchange: {
-        bidResponses: {
-          example: 'Bid responses for indexExchange',
-        },
-        includedInAdRequest: false,
-        rawBidResponses: {
-          example: 'Raw bid responses for indexExchange',
         },
       },
       prebid: {
@@ -685,15 +666,6 @@ describe('fetchAds: bid request storage', () => {
           example: 'Raw bid responses for amazon',
         },
       },
-      indexExchange: {
-        bidResponses: {
-          example: 'Bid responses for indexExchange',
-        },
-        includedInAdRequest: true, // Bidder responded in time
-        rawBidResponses: {
-          example: 'Raw bid responses for indexExchange',
-        },
-      },
       prebid: {
         bidResponses: {
           example: 'Bid responses for prebid',
@@ -762,15 +734,6 @@ describe('fetchAds: bid request storage', () => {
           example: 'Raw bid responses for amazon',
         },
       },
-      indexExchange: {
-        bidResponses: {
-          example: 'Bid responses for indexExchange',
-        },
-        includedInAdRequest: false, // We've not yet sent the ad server request.
-        rawBidResponses: {
-          example: 'Raw bid responses for indexExchange',
-        },
-      },
       // Prebid has not yet responded.
       // prebid: {
       //   bidResponses: {
@@ -795,15 +758,6 @@ describe('fetchAds: bid request storage', () => {
         includedInAdRequest: true, // Now we've sent the ad server request.
         rawBidResponses: {
           example: 'Raw bid responses for amazon',
-        },
-      },
-      indexExchange: {
-        bidResponses: {
-          example: 'Bid responses for indexExchange',
-        },
-        includedInAdRequest: true, // Now we've sent the ad server request.
-        rawBidResponses: {
-          example: 'Raw bid responses for indexExchange',
         },
       },
       // Prebid has not yet responded still.
