@@ -58,12 +58,6 @@ try {
   console.error(e)
 }
 </script>
-
-<!--
-  Index Exchange. See:
-  https://kb.indexexchange.com/Wrapper/Installation/Universal_Library_Implementation.htm
--->
-<script async src="//js-sec.indexww.com/ht/p/189508-208262485043658.js"></script>
 ```
 
 We could consider adding a `getAdCodeForHTMLBody()` function to `tab-ads`, which apps could use to insert scripts into the page.
