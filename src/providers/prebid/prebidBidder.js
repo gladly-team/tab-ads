@@ -213,6 +213,8 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               siteId: '995530',
               video: {
                 siteId: '1023462',
+                minduration: 5,
+                maxduration: 60,
               },
             },
           },
