@@ -22,6 +22,9 @@ import logger from 'src/utils/logger'
 const getPrebidAdUnit = (tabAdUnit, config) => {
   const { leaderboard, rectangleAdPrimary, rectangleAdSecondary } =
     config.newTabAds
+
+  console.log('tabAdUnit', tabAdUnit)
+
   switch (tabAdUnit.adId) {
     case leaderboard.adId:
       // Leaderboard-style ad
@@ -126,6 +129,15 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             // OpenRTB page position value: 1=above-the-fold
             pos: 1,
           },
+          video: {
+            context: 'outstream',
+            playerSize: [300, 250],
+            mimes: ['video/mp4'],
+            protocols: [1, 2, 3, 4, 5, 6, 7, 8],
+            playbackmethod: [2],
+            skip: 1,
+            plcmt: 2,
+          },
         },
         bids: [
           {
@@ -202,6 +214,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             bidder: 'ix',
             params: {
               siteId: '995530',
+            },
+          },
+          {
+            bidder: 'ix',
+            params: {
+              siteId: '1023462',
             },
           },
         ],

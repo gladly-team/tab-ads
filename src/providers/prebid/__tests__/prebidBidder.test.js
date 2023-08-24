@@ -204,6 +204,7 @@ describe('prebidBidder: fetchBids', () => {
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
       'grid',
       'ix',
+      'ix',
       'medianet',
       'openx',
       'pulsepoint',
