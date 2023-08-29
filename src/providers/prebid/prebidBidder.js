@@ -137,34 +137,34 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           },
         },
         bids: [
-          {
-            bidder: 'sonobi',
-            params: {
-              dom_id: tabAdUnit.adId,
-              ad_unit: tabAdUnit.adUnitId,
-            },
-          },
-          {
-            bidder: 'pulsepoint',
-            params: {
-              cf: '300X250',
-              cp: '560174',
-              ct: '460982',
-            },
-          },
-          {
-            bidder: 'sovrn',
-            params: {
-              tagid: '438916',
-            },
-          },
-          {
-            bidder: 'openx',
-            params: {
-              unit: '538658529',
-              delDomain: 'tabforacause-d.openx.net',
-            },
-          },
+          // {
+          //   bidder: 'sonobi',
+          //   params: {
+          //     dom_id: tabAdUnit.adId,
+          //     ad_unit: tabAdUnit.adUnitId,
+          //   },
+          // },
+          // {
+          //   bidder: 'pulsepoint',
+          //   params: {
+          //     cf: '300X250',
+          //     cp: '560174',
+          //     ct: '460982',
+          //   },
+          // },
+          // {
+          //   bidder: 'sovrn',
+          //   params: {
+          //     tagid: '438916',
+          //   },
+          // },
+          // {
+          //   bidder: 'openx',
+          //   params: {
+          //     unit: '538658529',
+          //     delDomain: 'tabforacause-d.openx.net',
+          //   },
+          // },
           // Disabled EMX Oct 19, 2022, for unpaid receivables.
           // If reenabling, be sure to add their adapter back in.
           // {
@@ -173,40 +173,40 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           //     tagid: '29673',
           //   },
           // },
-          {
-            bidder: 'unruly',
-            params: {
-              siteId: '73423',
-            },
-          },
-          {
-            bidder: 'rubicon',
-            params: {
-              accountId: '24314',
-              siteId: '410940',
-              zoneId: '2322800',
-              position: 'atf',
-            },
-          },
-          {
-            bidder: 'medianet',
-            params: {
-              cid: '8CU5J4251',
-              crid: '772477452',
-            },
-          },
-          {
-            bidder: 'triplelift',
-            params: {
-              inventoryCode: 'gladly-io_Medium_Rectangle_Desktop_300x250',
-            },
-          },
-          {
-            bidder: 'grid',
-            params: {
-              uid: '390255',
-            },
-          },
+          // {
+          //   bidder: 'unruly',
+          //   params: {
+          //     siteId: '73423',
+          //   },
+          // },
+          // {
+          //   bidder: 'rubicon',
+          //   params: {
+          //     accountId: '24314',
+          //     siteId: '410940',
+          //     zoneId: '2322800',
+          //     position: 'atf',
+          //   },
+          // },
+          // {
+          //   bidder: 'medianet',
+          //   params: {
+          //     cid: '8CU5J4251',
+          //     crid: '772477452',
+          //   },
+          // },
+          // {
+          //   bidder: 'triplelift',
+          //   params: {
+          //     inventoryCode: 'gladly-io_Medium_Rectangle_Desktop_300x250',
+          //   },
+          // },
+          // {
+          //   bidder: 'grid',
+          //   params: {
+          //     uid: '390255',
+          //   },
+          // },
           {
             bidder: 'ix',
             params: {
