@@ -121,11 +121,11 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
       return {
         code: tabAdUnit.adId,
         mediaTypes: {
-          banner: {
-            sizes: tabAdUnit.sizes,
-            // OpenRTB page position value: 1=above-the-fold
-            pos: 1,
-          },
+          // banner: {
+          //   sizes: tabAdUnit.sizes,
+          //   // OpenRTB page position value: 1=above-the-fold
+          //   pos: 1,
+          // },
           video: {
             context: 'outstream',
             playerSize: [300, 250],
@@ -210,7 +210,7 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           {
             bidder: 'ix',
             params: {
-              siteId: '995530',
+              siteId: '1023462',
               video: {
                 siteId: '1023462',
                 minduration: 5,
