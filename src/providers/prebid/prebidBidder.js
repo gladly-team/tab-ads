@@ -140,6 +140,7 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           {
             bidder: 'sonobi',
             params: {
+              sizes: tabAdUnit.sizes,
               dom_id: tabAdUnit.adId,
               ad_unit: tabAdUnit.adUnitId,
             },
