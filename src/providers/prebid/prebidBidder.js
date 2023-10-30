@@ -419,7 +419,7 @@ const fetchBids = async (config) => {
         userSync: {
           filterSettings: {
             iframe: {
-              bidders: 'kueezrtb',
+              bidders: ['kueezrtb'],
               filter: 'include',
             },
           },
