@@ -11,5 +11,6 @@
   "sovrnBidAdapter",
   "tripleliftBidAdapter",
   "ixBidAdapter",
-  "kueezRtbBidAdapter"
+  "kueezRtbBidAdapter",
+  "minutemediaBidAdapter"
 ]

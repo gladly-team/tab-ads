@@ -36,6 +36,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
         },
         bids: [
           {
+            bidder: 'minutemedia',
+            params: {
+              org: '01hcfzdf37cn',
+            },
+          },
+          {
             bidder: 'kueezrtb',
             params: {
               cId: '652b999dd012a295abea50f5',
@@ -145,6 +151,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
         },
         bids: [
           {
+            bidder: 'minutemedia',
+            params: {
+              org: '01hcfzdf37cn',
+            },
+          },
+          {
             bidder: 'kueezrtb',
             params: {
               cId: '652b999dd012a295abea50f5',
@@ -247,6 +259,12 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           },
         },
         bids: [
+          {
+            bidder: 'minutemedia',
+            params: {
+              org: '01hcfzdf37cn',
+            },
+          },
           {
             bidder: 'kueezrtb',
             params: {
