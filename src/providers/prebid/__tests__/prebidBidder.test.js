@@ -192,6 +192,7 @@ describe('prebidBidder: fetchBids', () => {
     expect(adUnitConfig[0].bids.map((bid) => bid.bidder).sort()).toEqual([
       'grid',
       'ix',
+      'kueezrtb',
       'medianet',
       'openx',
       'pulsepoint',
@@ -204,6 +205,7 @@ describe('prebidBidder: fetchBids', () => {
     expect(adUnitConfig[1].bids.map((bid) => bid.bidder).sort()).toEqual([
       'grid',
       'ix',
+      'kueezrtb',
       'medianet',
       'openx',
       'pulsepoint',
@@ -216,6 +218,7 @@ describe('prebidBidder: fetchBids', () => {
     expect(adUnitConfig[2].bids.map((bid) => bid.bidder).sort()).toEqual([
       'grid',
       'ix',
+      'kueezrtb',
       'medianet',
       'openx',
       'pulsepoint',

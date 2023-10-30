@@ -36,6 +36,13 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
         },
         bids: [
           {
+            bidder: 'kueezrtb',
+            params: {
+              cId: '652b999dd012a295abea50f5',
+              pId: '65lk7c192882r0011813fn9',
+            },
+          },
+          {
             bidder: 'sonobi',
             params: {
               dom_id: tabAdUnit.adId,
@@ -138,6 +145,13 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
         },
         bids: [
           {
+            bidder: 'kueezrtb',
+            params: {
+              cId: '652b999dd012a295abea50f5',
+              pId: '65lk7c192882r0011813fn9',
+            },
+          },
+          {
             bidder: 'sonobi',
             params: {
               sizes: tabAdUnit.sizes,
@@ -233,6 +247,13 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
           },
         },
         bids: [
+          {
+            bidder: 'kueezrtb',
+            params: {
+              cId: '652b999dd012a295abea50f5',
+              pId: '65lk7c192882r0011813fn9',
+            },
+          },
           {
             bidder: 'sonobi',
             params: {
@@ -394,6 +415,15 @@ const fetchBids = async (config) => {
 
     pbjs.que.push(() => {
       pbjs.setConfig({
+        // https://kueez.notion.site/Kueezrtb-Integration-Guideline-8213caa51e0d43fea8896fdc63eeccc8
+        userSync: {
+          filterSettings: {
+            iframe: {
+              bidders: 'kueezrtb',
+              filter: 'include',
+            },
+          },
+        },
         debug: config.logLevel === 'debug',
         // bidderTimeout: 700 // default
         // Overrides the page URL adapters should use. Otherwise, some adapters
