@@ -10,5 +10,6 @@
   "sonobiBidAdapter",
   "sovrnBidAdapter",
   "tripleliftBidAdapter",
-  "ixBidAdapter"
+  "ixBidAdapter",
+  "kueezRtbBidAdapter"
 ]
