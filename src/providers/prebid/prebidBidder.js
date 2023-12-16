@@ -64,12 +64,6 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             },
           },
           {
-            bidder: 'sovrn',
-            params: {
-              tagid: '438918',
-            },
-          },
-          {
             bidder: 'openx',
             params: {
               unit: '538658529',
@@ -180,12 +174,6 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
             },
           },
           {
-            bidder: 'sovrn',
-            params: {
-              tagid: '438916',
-            },
-          },
-          {
             bidder: 'openx',
             params: {
               unit: '538658529',
@@ -285,12 +273,6 @@ const getPrebidAdUnit = (tabAdUnit, config) => {
               cf: '300X250',
               cp: '560174',
               ct: '665497',
-            },
-          },
-          {
-            bidder: 'sovrn',
-            params: {
-              tagid: '589343',
             },
           },
           {
