@@ -199,7 +199,6 @@ describe('prebidBidder: fetchBids', () => {
       'pulsepoint',
       'rubicon',
       'sonobi',
-      'sovrn',
       'triplelift',
       'unruly',
     ])
@@ -213,7 +212,6 @@ describe('prebidBidder: fetchBids', () => {
       'pulsepoint',
       'rubicon',
       'sonobi',
-      'sovrn',
       'triplelift',
       'unruly',
     ])
@@ -227,7 +225,6 @@ describe('prebidBidder: fetchBids', () => {
       'pulsepoint',
       'rubicon',
       'sonobi',
-      'sovrn',
       'triplelift',
       'unruly',
     ])
